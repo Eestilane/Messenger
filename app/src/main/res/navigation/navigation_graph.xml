@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/chatsFragment">
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.messenger.fragments.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="com.example.messenger.fragments.ChatsFragment"
+        android:label="fragment_chats"
+        tools:layout="@layout/fragment_chats" >
+        <action
+            android:id="@+id/action_chatsFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/from_right_to_left"
+            app:exitAnim="@anim/close_frtl"
+            app:popEnterAnim="@anim/from_left_to_right"
+            app:popExitAnim="@anim/close_fltr"/>
+    </fragment>
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="com.example.messenger.fragments.ContactsFragment"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.messenger.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>
