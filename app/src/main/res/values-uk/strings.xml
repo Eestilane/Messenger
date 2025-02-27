@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat">ЧАТ</string>
+    <string name="chats">ЧАТИ</string>
+    <string name="contacts">КОНТАКТИ</string>
+    <string name="settings">НАЛАШТУВАННЯ</string>
+    <string name="language">Мова:</string>
+    <string name="author">ⓘАвтор:</string>
+    <string name="lightTheme">Тема: Світла</string>
+    <string name="darkTheme">Тема: Темна</string>
+    <string name="back">←Назад</string>
+    <string name="goToChat">Перейти до Чату</string>
+    <string name="version">ⓘВерсія:</string>
+    <string name="gleksText">Тут поки що порожньо…</string>
+    <string name="enterLogin">Введіть логін</string>
+    <string name="enterPassword">Введіть пароль</string>
+    <string name="enterUserName">Введіть ім\'я користувача</string>
+    <string name="login">Увійти</string>
+    <string name="register">Реєстрація</string>
+    <string name="invalidLogin">Неправильний логін</string>
+    <string name="invalidPassword">Неправильний пароль</string>
+    <string name="invalidUserName">Неприпустиме ім\'я користувача</string>
+    <string name="invalidLoginOrPassword">Неправильний логін або пароль</string>
+    <string name="logout">Вийти</string>
+    <string name="user">Користувач:</string>
+    <string name="logOutOfAccount">Вийти з облікового запису:</string>
+</resources>

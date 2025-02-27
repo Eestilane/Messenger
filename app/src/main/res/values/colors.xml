@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="gray">#1E1F22</color>
+    <color name="thumbLightTheme">#1C1A1F</color>
+    <color name="thumbDarkTheme">#E3E5E0</color>
+    <color name="trackLightTheme">#79747E</color>
+    <color name="trackDarkTheme">#868B81</color>
+    <color name="lightGray">#2B2D30</color>
+    <color name="veryLightGray">#43454A</color>
+    <color name="whiteGray">#D9D9D9</color>
+</resources>

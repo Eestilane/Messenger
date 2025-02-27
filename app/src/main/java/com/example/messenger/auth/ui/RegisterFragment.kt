@@ -9,10 +9,10 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.data.models.LoginRequest
 import com.example.messenger.data.models.LoginResponse
+import com.example.messenger.data.models.RegisterRequest
 import com.example.messenger.data.models.errors.AuthErrorBody422
-import com.example.messenger.databinding.FragmentLoginBinding
+import com.example.messenger.databinding.FragmentRegisterBinding
 import com.example.messenger.libs.TokenManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -20,14 +20,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class LoginFragment : Fragment() {
-    private var _binding: FragmentLoginBinding? = null
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,13 +36,13 @@ class LoginFragment : Fragment() {
 
         binding.loginError.isVisible = false
         binding.passwordError.isVisible = false
-        binding.loginOrPasswordError.isVisible = false
+        binding.nameError.isVisible = false
 
-        binding.loginButton.setOnClickListener {
+        binding.registerButton.setOnClickListener{
             binding.loginError.isVisible = false
             binding.passwordError.isVisible = false
-            binding.loginOrPasswordError.isVisible = false
-            RetrofitClient.create(requireContext(), view).login(LoginRequest(binding.enterLogin.text.toString(), binding.enterPassword.text.toString())).enqueue(
+            binding.nameError.isVisible = false
+            RetrofitClient.create(requireContext(), view).register(RegisterRequest(binding.enterLogin.text.toString(), binding.enterPassword.text.toString(), binding.enterName.text.toString())).enqueue(
                 object :
                     Callback<LoginResponse> {
                     override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
@@ -66,9 +66,10 @@ class LoginFragment : Fragment() {
                                 binding.passwordError.text = errorResponse.errors.Password!!.first()
                                 binding.passwordError.isVisible = true
                             }
-                        } else if (response.code() == 400) {
-                            binding.loginOrPasswordError.text = response.errorBody()?.charStream()?.readText()
-                            binding.loginOrPasswordError.isVisible = true
+                            if (errorResponse.errors.Name != null) {
+                                binding.nameError.text = errorResponse.errors.Name!!.first()
+                                binding.nameError.isVisible = true
+                            }
                         }
                     }
 

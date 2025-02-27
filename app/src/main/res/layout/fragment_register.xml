@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorBackground"
+    tools:context=".auth.ui.RegisterFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="8dp" />
+
+    <TextView
+        android:id="@+id/registerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/register"
+        android:textColor="?colorText"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/frameLogin"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintBottom_toTopOf="@id/loginError"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/registerText"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <EditText
+            android:id="@+id/enterLogin"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="start|center"
+            android:hint="@string/enterLogin"
+            android:inputType="text"
+            android:textColor="?colorText"
+            android:textColorHint="?colorHintText"
+            android:textSize="21sp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/loginError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/framePassword"
+        app:layout_constraintStart_toStartOf="@id/frameLogin"
+        app:layout_constraintTop_toBottomOf="@id/frameLogin" />
+
+    <FrameLayout
+        android:id="@+id/framePassword"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintBottom_toTopOf="@id/passwordError"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/loginError">
+
+        <EditText
+            android:id="@+id/enterPassword"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="start|center"
+            android:hint="@string/enterPassword"
+            android:inputType="textPassword"
+            android:textColor="?colorText"
+            android:textColorHint="?colorHintText"
+            android:textSize="21sp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/passwordError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/frameName"
+        app:layout_constraintStart_toStartOf="@id/framePassword"
+        app:layout_constraintTop_toBottomOf="@id/framePassword" />
+
+    <FrameLayout
+        android:id="@+id/frameName"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintBottom_toTopOf="@id/nameError"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/passwordError">
+
+        <EditText
+            android:id="@+id/enterName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="start|center"
+            android:hint="@string/enterUserName"
+            android:inputType="text"
+            android:textColor="?colorText"
+            android:textColorHint="?colorHintText"
+            android:textSize="21sp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/nameError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text=""
+        android:textColor="@color/red"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/registerButton"
+        app:layout_constraintStart_toStartOf="@id/frameName"
+        app:layout_constraintTop_toBottomOf="@id/frameName" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="?colorFragment"
+        android:text="@string/register"
+        android:textColor="?colorText"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/nameError" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

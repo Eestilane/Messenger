@@ -1,0 +1,19 @@
+<resources>
+
+    <style name="Base.Theme.Messenger" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorBackground">@color/white</item>
+        <item name="colorText">@color/black</item>
+        <item name="colorLineDetails">@color/black</item>
+        <item name="colorThumb">@color/thumbLightTheme</item>
+        <item name="colorTrack">@color/trackLightTheme</item>
+        <item name="iconChats">@drawable/chats</item>
+        <item name="iconContacts">@drawable/contacts</item>
+        <item name="iconSettings">@drawable/settings</item>
+        <item name="iconThumb">@drawable/day_theme</item>
+        <item name="themeText">@string/lightTheme</item>
+        <item name="fontFamily">@font/samsung</item>
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="colorFragment">@color/whiteGray</item>
+        <item name="colorHintText">@color/veryLightGray</item>
+    </style>
+</resources>

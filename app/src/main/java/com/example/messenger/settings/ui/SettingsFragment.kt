@@ -15,22 +15,18 @@ import com.example.messenger.data.ApiService
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.data.models.LoginResponse
 import com.example.messenger.data.models.RegisterRequest
+import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.FragmentSettingsBinding
+import com.example.messenger.libs.ThemeManager
 import com.example.messenger.libs.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.Locale
 
-const val DATA = "data"
-const val USER_NAME_KEY = "user_name_key"
-const val THEME = "theme"
-
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-
-//    val sharedPrefs = requireContext().getSharedPreferences(DATA, MODE_PRIVATE)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,19 +39,29 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        RetrofitClient.create(requireContext(), view).getUser().enqueue(
+            object :
+                Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                    if (response.isSuccessful) {
+                        response.body()?.name.let { name ->
+                            binding.user.text = name
+                        }
+                    }
+                }
 
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        val isSystemInDarkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES
+                override fun onFailure(p0: Call<UserResponse?>, p1: Throwable) {
+                }
+            })
 
-        binding.themeSwitch.isChecked = isSystemInDarkTheme
-
+        binding.themeSwitch.isChecked = ThemeManager.getTheme(requireContext())
         binding.themeSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 setDarkTheme()
             } else {
                 setLightTheme()
             }
+            ThemeManager.saveTheme(requireContext(), isChecked)
         }
 
         val languagesArray = arrayOf("English", "Русский", "Українська")
@@ -102,23 +108,21 @@ class SettingsFragment : Fragment() {
 
     private fun setDarkTheme() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//        sharedPrefs.edit().putString(THEME, AppCompatDelegate.MODE_NIGHT_YES.toString()).apply()
     }
 
     private fun setLightTheme() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//        sharedPrefs.edit().putString(THEME, AppCompatDelegate.MODE_NIGHT_NO.toString()).apply()
     }
 
-    private fun setLocale(lang: String) {
-        val locale = Locale(lang)
-        Locale.setDefault(locale)
-        val configuration = Configuration()
-        configuration.setLocale(locale)
-        requireActivity().resources.updateConfiguration(configuration, requireActivity().resources.displayMetrics)
-
+//    private fun setLocale(lang: String) {
+//        val locale = Locale(lang)
+//        Locale.setDefault(locale)
+//        val configuration = Configuration()
+//        configuration.setLocale(locale)
+//        requireActivity().resources.updateConfiguration(configuration, requireActivity().resources.displayMetrics)
+//
 //        val editor = requireActivity().getSharedPreferences("AppSettings", AppCompatActivity.MODE_PRIVATE).edit()
 //        editor.putString("My_Lang", lang)
 //        editor.apply()
-    }
+//    }
 }

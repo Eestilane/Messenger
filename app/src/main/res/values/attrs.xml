@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorBackground" format="color|reference" />
+    <attr name="colorText" format="color|reference" />
+    <attr name="colorLineDetails" format="color|reference" />
+    <attr name="colorThumb" format="color|reference" />
+    <attr name="colorTrack" format="color|reference" />
+    <attr name="iconChats" format="color|reference" />
+    <attr name="iconContacts" format="color|reference" />
+    <attr name="iconSettings" format="color|reference" />
+    <attr name="iconThumb" format="color|reference" />
+    <attr name="colorFragment" format="color|reference" />
+    <attr name="themeText" format="string" />
+    <attr name="colorHintText" format="color|reference"/>
+</resources>

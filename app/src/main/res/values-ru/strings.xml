@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat">ЧАТ</string>
+    <string name="chats">ЧАТЫ</string>
+    <string name="contacts">КОНТАКТЫ</string>
+    <string name="settings">НАСТРОЙКИ</string>
+    <string name="language">Язык:</string>
+    <string name="author">ⓘАвтор:</string>
+    <string name="lightTheme">Тема: Светлая</string>
+    <string name="darkTheme">Тема: Тёмная</string>
+    <string name="back">←Назад</string>
+    <string name="goToChat">Перейти к Чату</string>
+    <string name="version">ⓘВерсия:</string>
+    <string name="gleksText">Тут пока пусто…</string>
+    <string name="enterLogin">Введите логин</string>
+    <string name="enterPassword">Введите пароль</string>
+    <string name="enterUserName">Введите имя пользователя</string>
+    <string name="login">Войти</string>
+    <string name="register">Регистрация</string>
+    <string name="invalidLogin">Неверный логин</string>
+    <string name="invalidPassword">Неверный пароль</string>
+    <string name="invalidUserName">Недопустимое имя пользователя</string>
+    <string name="invalidLoginOrPassword">Неверный логин или пароль</string>
+    <string name="logout">Выйти</string>
+    <string name="user">Пользователь:</string>
+    <string name="logOutOfAccount">Выйти из аккаунта:</string>
+</resources>

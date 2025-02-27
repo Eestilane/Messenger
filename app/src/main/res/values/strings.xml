@@ -1,0 +1,33 @@
+<resources>
+    <string-array name="languages_array">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Українська</item>
+    </string-array>
+
+    <string name="chat">CHAT</string>
+    <string name="chats">CHATS</string>
+    <string name="contacts">CONTACTS</string>
+    <string name="settings">SETTINGS</string>
+    <string name="language">Language:</string>
+    <string name="author">ⓘAuthor:</string>
+    <string name="lightTheme">Theme: Light</string>
+    <string name="darkTheme">Theme: Dark</string>
+    <string name="back">←BACK</string>
+    <string name="goToChat">Go to Chat</string>
+    <string name="version">ⓘVersion:</string>
+    <string name="gleksText">It\'s empty now…</string>
+    <string name="enterLogin">Enter login</string>
+    <string name="enterPassword">Enter password</string>
+    <string name="enterUserName">Enter user name</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="invalidLogin">Invalid login</string>
+    <string name="invalidPassword">Invalid password</string>
+    <string name="invalidUserName">Invalid user name</string>
+    <string name="invalidLoginOrPassword">Invalid login or password</string>
+    <string name="logout">Log out</string>
+    <string name="user">User:</string>
+    <string name="logOutOfAccount">Log out of account:</string>
+
+</resources>
