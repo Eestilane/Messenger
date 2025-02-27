@@ -5,29 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground"
-    android:fontFamily="@font/cascadia"
-    tools:context=".fragments.ContactsFragment">
+    tools:context=".contacts.ui.ContactsFragment">
 
     <TextView
         android:id="@+id/contactsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="КОНТАКТЫ"
+        android:text="@string/contacts"
         android:textColor="?colorText"
-        android:textSize="16dp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?colorDetails"
+    <FrameLayout
+        android:id="@+id/listOfGleks"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contactsText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toBottomOf="@id/contactsText">
+
+        <TextView
+            android:id="@+id/gleksText"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/gleksText"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

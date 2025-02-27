@@ -5,121 +5,238 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground"
-    android:fontFamily="@font/cascadia"
-    tools:context=".fragments.SettingsFragment">
+    tools:context=".settings.ui.SettingsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/startGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="8dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/endGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="8dp" />
 
     <TextView
         android:id="@+id/settingsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="НАСТРОЙКИ"
+        android:text="@string/settings"
         android:textColor="?colorText"
-        android:textSize="16dp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:id="@+id/view1"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?colorDetails"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settingsText" />
+    <FrameLayout
+        android:id="@+id/frameUserInfo"
+        android:layout_width="0dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/settingsText">
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/themeSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@id/view2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view1"
-        app:thumbTint="?colorThumb"
-        app:trackTint="?colorTrack" />
+        <TextView
+            android:id="@+id/userText"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:gravity="start|center"
+            android:text="@string/user"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
 
-    <TextView
-        android:id="@+id/themeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="?themeText"
-        android:textColor="?colorText"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view1" />
+        <TextView
+            android:id="@+id/user"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:gravity="end|center"
+            android:text=""
+            android:textColor="?colorText"
+            android:textSize="21sp" />
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?colorDetails"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/themeText" />
+        <View
+            android:id="@+id/viewInFrameUserInfo"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:background="?colorLineDetails" />
 
-    <TextView
-        android:id="@+id/languageText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="ЯЗЫК"
-        android:textColor="?colorText"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view2" />
+        <TextView
+            android:id="@+id/userLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="49dp"
+            android:gravity="start|center"
+            android:text="@string/logOutOfAccount"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
 
-    <TextView
-        android:id="@+id/language"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="EN/RU/UA ???"
-        android:textColor="?colorText"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view2" />
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="49dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="?colorFragment"
+            android:gravity="end|center"
+            android:padding="1dp"
+            android:text="@string/logout"
+            android:textColor="@color/red"
+            android:textSize="21sp" />
 
-    <View
-        android:id="@+id/view3"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?colorDetails"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/languageText" />
+    </FrameLayout>
 
-    <TextView
-        android:id="@+id/author"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+    <FrameLayout
+        android:id="@+id/frameTheme"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:text="АВТОР ⓘ"
-        android:textColor="?colorText"
-        android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view3" />
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/frameUserInfo">
 
-    <TextView
-        android:id="@+id/eestilane"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/themeText"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:gravity="start|center"
+            android:text="?themeText"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="8dp"
+            app:thumbTint="?colorThumb"
+            app:trackTint="?colorTrack" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLanguage"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Eestilane"
-        android:textColor="@color/red"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view3" />
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/frameTheme">
+
+
+        <TextView
+            android:id="@+id/languageText"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:gravity="start|center"
+            android:text="@string/language"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
+
+        <Spinner
+            android:id="@+id/languageSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="?colorThumb"
+            android:gravity="end|top"
+            android:textColor="?colorText" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameAuthor"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/frameLanguage">
+
+        <TextView
+            android:id="@+id/authorText"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:gravity="start|center"
+            android:text="@string/author"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/eestilane"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:gravity="end|center"
+            android:text="Eestilane"
+            android:textColor="@color/red"
+            android:textSize="21sp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameVersion"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_elemet"
+        android:backgroundTint="?colorFragment"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/frameAuthor">
+
+        <TextView
+            android:id="@+id/versionText"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:gravity="start|center"
+            android:text="@string/version"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp"
+            android:gravity="end|center"
+            android:text="Test 0.03"
+            android:textColor="?colorText"
+            android:textSize="21sp" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

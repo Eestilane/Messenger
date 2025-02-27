@@ -1,4 +1,4 @@
-package com.example.messenger.fragments
+package com.example.messenger.contacts.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

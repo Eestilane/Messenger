@@ -4,15 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/chatsFragment">
+    app:startDestination="@id/authFragment">
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.messenger.fragments.ChatFragment"
+        android:name="com.example.messenger.chats.ui.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.messenger.fragments.ChatsFragment"
+        android:name="com.example.messenger.chats.ui.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" >
         <action
@@ -25,12 +25,39 @@
     </fragment>
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="com.example.messenger.fragments.ContactsFragment"
+        android:name="com.example.messenger.contacts.ui.ContactsFragment"
         android:label="fragment_contacts"
         tools:layout="@layout/fragment_contacts" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.messenger.fragments.SettingsFragment"
+        android:name="com.example.messenger.settings.ui.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_authFragment"
+            app:destination="@id/authFragment"
+            app:enterAnim="@anim/from_right_to_left"
+            app:exitAnim="@anim/close_frtl"/>
+    </fragment>
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="com.example.messenger.auth.ui.AuthFragment"
+        android:label="fragment_auth"
+        tools:layout="@layout/fragment_auth" >
+        <action
+            android:id="@+id/action_authFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/from_right_to_left"
+            app:exitAnim="@anim/close_frtl"/>
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.messenger.auth.ui.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.messenger.auth.ui.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>
