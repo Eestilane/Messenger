@@ -33,10 +33,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/frameUserInfo"
+    <RelativeLayout
+        android:id="@+id/blockUser"
         android:layout_width="0dp"
-        android:layout_height="97dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_elemet"
         android:backgroundTint="?colorFragment"
@@ -44,91 +44,103 @@
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintTop_toBottomOf="@id/settingsText">
 
-        <TextView
-            android:id="@+id/userText"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:gravity="start|center"
-            android:text="@string/user"
-            android:textColor="?colorText"
-            android:textSize="21sp" />
+        <FrameLayout
+            android:id="@+id/frameUserInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/user"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:gravity="end|center"
-            android:text=""
-            android:textColor="?colorText"
-            android:textSize="21sp" />
+            <TextView
+                android:id="@+id/userText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:padding="8dp"
+                android:text="@string/user"
+                android:textColor="?colorText"
+                android:textFontWeight="1"
+                android:textSize="21sp" />
+
+            <TextView
+                android:id="@+id/user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:padding="8dp"
+                android:text=""
+                android:textColor="?colorText"
+                android:textFontWeight="1000"
+                android:textSize="21sp" />
+
+        </FrameLayout>
 
         <View
-            android:id="@+id/viewInFrameUserInfo"
+            android:id="@+id/viewInBlockUser"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_gravity="center"
+            android:layout_below="@id/frameUserInfo"
             android:background="?colorLineDetails" />
 
-        <TextView
-            android:id="@+id/userLogout"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="49dp"
-            android:gravity="start|center"
-            android:text="@string/logOutOfAccount"
-            android:textColor="?colorText"
-            android:textSize="21sp" />
+        <FrameLayout
+            android:id="@+id/frameLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewInBlockUser">
 
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="49dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="?colorFragment"
-            android:gravity="end|center"
-            android:padding="1dp"
-            android:text="@string/logout"
-            android:textColor="@color/red"
-            android:textSize="21sp" />
+            <TextView
+                android:id="@+id/userLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:padding="8dp"
+                android:text="@string/logOutOfAccount"
+                android:textColor="?colorText"
+                android:textFontWeight="1"
+                android:textSize="21sp" />
 
-    </FrameLayout>
+            <Button
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:backgroundTint="?colorFragment"
+                android:paddingEnd="8dp"
+                android:text="@string/logout"
+                android:textColor="@color/red"
+                android:textFontWeight="1000"
+                android:textSize="21sp" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/frameTheme"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_elemet"
         android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/frameUserInfo">
+        app:layout_constraintTop_toBottomOf="@id/blockUser">
 
         <TextView
             android:id="@+id/themeText"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:gravity="start|center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
             android:text="?themeText"
             android:textColor="?colorText"
+            android:textFontWeight="1"
             android:textSize="21sp" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/themeSwitch"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center"
-            android:layout_marginEnd="8dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:padding="8dp"
             app:thumbTint="?colorThumb"
             app:trackTint="?colorTrack" />
 
@@ -137,7 +149,7 @@
     <FrameLayout
         android:id="@+id/frameLanguage"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_elemet"
         android:backgroundTint="?colorFragment"
@@ -149,22 +161,22 @@
         <TextView
             android:id="@+id/languageText"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:gravity="start|center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
             android:text="@string/language"
             android:textColor="?colorText"
+            android:textFontWeight="1"
             android:textSize="21sp" />
 
         <Spinner
             android:id="@+id/languageSpinner"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center"
-            android:layout_marginEnd="8dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
             android:backgroundTint="?colorThumb"
-            android:gravity="end|top"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
             android:textColor="?colorText" />
 
     </FrameLayout>
@@ -172,7 +184,7 @@
     <FrameLayout
         android:id="@+id/frameAuthor"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_elemet"
         android:backgroundTint="?colorFragment"
@@ -183,23 +195,23 @@
         <TextView
             android:id="@+id/authorText"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:gravity="start|center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
             android:text="@string/author"
             android:textColor="?colorText"
+            android:textFontWeight="1"
             android:textSize="21sp" />
 
         <TextView
             android:id="@+id/eestilane"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:gravity="end|center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:padding="8dp"
             android:text="Eestilane"
             android:textColor="@color/red"
+            android:textFontWeight="1"
             android:textSize="21sp" />
 
     </FrameLayout>
@@ -207,7 +219,7 @@
     <FrameLayout
         android:id="@+id/frameVersion"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/rounded_elemet"
         android:backgroundTint="?colorFragment"
@@ -218,23 +230,23 @@
         <TextView
             android:id="@+id/versionText"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:layout_marginStart="8dp"
-            android:gravity="start|center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
             android:text="@string/version"
             android:textColor="?colorText"
+            android:textFontWeight="1"
             android:textSize="21sp" />
 
         <TextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="8dp"
-            android:gravity="end|center"
-            android:text="Test 0.03"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:padding="8dp"
+            android:text="Test 0.04"
             android:textColor="?colorText"
+            android:textFontWeight="1"
             android:textSize="21sp" />
 
     </FrameLayout>

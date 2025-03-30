@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/rounded_elemet"
+    android:backgroundTint="?colorFragment">
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/accept"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="Пися"
+        android:textColor="?colorText"
+        android:textFontWeight="1000"
+        android:textSize="21sp" />
+
+    <Button
+        android:id="@+id/accept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="?colorFragment"
+        android:gravity="end|center"
+        android:paddingEnd="8dp"
+        android:text="Accepet"
+        android:textColor="@color/red"
+        android:textFontWeight="1000"
+        android:textSize="21sp" />
+
+    <Button
+        android:id="@+id/decline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/accept"
+        android:backgroundTint="?colorFragment"
+        android:gravity="end|center"
+        android:paddingEnd="8dp"
+        android:text="Decline"
+        android:textColor="@color/red"
+        android:textFontWeight="1000"
+        android:textSize="21sp" />
+
+    <View
+        android:id="@+id/viewInItemContact"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/accept"
+        android:background="?colorLineDetails" />
+
+    <TextView
+        android:id="@+id/userLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewInItemContact"
+        android:padding="8dp"
+        android:text="Попа"
+        android:textColor="?colorText"
+        android:textFontWeight="1"
+        android:textSize="18sp" />
+
+</RelativeLayout>

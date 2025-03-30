@@ -3,7 +3,7 @@
     <style name="Base.Theme.Messenger" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorBackground">@color/gray</item>
         <item name="colorText">@color/white</item>
-        <item name="colorLineDetails">@color/white</item>
+        <item name="colorLineDetails">@color/veryLightGray</item>
         <item name="colorThumb">@color/thumbDarkTheme</item>
         <item name="colorTrack">@color/trackDarkTheme</item>
         <item name="iconChats">@drawable/chats_white</item>

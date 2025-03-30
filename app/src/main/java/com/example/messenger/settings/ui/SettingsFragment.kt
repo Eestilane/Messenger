@@ -86,8 +86,8 @@ class SettingsFragment : Fragment() {
         binding.logout.setOnClickListener {
             RetrofitClient.create(requireContext(), view).logout().enqueue(
                 object :
-                    Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    Callback<Unit> {
+                    override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                         if (response.isSuccessful) {
                             TokenManager.clearToken(requireContext())
                             findNavController().navigate(com.example.messenger.R.id.action_settingsFragment_to_authFragment)
@@ -95,7 +95,7 @@ class SettingsFragment : Fragment() {
                         }
                     }
 
-                    override fun onFailure(p0: Call<Void?>, p1: Throwable) {
+                    override fun onFailure(p0: Call<Unit?>, p1: Throwable) {
                     }
                 })
         }
