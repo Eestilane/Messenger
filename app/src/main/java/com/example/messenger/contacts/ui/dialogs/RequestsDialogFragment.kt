@@ -12,12 +12,12 @@ import com.example.messenger.contacts.ui.adapters.IncomingRequestsAdapter
 import com.example.messenger.contacts.ui.adapters.RequestsPagerAdapter
 import com.example.messenger.contacts.ui.view_models.RequestsViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentRequestsDialogBinding
+import com.example.messenger.databinding.FragmentContactsRequestsBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlin.getValue
 
 class RequestsDialogFragment : DialogFragment() {
-    private var _binding: FragmentRequestsDialogBinding? = null
+    private var _binding: FragmentContactsRequestsBinding? = null
     private val binding get() = _binding!!
     lateinit var tabsMediator: TabLayoutMediator
 
@@ -25,7 +25,7 @@ class RequestsDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRequestsDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentContactsRequestsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

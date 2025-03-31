@@ -10,11 +10,11 @@ import com.example.messenger.R
 import com.example.messenger.contacts.ui.adapters.OutgoingRequestsAdapter
 import com.example.messenger.contacts.ui.view_models.RequestsViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentOutgoingRequestsBinding
+import com.example.messenger.databinding.FragmentContactsOutgoingRequestsBinding
 import kotlin.getValue
 
 class OutgoingRequestsFragment : Fragment() {
-    private var _binding: FragmentOutgoingRequestsBinding? = null
+    private var _binding: FragmentContactsOutgoingRequestsBinding? = null
     private val binding get() = _binding!!
     private lateinit var outgoingRequestsAdapter: OutgoingRequestsAdapter
     private val apiService by lazy {
@@ -28,7 +28,7 @@ class OutgoingRequestsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentOutgoingRequestsBinding.inflate(inflater, container, false)
+        _binding = FragmentContactsOutgoingRequestsBinding.inflate(inflater, container, false)
         return binding.root
     }
 

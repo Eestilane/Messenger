@@ -10,10 +10,10 @@ import androidx.fragment.app.viewModels
 import com.example.messenger.contacts.ui.adapters.UserSearchAdapter
 import com.example.messenger.contacts.ui.view_models.UserSearchViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentUserSearchDialogBinding
+import com.example.messenger.databinding.FragmentContactsUserSearchBinding
 
 class UserSearchDialogFragment : DialogFragment() {
-    private var _binding: FragmentUserSearchDialogBinding? = null
+    private var _binding: FragmentContactsUserSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var userSearchAdapter: UserSearchAdapter
     private val apiService by lazy {
@@ -27,7 +27,7 @@ class UserSearchDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentUserSearchDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentContactsUserSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 

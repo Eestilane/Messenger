@@ -12,7 +12,7 @@ import com.example.messenger.data.RetrofitClient
 import com.example.messenger.data.models.LoginResponse
 import com.example.messenger.data.models.RegisterRequest
 import com.example.messenger.data.models.errors.AuthErrorBody422
-import com.example.messenger.databinding.FragmentRegisterBinding
+import com.example.messenger.databinding.FragmentAuthRegisterBinding
 import com.example.messenger.libs.TokenManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,13 +21,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RegisterFragment : Fragment() {
-    private var _binding: FragmentRegisterBinding? = null
+    private var _binding: FragmentAuthRegisterBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = FragmentAuthRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
 

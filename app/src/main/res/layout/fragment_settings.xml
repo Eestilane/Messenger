@@ -50,7 +50,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/userText"
+                android:id="@+id/userLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
@@ -60,31 +60,58 @@
                 android:textFontWeight="1"
                 android:textSize="21sp" />
 
-            <TextView
-                android:id="@+id/user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:padding="8dp"
-                android:text=""
-                android:textColor="?colorText"
-                android:textFontWeight="1000"
-                android:textSize="21sp" />
-
         </FrameLayout>
 
         <View
-            android:id="@+id/viewInBlockUser"
+            android:id="@+id/viewInBlockUser1"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@id/frameUserInfo"
             android:background="?colorLineDetails" />
 
         <FrameLayout
+            android:id="@+id/frameName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewInBlockUser1">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:padding="8dp"
+                android:text="Name:"
+                android:textColor="?colorText"
+                android:textFontWeight="1"
+                android:textSize="21sp" />
+
+            <Button
+                android:id="@+id/rename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:backgroundTint="?colorFragment"
+                android:paddingEnd="8dp"
+                android:text="Rename"
+                android:textColor="@color/red"
+                android:textFontWeight="1000"
+                android:textSize="21sp" />
+
+        </FrameLayout>
+
+        <View
+            android:id="@+id/viewInBlockUser2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/frameName"
+            android:background="?colorLineDetails" />
+
+        <FrameLayout
             android:id="@+id/frameLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/viewInBlockUser">
+            android:layout_below="@id/viewInBlockUser2">
 
             <TextView
                 android:id="@+id/userLogout"

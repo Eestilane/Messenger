@@ -1,6 +1,6 @@
 package com.example.messenger.settings.ui
 
-import android.R
+import com.example.messenger.R
 import android.content.Context.MODE_PRIVATE
 import android.content.res.Configuration
 import android.os.Bundle
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.data.models.LoginResponse
@@ -44,8 +45,9 @@ class SettingsFragment : Fragment() {
                 Callback<UserResponse> {
                 override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                     if (response.isSuccessful) {
-                        response.body()?.name.let { name ->
-                            binding.user.text = name
+                        response.body()?.let { user ->
+                            binding.userLogin.text = getString(R.string.user, user.login)
+                            binding.userName.text = getString(R.string.name, user.name)
                         }
                     }
                 }
@@ -64,10 +66,10 @@ class SettingsFragment : Fragment() {
             ThemeManager.saveTheme(requireContext(), isChecked)
         }
 
-        val languagesArray = arrayOf("English", "Русский", "Українська")
-        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, languagesArray)
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        binding.languageSpinner.adapter = adapter
+//        val languagesArray = arrayOf("English", "Русский", "Українська")
+//        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, languagesArray)
+//        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+//        binding.languageSpinner.adapter = adapter
 
 //        val prefs = requireActivity().getSharedPreferences("AppSettings", AppCompatActivity.MODE_PRIVATE)
 //        val savedLanguage = prefs.getString("My_Lang", "en")
@@ -98,6 +100,10 @@ class SettingsFragment : Fragment() {
                     override fun onFailure(p0: Call<Unit?>, p1: Throwable) {
                     }
                 })
+        }
+
+        binding.rename.setOnClickListener{
+            NameChangeDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
     }
 

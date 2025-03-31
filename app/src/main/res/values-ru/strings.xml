@@ -22,6 +22,7 @@
     <string name="invalidUserName">Недопустимое имя пользователя</string>
     <string name="invalidLoginOrPassword">Неверный логин или пароль</string>
     <string name="logout">Выйти</string>
-    <string name="user">Пользователь:</string>
+    <string name="user">Пользователь: %1s</string>
+    <string name="name">"Имя: %1s</string>
     <string name="logOutOfAccount">Выйти из аккаунта:</string>
 </resources>
