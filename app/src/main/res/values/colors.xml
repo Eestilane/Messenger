@@ -3,6 +3,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
     <color name="gray">#1E1F22</color>
     <color name="thumbLightTheme">#1C1A1F</color>
     <color name="thumbDarkTheme">#E3E5E0</color>

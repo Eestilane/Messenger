@@ -10,23 +10,23 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.data.models.UserSearchResponse
 import com.example.messenger.data.models.contacts.AcceptDeclineRequest
-import com.example.messenger.data.models.contacts.AddContactRequest
 import com.example.messenger.data.models.contacts.RequestResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class IncomingRequestsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
+class RequestsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _incomingRequests = MutableLiveData<List<RequestResponse>>()
+    private val _outgoingRequests = MutableLiveData<List<RequestResponse>>()
     val incomingRequests: LiveData<List<RequestResponse>> get() = _incomingRequests
+    val outgoingRequests: LiveData<List<RequestResponse>> get() = _outgoingRequests
 
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    IncomingRequestsViewModel(
+                    RequestsViewModel(
                         apiService = apiService,
                         context = context,
                         view = view
@@ -43,6 +43,23 @@ class IncomingRequestsViewModel(val apiService: ApiService, val context: Context
                     if (response.isSuccessful) {
                         if (response.body() != null)
                             _incomingRequests.value = response.body()
+                    }
+                }
+
+                override fun onFailure(p0: Call<List<RequestResponse>?>, p1: Throwable) {
+
+                }
+            })
+    }
+
+    fun outRequestResponse(){
+        RetrofitClient.create(context, view).getContactsOutRequest().enqueue(
+            object :
+                Callback<List<RequestResponse>> {
+                override fun onResponse(call: Call<List<RequestResponse>>, response: Response<List<RequestResponse>>) {
+                    if (response.isSuccessful) {
+                        if (response.body() != null)
+                            _outgoingRequests.value = response.body()
                     }
                 }
 
@@ -75,6 +92,7 @@ class IncomingRequestsViewModel(val apiService: ApiService, val context: Context
                 override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                     if (response.isSuccessful) {
                         inRequestResponse()
+                        outRequestResponse()
                     }
                 }
 

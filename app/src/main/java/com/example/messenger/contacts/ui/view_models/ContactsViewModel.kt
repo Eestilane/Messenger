@@ -49,4 +49,8 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
                 }
             })
     }
+
+    fun deleteContact(){
+        return
+    }
 }

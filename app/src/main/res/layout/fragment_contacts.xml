@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground"
-    tools:context=".contacts.ui.ContactsFragment">
+    tools:context=".contacts.ui.fragments.ContactsFragment">
 
     <TextView
         android:id="@+id/contactsText"
@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/user_search"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_elemet"
@@ -58,6 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/fabAddContact"
+        android:src="@drawable/incoming_requests"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"

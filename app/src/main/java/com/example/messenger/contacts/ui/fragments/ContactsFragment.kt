@@ -1,4 +1,4 @@
-package com.example.messenger.contacts.ui
+package com.example.messenger.contacts.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.messenger.contacts.ui.adapters.ContactsAdapter
-import com.example.messenger.contacts.ui.dialogs.IncomingRequestsDialogFragment
+import com.example.messenger.contacts.ui.dialogs.RequestsDialogFragment
 import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
 import com.example.messenger.contacts.ui.view_models.ContactsViewModel
 import com.example.messenger.data.RetrofitClient
@@ -36,7 +36,9 @@ class ContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        contactsAdapter = ContactsAdapter()
+        contactsAdapter = ContactsAdapter(
+            onClick = { contact -> viewModel.deleteContact() }
+        )
         binding.rvSearchResults.adapter = contactsAdapter
         viewModel.contacts.observe(viewLifecycleOwner) { contacts ->
             contactsAdapter.setContacts(contacts)
@@ -58,7 +60,7 @@ class ContactsFragment : Fragment() {
         }
 
         binding.fabRequestContact.setOnClickListener{
-            IncomingRequestsDialogFragment().show(childFragmentManager, "ConfirmationDialog")
+            RequestsDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
     }
 

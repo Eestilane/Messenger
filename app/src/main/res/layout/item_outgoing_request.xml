@@ -10,7 +10,7 @@
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/add"
+        android:layout_alignBottom="@id/decline"
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:padding="8dp"
@@ -20,15 +20,15 @@
         android:textSize="21sp" />
 
     <Button
-        android:id="@+id/add"
+        android:id="@+id/decline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:backgroundTint="?colorFragment"
         android:gravity="end|center"
         android:paddingEnd="8dp"
-        android:text="Add"
-        android:textColor="@color/green"
+        android:text="Decline"
+        android:textColor="@color/red"
         android:textFontWeight="1000"
         android:textSize="21sp" />
 
@@ -36,18 +36,18 @@
         android:id="@+id/viewInItemContact"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/add"
-        android:background="?colorLineDetails" />
+        android:layout_below="@id/userName"
+        android:background="?colorLineDetails"/>
 
     <TextView
         android:id="@+id/userLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/viewInItemContact"
         android:padding="8dp"
         android:text="Попа"
         android:textColor="?colorText"
         android:textFontWeight="1"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@id/viewInItemContact" />
 
 </RelativeLayout>

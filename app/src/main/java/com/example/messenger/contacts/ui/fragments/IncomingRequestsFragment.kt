@@ -1,36 +1,34 @@
-package com.example.messenger.contacts.ui.dialogs
+package com.example.messenger.contacts.ui.fragments
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.messenger.R
 import com.example.messenger.contacts.ui.adapters.IncomingRequestsAdapter
-import com.example.messenger.contacts.ui.view_models.IncomingRequestsViewModel
+import com.example.messenger.contacts.ui.view_models.RequestsViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentIncomingRequestsDialogBinding
+import com.example.messenger.databinding.FragmentIncomingRequestsBinding
 import kotlin.getValue
 
-class IncomingRequestsDialogFragment : DialogFragment() {
-    private var _binding: FragmentIncomingRequestsDialogBinding? = null
+class IncomingRequestsFragment : Fragment() {
+    private var _binding: FragmentIncomingRequestsBinding? = null
     private val binding get() = _binding!!
     private lateinit var incomingRequestsAdapter: IncomingRequestsAdapter
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }
-    private val viewModel by viewModels<IncomingRequestsViewModel> {
-        IncomingRequestsViewModel.getViewModelFactory(apiService, requireContext(), view)
+    private val viewModel by viewModels<RequestsViewModel> {
+        RequestsViewModel.getViewModelFactory(apiService, requireContext(), view)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentIncomingRequestsDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentIncomingRequestsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -44,9 +42,6 @@ class IncomingRequestsDialogFragment : DialogFragment() {
         viewModel.incomingRequests.observe(viewLifecycleOwner) { requests ->
             incomingRequestsAdapter.setIncomingRequests(requests)
         }
-
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-
         viewModel.inRequestResponse()
     }
 }
