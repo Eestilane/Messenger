@@ -43,14 +43,14 @@ class ContactsFragment : Fragment() {
         viewModel.contacts.observe(viewLifecycleOwner) { contacts ->
             contactsAdapter.setContacts(contacts)
         }
-        val contacts = listOf<ContactsResponse>()
-        contactsAdapter.setContacts(contacts)
+
+        contactsAdapter.filter.filter("")
 
         viewModel.getContacts()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.getContacts()
+                contactsAdapter.filter.filter(newText)
                 return true
             }
         })
