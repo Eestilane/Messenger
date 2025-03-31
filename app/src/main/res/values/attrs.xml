@@ -8,6 +8,8 @@
     <attr name="iconChats" format="color|reference" />
     <attr name="iconContacts" format="color|reference" />
     <attr name="iconSettings" format="color|reference" />
+    <attr name="iconUserSearch" format="color|reference" />
+    <attr name="iconIncomingRequests" format="color|reference" />
     <attr name="iconThumb" format="color|reference" />
     <attr name="colorFragment" format="color|reference" />
     <attr name="themeText" format="string" />

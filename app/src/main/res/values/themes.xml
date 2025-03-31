@@ -9,6 +9,8 @@
         <item name="iconChats">@drawable/chats</item>
         <item name="iconContacts">@drawable/contacts</item>
         <item name="iconSettings">@drawable/settings</item>
+        <item name="iconUserSearch">@drawable/user_search</item>
+        <item name="iconIncomingRequests">@drawable/incoming_requests</item>
         <item name="iconThumb">@drawable/day_theme</item>
         <item name="themeText">@string/lightTheme</item>
         <item name="fontFamily">@font/samsung</item>
