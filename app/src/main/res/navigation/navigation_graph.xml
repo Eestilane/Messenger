@@ -9,7 +9,7 @@
         android:id="@+id/chatFragment"
         android:name="com.example.messenger.chats.ui.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chats_chat" />
     <fragment
         android:id="@+id/chatsFragment"
         android:name="com.example.messenger.chats.ui.ChatsFragment"
@@ -54,10 +54,10 @@
         android:id="@+id/loginFragment"
         android:name="com.example.messenger.auth.ui.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_auth_login" />
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.messenger.auth.ui.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_auth_register" />
 </navigation>
