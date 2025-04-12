@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import com.example.messenger.R
 import androidx.navigation.Navigation
+import com.example.messenger.R
 import com.example.messenger.libs.TokenManager
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

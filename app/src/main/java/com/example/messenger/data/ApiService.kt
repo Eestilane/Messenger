@@ -1,56 +1,67 @@
 package com.example.messenger.data
 
-import com.example.messenger.data.models.contacts.AddContactRequest
-import com.example.messenger.data.models.contacts.ContactsResponse
-import com.example.messenger.data.models.contacts.AcceptDeclineRequest
 import com.example.messenger.data.models.LoginRequest
 import com.example.messenger.data.models.LoginResponse
 import com.example.messenger.data.models.RegisterRequest
 import com.example.messenger.data.models.UpdateNameRequest
 import com.example.messenger.data.models.UserResponse
 import com.example.messenger.data.models.UserSearchResponse
+import com.example.messenger.data.models.contacts.AcceptDeclineRequest
+import com.example.messenger.data.models.contacts.ContactRequest
+import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.data.models.contacts.RequestResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
     @POST("/auth/login")
-    fun login(@Body request: LoginRequest): Call<LoginResponse>
+    suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("/auth/register")
-    fun register(@Body request: RegisterRequest): Call<LoginResponse>
+    suspend fun register(@Body request: RegisterRequest): Response<LoginResponse>
 
     @POST("/auth/logout")
-    fun logout(): Call<Unit>
+    suspend fun logout(): Response<Unit>
 
     @GET("/users/user")
-    fun getUser(): Call<UserResponse>
+    suspend fun getUser(): Response<UserResponse>
 
     @GET("/users/search")
-    fun userSearch(@Query("search") search : String): Call<List<UserSearchResponse>>
+    suspend fun userSearch(@Query("search") search : String): Response<List<UserSearchResponse>>
 
-    @PATCH("/user/update/name")
-    fun userUpdateName(@Body request: UpdateNameRequest): Call<Unit>
+    @PATCH("/users/update/name")
+    suspend fun userUpdateName(@Body request: UpdateNameRequest): Response<Unit>
 
     @GET("/contacts")
-    fun getContacts(): Call<List<ContactsResponse>>
+    suspend fun getContacts(): Response<List<ContactsResponse>>
 
     @POST("/contacts/add")
-    fun addContact(@Body request: AddContactRequest): Call<Unit>
+    suspend fun addContact(@Body request: ContactRequest): Response<Unit>
 
     @POST("/contacts/accept")
-    fun acceptRequest(@Body request: AcceptDeclineRequest): Call<Unit>
+    suspend fun acceptRequest(@Body request: AcceptDeclineRequest): Response<Unit>
 
     @POST("/contacts/decline")
-    fun declineRequest(@Body request: AcceptDeclineRequest): Call<Unit>
+    suspend fun declineRequest(@Body request: AcceptDeclineRequest): Response<Unit>
+
+    @POST("/contacts/delete")
+    suspend fun deleteContact(@Body request: ContactRequest): Response<Unit>
 
     @GET("contacts/in_requests")
-    fun getContactsInRequest(): Call<List<RequestResponse>>
+    suspend fun getContactsInRequest(): Response<List<RequestResponse>>
 
     @GET("contacts/out_requests")
-    fun getContactsOutRequest(): Call<List<RequestResponse>>
+    suspend fun getContactsOutRequest(): Response<List<RequestResponse>>
+
+    @Multipart
+    @PATCH("/users/update/avatar")
+    suspend fun updateAvatar(@Part file: MultipartBody.Part): Response<String>
 }

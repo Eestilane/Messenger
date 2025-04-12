@@ -23,8 +23,8 @@
         android:id="@+id/lef"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/lef"
         android:layout_marginTop="16dp"
+        android:src="@drawable/lef"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,7 @@
         android:padding="0dp"
         android:text="←"
         android:textColor="?colorText"
+        android:textFontWeight="1000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="@id/lef"
         app:layout_constraintTop_toTopOf="parent" />

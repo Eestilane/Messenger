@@ -6,15 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.data.ApiService
-import com.example.messenger.data.RetrofitClient
 import com.example.messenger.data.models.contacts.AcceptDeclineRequest
 import com.example.messenger.data.models.contacts.RequestResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.messenger.libs.HandleOperators
+import kotlinx.coroutines.launch
 
 class RequestsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _incomingRequests = MutableLiveData<List<RequestResponse>>()
@@ -35,70 +34,68 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
             }
     }
 
-    fun inRequestResponse(){
-        RetrofitClient.create(context, view).getContactsInRequest().enqueue(
-            object :
-                Callback<List<RequestResponse>> {
-                override fun onResponse(call: Call<List<RequestResponse>>, response: Response<List<RequestResponse>>) {
-                    if (response.isSuccessful) {
-                        if (response.body() != null)
-                            _incomingRequests.value = response.body()
-                    }
+    fun inRequestResponse() {
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.getContactsInRequest()
+            }
+            when (response.code()) {
+                200 -> {
+                    _incomingRequests.value = response.body()
                 }
 
-                override fun onFailure(p0: Call<List<RequestResponse>?>, p1: Throwable) {
-
+                999 -> {
                 }
-            })
+            }
+        }
     }
 
-    fun outRequestResponse(){
-        RetrofitClient.create(context, view).getContactsOutRequest().enqueue(
-            object :
-                Callback<List<RequestResponse>> {
-                override fun onResponse(call: Call<List<RequestResponse>>, response: Response<List<RequestResponse>>) {
-                    if (response.isSuccessful) {
-                        if (response.body() != null)
-                            _outgoingRequests.value = response.body()
-                    }
+    fun outRequestResponse() {
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.getContactsOutRequest()
+            }
+            when (response.code()) {
+                200 -> {
+                    _outgoingRequests.value = response.body()
                 }
 
-                override fun onFailure(p0: Call<List<RequestResponse>?>, p1: Throwable) {
-
+                999 -> {
                 }
-            })
+            }
+        }
     }
 
     fun acceptRequest(userId: String) {
-        RetrofitClient.create(context, view).acceptRequest(AcceptDeclineRequest(userId)).enqueue(
-            object :
-                Callback<Unit> {
-                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                    if (response.isSuccessful) {
-                        inRequestResponse()
-                    }
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.acceptRequest(AcceptDeclineRequest(userId))
+            }
+            when (response.code()) {
+                200 -> {
+                    inRequestResponse()
                 }
 
-                override fun onFailure(p0: Call<Unit?>, p1: Throwable) {
-
+                999 -> {
                 }
-            })
+            }
+        }
     }
 
     fun declineRequest(userId: String) {
-        RetrofitClient.create(context, view).acceptRequest(AcceptDeclineRequest(userId)).enqueue(
-            object :
-                Callback<Unit> {
-                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                    if (response.isSuccessful) {
-                        inRequestResponse()
-                        outRequestResponse()
-                    }
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.declineRequest(AcceptDeclineRequest(userId))
+            }
+            when (response.code()) {
+                200 -> {
+                    inRequestResponse()
+                    outRequestResponse()
                 }
 
-                override fun onFailure(p0: Call<Unit?>, p1: Throwable) {
-
+                999 -> {
                 }
-            })
+            }
+        }
     }
 }

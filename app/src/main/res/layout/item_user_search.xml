@@ -1,17 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:background="@drawable/rounded_elemet"
+    android:background="@drawable/rounded_element"
     android:backgroundTint="?colorFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/userAvatarCard"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignBottom="@id/userLogin"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="36dp">
+
+        <ImageView
+            android:id="@+id/userAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar"/>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/userName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/add"
         android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/userAvatarCard"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:text="Пися"
@@ -19,14 +38,14 @@
         android:textFontWeight="1000"
         android:textSize="21sp" />
 
-    <Button
+    <TextView
         android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:backgroundTint="?colorFragment"
         android:gravity="end|center"
-        android:paddingEnd="8dp"
+        android:padding="8dp"
         android:text="Add"
         android:textColor="@color/green"
         android:textFontWeight="1000"
@@ -36,7 +55,8 @@
         android:id="@+id/viewInItemContact"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/add"
+        android:layout_below="@id/userName"
+        android:layout_toEndOf="@id/userAvatarCard"
         android:background="?colorLineDetails" />
 
     <TextView
@@ -44,6 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/viewInItemContact"
+        android:layout_toEndOf="@id/userAvatarCard"
         android:padding="8dp"
         android:text="Попа"
         android:textColor="?colorText"

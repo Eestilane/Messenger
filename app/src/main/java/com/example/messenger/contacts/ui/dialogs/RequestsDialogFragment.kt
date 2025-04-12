@@ -5,16 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import com.example.messenger.R
-import com.example.messenger.auth.ui.AuthPagerAdapter
-import com.example.messenger.contacts.ui.adapters.IncomingRequestsAdapter
 import com.example.messenger.contacts.ui.adapters.RequestsPagerAdapter
-import com.example.messenger.contacts.ui.view_models.RequestsViewModel
-import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentContactsRequestsBinding
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlin.getValue
 
 class RequestsDialogFragment : DialogFragment() {
     private var _binding: FragmentContactsRequestsBinding? = null
@@ -41,6 +34,10 @@ class RequestsDialogFragment : DialogFragment() {
         }
 
         tabsMediator.attach()
+
+        binding.toBack.setOnClickListener{
+            dismiss()
+        }
     }
 
     override fun onDestroyView() {

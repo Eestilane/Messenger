@@ -38,10 +38,13 @@
             app:destination="@id/authFragment"
             app:enterAnim="@anim/from_right_to_left"
             app:exitAnim="@anim/close_frtl"/>
+        <action
+            android:id="@+id/action_settingsFragment_to_nameChangeDialogFragment"
+            app:destination="@id/nameChangeDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.example.messenger.auth.ui.AuthFragment"
+        android:name="com.example.messenger.auth.ui.fragments.AuthFragment"
         android:label="fragment_auth"
         tools:layout="@layout/fragment_auth" >
         <action
@@ -52,12 +55,17 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.messenger.auth.ui.LoginFragment"
+        android:name="com.example.messenger.auth.ui.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_auth_login" />
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.messenger.auth.ui.RegisterFragment"
+        android:name="com.example.messenger.auth.ui.fragments.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_auth_register" />
+    <dialog
+        android:id="@+id/nameChangeDialogFragment"
+        android:name="com.example.messenger.settings.ui.NameChangeDialogFragment"
+        android:label="fragment_settings_name_change"
+        tools:layout="@layout/fragment_settings_name_change" />
 </navigation>

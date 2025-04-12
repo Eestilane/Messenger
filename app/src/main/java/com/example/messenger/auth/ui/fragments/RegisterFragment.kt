@@ -1,0 +1,106 @@
+package com.example.messenger.auth.ui.fragments
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.messenger.R
+import com.example.messenger.auth.ui.models.AuthScreenState
+import com.example.messenger.auth.ui.view_models.AuthViewModel
+import com.example.messenger.data.RetrofitClient
+import com.example.messenger.data.models.LoginResponse
+import com.example.messenger.data.models.RegisterRequest
+import com.example.messenger.data.models.errors.AuthErrorBody422
+import com.example.messenger.databinding.FragmentAuthRegisterBinding
+import com.example.messenger.libs.TokenManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlin.getValue
+
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentAuthRegisterBinding? = null
+    private val binding get() = _binding!!
+    private val apiService by lazy {
+        RetrofitClient.create(requireContext(), view)
+    }
+    private val viewModel by viewModels<AuthViewModel> {
+        AuthViewModel.getViewModelFactory(apiService, requireContext(), view)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentAuthRegisterBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.authState.observe(viewLifecycleOwner) { authState ->
+            render(authState)
+        }
+
+        binding.registerButton.setOnClickListener{
+            viewModel.register(login = binding.enterLogin.text.toString(), password = binding.enterPassword.text.toString(), name = binding.enterName.text.toString(), context = requireContext())
+        }
+    }
+
+    private fun render(state: AuthScreenState) {
+        when (state) {
+            is AuthScreenState.Loading -> showLoading(state)
+            is AuthScreenState.Content -> showContent(state)
+            is AuthScreenState.Error -> showError(state)
+            is AuthScreenState.Navigate -> showNavigate(state)
+        }
+    }
+
+    private fun hideAll() {
+        binding.loginError.isVisible = false
+        binding.passwordError.isVisible = false
+        binding.nameError.isVisible = false
+        setFragmentResult("request", bundleOf("result" to false))
+    }
+
+    private fun showLoading(state: AuthScreenState.Loading) {
+        hideAll()
+        setFragmentResult("request", bundleOf("result" to true))
+    }
+
+    private fun showContent(state: AuthScreenState.Content) {
+        hideAll()
+    }
+
+    private fun showError(state: AuthScreenState.Error) {
+        hideAll()
+
+        if (state.loginError != null){
+            binding.loginError.isVisible = true
+            binding.loginError.text = state.loginError
+        }
+
+        if (state.passwordError != null){
+            binding.passwordError.isVisible = true
+            binding.passwordError.text = state.passwordError
+        }
+
+        if (state.nameError != null){
+            binding.nameError.isVisible = true
+            binding.nameError.text = state.nameError
+        }
+    }
+
+    private fun showNavigate(state: AuthScreenState){
+        findNavController().navigate(R.id.action_authFragment_to_chatsFragment)
+    }
+}

@@ -12,7 +12,6 @@ import com.example.messenger.contacts.ui.dialogs.RequestsDialogFragment
 import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
 import com.example.messenger.contacts.ui.view_models.ContactsViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.databinding.FragmentContactsBinding
 
 class ContactsFragment : Fragment() {
@@ -37,7 +36,7 @@ class ContactsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         contactsAdapter = ContactsAdapter(
-            onClick = { contact -> viewModel.deleteContact() }
+            onClick = { contact -> viewModel.deleteContact(contact.id) }
         )
         binding.rvSearchResults.adapter = contactsAdapter
         viewModel.contacts.observe(viewLifecycleOwner) { contacts ->

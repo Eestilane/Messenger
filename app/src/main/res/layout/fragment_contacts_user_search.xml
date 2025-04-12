@@ -7,6 +7,20 @@
     android:background="?colorBackground"
     tools:context=".contacts.ui.fragments.ContactsFragment">
 
+    <Button
+        android:id="@+id/toBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:backgroundTint="?colorBackground"
+        android:gravity="center|top"
+        android:padding="0dp"
+        android:text="←"
+        android:textColor="?colorText"
+        android:textFontWeight="1000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/contactsText"
         android:layout_width="wrap_content"
@@ -26,7 +40,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:queryHint="Поиск контактов"
         app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
@@ -34,9 +48,7 @@
         android:id="@+id/rv_search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         tools:itemCount="7"

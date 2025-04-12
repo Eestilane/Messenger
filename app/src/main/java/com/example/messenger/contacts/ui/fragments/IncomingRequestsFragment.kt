@@ -1,12 +1,11 @@
 package com.example.messenger.contacts.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.messenger.R
 import com.example.messenger.contacts.ui.adapters.IncomingRequestsAdapter
 import com.example.messenger.contacts.ui.view_models.RequestsViewModel
 import com.example.messenger.data.RetrofitClient

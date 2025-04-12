@@ -1,14 +1,18 @@
-package com.example.messenger.auth.ui
+package com.example.messenger.auth.ui.fragments
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import com.example.messenger.R
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
+import com.example.messenger.R
+import com.example.messenger.auth.ui.adapters.AuthPagerAdapter
 import com.example.messenger.databinding.FragmentAuthBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -30,6 +34,12 @@ class AuthFragment : Fragment() {
         val connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         val isInternetConnected = capabilities != null
+
+        setFragmentResultListener("request") { key, bundle ->
+            val result = bundle.getBoolean("result")
+            binding.overlay.isVisible = result
+            binding.progressBar.isVisible = result
+        }
 
         if (capabilities != null) {
             val connectionType = when {

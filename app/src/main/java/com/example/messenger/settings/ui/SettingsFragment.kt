@@ -1,33 +1,61 @@
 package com.example.messenger.settings.ui
 
-import com.example.messenger.R
-import android.content.Context.MODE_PRIVATE
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.webkit.MimeTypeMap
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
-import com.example.messenger.data.ApiService
+import com.bumptech.glide.Glide
+import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.data.models.LoginResponse
-import com.example.messenger.data.models.RegisterRequest
-import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.FragmentSettingsBinding
 import com.example.messenger.libs.ThemeManager
-import com.example.messenger.libs.TokenManager
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.Locale
+import com.example.messenger.settings.ui.models.SettingsScreenState
+import com.example.messenger.settings.ui.view_models.SettingsViewModel
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+    private val apiService by lazy {
+        RetrofitClient.create(requireContext(), view)
+    }
+    private val viewModel by viewModels<SettingsViewModel> {
+        SettingsViewModel.getViewModelFactory(apiService, requireContext(), view)
+    }
+
+    val pickMedia = registerForActivityResult(PickVisualMedia()) { uri ->
+        if (uri == null) {
+            return@registerForActivityResult
+        }
+        val type = requireContext().contentResolver.getType(uri)
+            ?: return@registerForActivityResult
+
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+            ?: return@registerForActivityResult
+
+        val requestBody = requireContext().contentResolver.openInputStream(uri).use {
+            it?.readBytes()?.toRequestBody(type.toMediaTypeOrNull())
+        } ?: return@registerForActivityResult
+
+        val filePart = MultipartBody.Part.createFormData(
+            "file",
+            uri.lastPathSegment + "." + extension,
+            requestBody
+        );
+
+        viewModel.updateAvatar(filePart)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,21 +68,9 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        RetrofitClient.create(requireContext(), view).getUser().enqueue(
-            object :
-                Callback<UserResponse> {
-                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
-                    if (response.isSuccessful) {
-                        response.body()?.let { user ->
-                            binding.userLogin.text = getString(R.string.user, user.login)
-                            binding.userName.text = getString(R.string.name, user.name)
-                        }
-                    }
-                }
-
-                override fun onFailure(p0: Call<UserResponse?>, p1: Throwable) {
-                }
-            })
+        viewModel.settingsData.observe(viewLifecycleOwner) { settingsData ->
+            render(settingsData)
+        }
 
         binding.themeSwitch.isChecked = ThemeManager.getTheme(requireContext())
         binding.themeSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -66,44 +82,21 @@ class SettingsFragment : Fragment() {
             ThemeManager.saveTheme(requireContext(), isChecked)
         }
 
-//        val languagesArray = arrayOf("English", "Русский", "Українська")
-//        val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, languagesArray)
-//        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-//        binding.languageSpinner.adapter = adapter
-
-//        val prefs = requireActivity().getSharedPreferences("AppSettings", AppCompatActivity.MODE_PRIVATE)
-//        val savedLanguage = prefs.getString("My_Lang", "en")
-//        setLocale(savedLanguage ?: "en")
-
-//        binding.languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-//                val languageCode = if (position == 0) "en" else if (position == 1) "ru" else "uk"
-//                setLocale(languageCode)
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>) {
-//            }
-//        }
-
         binding.logout.setOnClickListener {
-            RetrofitClient.create(requireContext(), view).logout().enqueue(
-                object :
-                    Callback<Unit> {
-                    override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                        if (response.isSuccessful) {
-                            TokenManager.clearToken(requireContext())
-                            findNavController().navigate(com.example.messenger.R.id.action_settingsFragment_to_authFragment)
-                        } else {
-                        }
-                    }
-
-                    override fun onFailure(p0: Call<Unit?>, p1: Throwable) {
-                    }
-                })
+            viewModel.logout(requireContext())
         }
 
-        binding.rename.setOnClickListener{
-            NameChangeDialogFragment().show(childFragmentManager, "ConfirmationDialog")
+        setFragmentResultListener("requestRename") { key, bundle ->
+            val result = bundle.getString("resultRename")
+            viewModel.rename(result.toString())
+        }
+
+        binding.rename.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_nameChangeDialogFragment)
+        }
+
+        binding.userAvatar.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))
         }
     }
 
@@ -120,15 +113,38 @@ class SettingsFragment : Fragment() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
-//    private fun setLocale(lang: String) {
-//        val locale = Locale(lang)
-//        Locale.setDefault(locale)
-//        val configuration = Configuration()
-//        configuration.setLocale(locale)
-//        requireActivity().resources.updateConfiguration(configuration, requireActivity().resources.displayMetrics)
-//
-//        val editor = requireActivity().getSharedPreferences("AppSettings", AppCompatActivity.MODE_PRIVATE).edit()
-//        editor.putString("My_Lang", lang)
-//        editor.apply()
-//    }
+    private fun render(state: SettingsScreenState) {
+        when (state) {
+            is SettingsScreenState.Loading -> showLoading(state)
+            is SettingsScreenState.Content -> showContent(state)
+            is SettingsScreenState.Error -> showError(state)
+            is SettingsScreenState.Navigate -> showNavigate(state)
+        }
+    }
+
+    private fun hideAll() {
+        binding.overlay.isVisible = false
+        binding.progressBar.isVisible = false
+    }
+
+    private fun showLoading(state: SettingsScreenState.Loading) {
+        hideAll()
+        binding.overlay.isVisible = true
+        binding.progressBar.isVisible = true
+    }
+
+    private fun showContent(state: SettingsScreenState.Content) {
+        hideAll()
+        binding.userLogin.text = getString(R.string.user, state.userLogin)
+        binding.userName.text = getString(R.string.name, state.userName)
+        Glide.with(requireContext()).load(state.userAvatar).placeholder(R.drawable.avatar).into(binding.userAvatar)
+    }
+
+    private fun showError(state: SettingsScreenState.Error) {
+        hideAll()
+    }
+
+    private fun showNavigate(state: SettingsScreenState) {
+        findNavController().navigate(com.example.messenger.R.id.action_settingsFragment_to_authFragment)
+    }
 }

@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.example.messenger.data.models.UserSearchResponse
+import com.bumptech.glide.Glide
+import com.example.messenger.R
 import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.databinding.ItemContactBinding
 
-class ContactsAdapter(val onClick: (UserSearchResponse) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder> (), Filterable {
+class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder> (), Filterable {
     inner class ViewHolder(val binding: ItemContactBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -25,8 +26,9 @@ class ContactsAdapter(val onClick: (UserSearchResponse) -> Unit) : RecyclerView.
         with(holder.binding) {
             userName.text = filteredContacts[position].name
             userLogin.text = filteredContacts[position].login
+            Glide.with(holder.itemView).load(filteredContacts[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
             delete.setOnClickListener {
-//                onClick(contacts[position])
+                onClick(filteredContacts[position])
             }
         }
     }

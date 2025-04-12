@@ -51,5 +51,9 @@ class UserSearchDialogFragment : DialogFragment() {
                 return true
             }
         })
+
+        binding.toBack.setOnClickListener{
+            dismiss()
+        }
     }
 }

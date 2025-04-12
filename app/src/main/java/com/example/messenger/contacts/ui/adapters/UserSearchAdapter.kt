@@ -3,6 +3,8 @@ package com.example.messenger.contacts.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.messenger.R
 import com.example.messenger.data.models.UserSearchResponse
 import com.example.messenger.databinding.ItemUserSearchBinding
 
@@ -21,6 +23,7 @@ class UserSearchAdapter(private val onClick: (UserSearchResponse) -> Unit) : Rec
         with(holder.binding) {
             userName.text = contacts[position].name
             userLogin.text = contacts[position].login
+            Glide.with(holder.itemView).load(contacts[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
             add.setOnClickListener {
                 onClick(contacts[position])
             }

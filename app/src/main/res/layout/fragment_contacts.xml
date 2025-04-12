@@ -26,7 +26,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:queryHint="Поиск контактов"
         app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
@@ -34,9 +34,7 @@
         android:id="@+id/rv_search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         tools:itemCount="7"
@@ -51,7 +49,7 @@
         android:src="@drawable/user_search"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorLineDetails"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -63,7 +61,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorLineDetails"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

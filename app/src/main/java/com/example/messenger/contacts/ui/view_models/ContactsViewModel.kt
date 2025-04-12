@@ -10,14 +10,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.data.ApiService
-import com.example.messenger.data.RetrofitClient
+import com.example.messenger.data.models.contacts.ContactRequest
 import com.example.messenger.data.models.contacts.ContactsResponse
-import com.example.messenger.libs.DebounceOperators
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.messenger.libs.HandleOperators
+import kotlinx.coroutines.launch
 
-class ContactsViewModel(val apiService: ApiService, val context: Context, val view: View?): ViewModel() {
+class ContactsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _contacts = MutableLiveData<List<ContactsResponse>>()
     val contacts: LiveData<List<ContactsResponse>> get() = _contacts
 
@@ -31,26 +29,38 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
                         view = view
                     )
                 }
-            }}
-
-    fun getContacts(){
-        RetrofitClient.create(context, view).getContacts().enqueue(
-            object :
-                Callback<List<ContactsResponse>> {
-                override fun onResponse(call: Call<List<ContactsResponse>>, response: Response<List<ContactsResponse>>) {
-                    if (response.isSuccessful) {
-                        if (response.body() != null)
-                            _contacts.value = response.body()
-                    }
-                }
-
-                override fun onFailure(p0: Call<List<ContactsResponse>?>, p1: Throwable) {
-
-                }
-            })
+            }
     }
 
-    fun deleteContact(){
-        return
+    fun getContacts() {
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.getContacts()
+            }
+            when (response.code()) {
+                200 -> {
+                    _contacts.value = response.body()
+                }
+
+                999 -> {
+                }
+            }
+        }
+    }
+
+    fun deleteContact(userId: String) {
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.deleteContact(ContactRequest(userId))
+            }
+            when (response.code()) {
+                200 -> {
+                    getContacts()
+                }
+
+                999 -> {
+                }
+            }
+        }
     }
 }

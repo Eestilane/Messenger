@@ -3,6 +3,8 @@ package com.example.messenger.contacts.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.messenger.R
 import com.example.messenger.data.models.contacts.RequestResponse
 import com.example.messenger.databinding.ItemOutgoingRequestBinding
 
@@ -21,6 +23,7 @@ class OutgoingRequestsAdapter(val decline: (RequestResponse) -> Unit): RecyclerV
         with(holder.binding) {
             userName.text = requests[position].name
             userLogin.text = requests[position].login
+            Glide.with(holder.itemView).load(requests[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
             decline.setOnClickListener {
                 decline(requests[position])
             }

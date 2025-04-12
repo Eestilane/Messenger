@@ -29,127 +29,167 @@
         android:text="@string/settings"
         android:textColor="?colorText"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
-        android:id="@+id/blockUser"
+    <View
+        android:id="@+id/userAvatarView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_element_top"
+        app:layout_constraintBottom_toTopOf="@id/frameUserInfo"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/settingsText" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/userAvatar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_elemet"
-        android:backgroundTint="?colorFragment"
+        android:layout_marginTop="24dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/settingsText"
+        app:shapeAppearanceOverlay="@style/circleImageView" />
+
+    <View
+        android:id="@+id/viewInBlockUser0"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_below="@id/frameUserInfo"
+        android:layout_marginTop="8dp"
+        android:background="?colorLineDetails"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/userAvatar" />
+
+    <FrameLayout
+        android:id="@+id/frameUserInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?colorFragment"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/viewInBlockUser0">
+
+        <TextView
+            android:id="@+id/userLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
+            android:text="@string/user"
+            android:textColor="?colorText"
+            android:textFontWeight="1"
+            android:textSize="21sp" />
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/viewInBlockUser1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_below="@id/frameUserInfo"
+        android:background="?colorLineDetails"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/frameUserInfo" />
+
+    <FrameLayout
+        android:id="@+id/frameName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?colorFragment"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/viewInBlockUser1">
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
+            android:text="@string/name"
+            android:textColor="?colorText"
+            android:textFontWeight="1"
+            android:textSize="21sp" />
+
+        <Button
+            android:id="@+id/rename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:backgroundTint="?colorFragment"
+            android:paddingEnd="8dp"
+            android:text="Rename"
+            android:textColor="@color/red"
+            android:textFontWeight="1000"
+            android:textSize="21sp" />
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/viewInBlockUser2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_below="@id/frameName"
+        android:background="?colorLineDetails"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/settingsText">
+        app:layout_constraintTop_toBottomOf="@id/frameName" />
 
-        <FrameLayout
-            android:id="@+id/frameUserInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <FrameLayout
+        android:id="@+id/frameLogout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/viewInBlockUser2"
+        android:background="@drawable/rounded_element_bottom"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/viewInBlockUser2">
 
-            <TextView
-                android:id="@+id/userLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:padding="8dp"
-                android:text="@string/user"
-                android:textColor="?colorText"
-                android:textFontWeight="1"
-                android:textSize="21sp" />
-
-        </FrameLayout>
-
-        <View
-            android:id="@+id/viewInBlockUser1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/frameUserInfo"
-            android:background="?colorLineDetails" />
-
-        <FrameLayout
-            android:id="@+id/frameName"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/userLogout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/viewInBlockUser1">
+            android:layout_gravity="start|center_vertical"
+            android:padding="8dp"
+            android:text="@string/logOutOfAccount"
+            android:textColor="?colorText"
+            android:textFontWeight="1"
+            android:textSize="21sp" />
 
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:padding="8dp"
-                android:text="Name:"
-                android:textColor="?colorText"
-                android:textFontWeight="1"
-                android:textSize="21sp" />
-
-            <Button
-                android:id="@+id/rename"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:backgroundTint="?colorFragment"
-                android:paddingEnd="8dp"
-                android:text="Rename"
-                android:textColor="@color/red"
-                android:textFontWeight="1000"
-                android:textSize="21sp" />
-
-        </FrameLayout>
-
-        <View
-            android:id="@+id/viewInBlockUser2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/frameName"
-            android:background="?colorLineDetails" />
-
-        <FrameLayout
-            android:id="@+id/frameLogout"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/viewInBlockUser2">
+            android:layout_gravity="end|center_vertical"
+            android:backgroundTint="?colorFragment"
+            android:paddingEnd="8dp"
+            android:text="@string/logout"
+            android:textColor="@color/red"
+            android:textFontWeight="1000"
+            android:textSize="21sp" />
 
-            <TextView
-                android:id="@+id/userLogout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:padding="8dp"
-                android:text="@string/logOutOfAccount"
-                android:textColor="?colorText"
-                android:textFontWeight="1"
-                android:textSize="21sp" />
-
-            <Button
-                android:id="@+id/logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:backgroundTint="?colorFragment"
-                android:paddingEnd="8dp"
-                android:text="@string/logout"
-                android:textColor="@color/red"
-                android:textFontWeight="1000"
-                android:textSize="21sp" />
-
-        </FrameLayout>
-
-    </RelativeLayout>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/frameTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/blockUser">
+        app:layout_constraintTop_toBottomOf="@id/frameLogout">
 
         <TextView
             android:id="@+id/themeText"
@@ -178,7 +218,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -213,7 +253,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -248,7 +288,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_elemet"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
@@ -277,5 +317,26 @@
             android:textSize="21sp" />
 
     </FrameLayout>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#80000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressBackgroundTint="?colorText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
