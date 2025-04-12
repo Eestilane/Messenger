@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:background="@drawable/rounded_elemet"
+    android:background="@drawable/rounded_element"
     android:backgroundTint="?colorFragment">
+
+    <ImageView
+        android:id="@+id/userAvatar"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/userLogin"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:background="@drawable/rounded_element"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/userName"
@@ -12,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/decline"
         android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/userAvatar"
         android:gravity="center_vertical"
         android:padding="8dp"
         android:text="Пися"
@@ -37,17 +49,19 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@id/userName"
-        android:background="?colorLineDetails"/>
+        android:layout_toEndOf="@id/userAvatar"
+        android:background="?colorLineDetails" />
 
     <TextView
         android:id="@+id/userLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/viewInItemContact"
+        android:layout_toEndOf="@id/userAvatar"
         android:padding="8dp"
         android:text="Попа"
         android:textColor="?colorText"
         android:textFontWeight="1"
-        android:textSize="18sp"
-        android:layout_below="@id/viewInItemContact" />
+        android:textSize="18sp" />
 
 </RelativeLayout>

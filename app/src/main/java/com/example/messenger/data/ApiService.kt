@@ -1,16 +1,17 @@
 package com.example.messenger.data
 
-import com.example.messenger.data.models.contacts.AddContactRequest
-import com.example.messenger.data.models.contacts.ContactsResponse
-import com.example.messenger.data.models.contacts.AcceptDeclineRequest
 import com.example.messenger.data.models.LoginRequest
 import com.example.messenger.data.models.LoginResponse
 import com.example.messenger.data.models.RegisterRequest
 import com.example.messenger.data.models.UpdateNameRequest
 import com.example.messenger.data.models.UserResponse
 import com.example.messenger.data.models.UserSearchResponse
+import com.example.messenger.data.models.contacts.AcceptDeclineRequest
+import com.example.messenger.data.models.contacts.ContactRequest
+import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.data.models.contacts.RequestResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -28,29 +29,32 @@ interface ApiService {
     fun logout(): Call<Unit>
 
     @GET("/users/user")
-    fun getUser(): Call<UserResponse>
+    suspend fun getUser(): Response<UserResponse>
 
     @GET("/users/search")
-    fun userSearch(@Query("search") search : String): Call<List<UserSearchResponse>>
+    suspend fun userSearch(@Query("search") search : String): Response<List<UserSearchResponse>>
 
     @PATCH("/user/update/name")
-    fun userUpdateName(@Body request: UpdateNameRequest): Call<Unit>
+    suspend fun userUpdateName(@Body request: UpdateNameRequest): Response<Unit>
 
     @GET("/contacts")
-    fun getContacts(): Call<List<ContactsResponse>>
+    suspend fun getContacts(): Response<List<ContactsResponse>>
 
     @POST("/contacts/add")
-    fun addContact(@Body request: AddContactRequest): Call<Unit>
+    suspend fun addContact(@Body request: ContactRequest): Response<Unit>
 
     @POST("/contacts/accept")
-    fun acceptRequest(@Body request: AcceptDeclineRequest): Call<Unit>
+    suspend fun acceptRequest(@Body request: AcceptDeclineRequest): Response<Unit>
 
     @POST("/contacts/decline")
-    fun declineRequest(@Body request: AcceptDeclineRequest): Call<Unit>
+    suspend fun declineRequest(@Body request: AcceptDeclineRequest): Response<Unit>
+
+    @POST("/contacts/delete")
+    suspend fun deleteContact(@Body request: ContactRequest): Response<Unit>
 
     @GET("contacts/in_requests")
-    fun getContactsInRequest(): Call<List<RequestResponse>>
+    suspend fun getContactsInRequest(): Response<List<RequestResponse>>
 
     @GET("contacts/out_requests")
-    fun getContactsOutRequest(): Call<List<RequestResponse>>
+    suspend fun getContactsOutRequest(): Response<List<RequestResponse>>
 }

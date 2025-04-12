@@ -1,14 +1,15 @@
-package com.example.messenger.auth.ui
+package com.example.messenger.auth.ui.fragments
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import com.example.messenger.R
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.example.messenger.R
+import com.example.messenger.auth.ui.adapters.AuthPagerAdapter
 import com.example.messenger.databinding.FragmentAuthBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

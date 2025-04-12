@@ -1,11 +1,11 @@
-package com.example.messenger.auth.ui
+package com.example.messenger.auth.ui.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
