@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.auth.ui.models.AuthScreenState
-import com.example.messenger.contacts.ui.view_models.ContactsViewModel
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.LoginRequest
 import com.example.messenger.data.models.LoginResponse

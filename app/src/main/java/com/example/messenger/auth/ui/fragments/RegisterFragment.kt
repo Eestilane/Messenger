@@ -14,16 +14,7 @@ import com.example.messenger.R
 import com.example.messenger.auth.ui.models.AuthScreenState
 import com.example.messenger.auth.ui.view_models.AuthViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.data.models.LoginResponse
-import com.example.messenger.data.models.RegisterRequest
-import com.example.messenger.data.models.errors.AuthErrorBody422
 import com.example.messenger.databinding.FragmentAuthRegisterBinding
-import com.example.messenger.libs.TokenManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.getValue
 
 class RegisterFragment : Fragment() {
