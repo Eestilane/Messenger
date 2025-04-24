@@ -35,7 +35,7 @@ class AuthFragment : Fragment() {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         val isInternetConnected = capabilities != null
 
-        setFragmentResultListener("request") { key, bundle ->
+        childFragmentManager.setFragmentResultListener("request", viewLifecycleOwner) { key, bundle ->
             val result = bundle.getBoolean("result")
             binding.overlay.isVisible = result
             binding.progressBar.isVisible = result

@@ -49,11 +49,9 @@ class AuthViewModel(val apiService: ApiService, val context: Context, val view: 
 
             when (response.code()) {
                 200 -> {
-                    with(response as LoginResponse) {
-                        response.body()?.token?.let { token ->
-                            TokenManager.saveToken(context, token)
-                            renderState(AuthScreenState.Navigate)
-                        }
+                    with(response.body() as LoginResponse) {
+                        TokenManager.saveToken(context, token)
+                        renderState(AuthScreenState.Navigate)
                     }
                 }
 
@@ -91,11 +89,9 @@ class AuthViewModel(val apiService: ApiService, val context: Context, val view: 
 
             when (response.code()) {
                 200 -> {
-                    with(response as LoginResponse) {
-                        response.body()?.token?.let { token ->
-                            TokenManager.saveToken(context, token)
-                            renderState(AuthScreenState.Navigate)
-                        }
+                    with(response.body() as LoginResponse) {
+                        TokenManager.saveToken(context, token)
+                        renderState(AuthScreenState.Navigate)
                     }
                 }
 

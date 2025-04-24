@@ -5,11 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.messenger.contacts.ui.adapters.ContactsAdapter
 import com.example.messenger.contacts.ui.dialogs.RequestsDialogFragment
 import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
+import com.example.messenger.contacts.ui.models.ContactsScreenState
+import com.example.messenger.contacts.ui.models.RequestsScreenState
+import com.example.messenger.contacts.ui.models.UserSearchScreenState
 import com.example.messenger.contacts.ui.view_models.ContactsViewModel
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentContactsBinding
@@ -35,17 +39,15 @@ class ContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.contacts.observe(viewLifecycleOwner) { contacts ->
+            render(contacts)
+        }
+
         contactsAdapter = ContactsAdapter(
             onClick = { contact -> viewModel.deleteContact(contact.id) }
         )
         binding.rvSearchResults.adapter = contactsAdapter
-        viewModel.contacts.observe(viewLifecycleOwner) { contacts ->
-            contactsAdapter.setContacts(contacts)
-        }
 
-        contactsAdapter.filter.filter("")
-
-        viewModel.getContacts()
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -54,11 +56,11 @@ class ContactsFragment : Fragment() {
             }
         })
 
-        binding.fabAddContact.setOnClickListener{
+        binding.fabAddContact.setOnClickListener {
             UserSearchDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
 
-        binding.fabRequestContact.setOnClickListener{
+        binding.fabRequestContact.setOnClickListener {
             RequestsDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
     }
@@ -66,5 +68,35 @@ class ContactsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun render(state: ContactsScreenState) {
+        when (state) {
+            is ContactsScreenState.Loading -> showLoading(state)
+            is ContactsScreenState.Content -> showContent(state)
+            is ContactsScreenState.Error -> showError(state)
+        }
+    }
+
+    private fun hideAll() {
+        binding.overlay.isVisible = false
+        binding.progressBar.isVisible = false
+        binding.rvSearchResults.isVisible = false
+    }
+
+    private fun showLoading(state: ContactsScreenState.Loading) {
+        hideAll()
+        binding.overlay.isVisible = true
+        binding.progressBar.isVisible = true
+    }
+
+    private fun showContent(state: ContactsScreenState.Content) {
+        hideAll()
+        binding.rvSearchResults.isVisible = true
+        contactsAdapter.setContacts(state.contacts)
+    }
+
+    private fun showError(state: ContactsScreenState.Error) {
+        hideAll()
     }
 }
