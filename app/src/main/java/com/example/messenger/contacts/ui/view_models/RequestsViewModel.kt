@@ -9,17 +9,21 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.messenger.contacts.ui.models.RequestsScreenState
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.contacts.AcceptDeclineRequest
-import com.example.messenger.data.models.contacts.RequestResponse
 import com.example.messenger.libs.HandleOperators
+import com.example.messenger.libs.ThrottleOperators
 import kotlinx.coroutines.launch
 
 class RequestsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
-    private val _incomingRequests = MutableLiveData<List<RequestResponse>>()
-    private val _outgoingRequests = MutableLiveData<List<RequestResponse>>()
-    val incomingRequests: LiveData<List<RequestResponse>> get() = _incomingRequests
-    val outgoingRequests: LiveData<List<RequestResponse>> get() = _outgoingRequests
+    private val _requestsState = MutableLiveData<RequestsScreenState>(RequestsScreenState.Loading)
+    val requestsState: LiveData<RequestsScreenState> get() = _requestsState
+    var incomingRequest = false
+
+    fun renderState(state: RequestsScreenState) {
+        _requestsState.value = state
+    }
 
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory =
@@ -36,12 +40,18 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
 
     fun inRequestResponse() {
         viewModelScope.launch {
+            renderState(RequestsScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.getContactsInRequest()
             }
             when (response.code()) {
                 200 -> {
-                    _incomingRequests.value = response.body()
+                    val requests = response.body()
+                    renderState(
+                        RequestsScreenState.Content(
+                            requests = requests!!
+                        )
+                    )
                 }
 
                 999 -> {
@@ -52,12 +62,18 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
 
     fun outRequestResponse() {
         viewModelScope.launch {
+            renderState(RequestsScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.getContactsOutRequest()
             }
             when (response.code()) {
                 200 -> {
-                    _outgoingRequests.value = response.body()
+                    val requests = response.body()
+                    renderState(
+                        RequestsScreenState.Content(
+                            requests = requests!!
+                        )
+                    )
                 }
 
                 999 -> {
@@ -66,8 +82,14 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
         }
     }
 
+    val accept: (String) -> Unit = ThrottleOperators.throttleLatest(
+        300L, viewModelScope,
+        this::acceptRequest
+    )
+
     fun acceptRequest(userId: String) {
         viewModelScope.launch {
+            renderState(RequestsScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.acceptRequest(AcceptDeclineRequest(userId))
             }
@@ -82,15 +104,24 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
         }
     }
 
+    val decline: (String) -> Unit = ThrottleOperators.throttleLatest(
+        300L, viewModelScope,
+        this::declineRequest
+    )
+
     fun declineRequest(userId: String) {
         viewModelScope.launch {
+            renderState(RequestsScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.declineRequest(AcceptDeclineRequest(userId))
             }
             when (response.code()) {
                 200 -> {
-                    inRequestResponse()
-                    outRequestResponse()
+                    if (incomingRequest) {
+                        inRequestResponse()
+                    } else {
+                        outRequestResponse()
+                    }
                 }
 
                 999 -> {

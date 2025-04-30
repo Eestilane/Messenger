@@ -12,8 +12,6 @@ import com.example.messenger.contacts.ui.adapters.ContactsAdapter
 import com.example.messenger.contacts.ui.dialogs.RequestsDialogFragment
 import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
 import com.example.messenger.contacts.ui.models.ContactsScreenState
-import com.example.messenger.contacts.ui.models.RequestsScreenState
-import com.example.messenger.contacts.ui.models.UserSearchScreenState
 import com.example.messenger.contacts.ui.view_models.ContactsViewModel
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentContactsBinding
@@ -79,14 +77,12 @@ class ContactsFragment : Fragment() {
     }
 
     private fun hideAll() {
-        binding.overlay.isVisible = false
         binding.progressBar.isVisible = false
         binding.rvSearchResults.isVisible = false
     }
 
     private fun showLoading(state: ContactsScreenState.Loading) {
         hideAll()
-        binding.overlay.isVisible = true
         binding.progressBar.isVisible = true
     }
 

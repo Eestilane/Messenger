@@ -9,12 +9,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.messenger.auth.ui.models.AuthScreenState
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.UpdateNameRequest
 import com.example.messenger.data.models.UserResponse
+import com.example.messenger.data.models.errors.AuthErrorBody422
 import com.example.messenger.libs.HandleOperators
 import com.example.messenger.libs.TokenManager
+import com.example.messenger.settings.ui.models.NameChangeScreenState
 import com.example.messenger.settings.ui.models.SettingsScreenState
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import kotlin.String
@@ -22,28 +26,36 @@ import kotlin.String
 class SettingsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _settingsData = MutableLiveData<SettingsScreenState>(SettingsScreenState.Loading)
     val settingsData: LiveData<SettingsScreenState> get() = _settingsData
+    private val _renameData = MutableLiveData<NameChangeScreenState>(NameChangeScreenState.Null)
+    val renameData: LiveData<NameChangeScreenState> get() = _renameData
     private lateinit var user: UserResponse
 
     init {
         getUser()
     }
 
-    fun renderState(state: SettingsScreenState) {
+    fun renderSettingsState(state: SettingsScreenState) {
         _settingsData.postValue(state)
+    }
+
+    fun renderNameChangeState(state: NameChangeScreenState) {
+        _renameData.postValue(state)
     }
 
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 SettingsViewModel(
-                    apiService = apiService, context = context, view = view
+                    apiService = apiService,
+                    context = context,
+                    view = view
                 )
             }
         }
     }
 
     fun getUser() {
-        renderState(SettingsScreenState.Loading)
+        renderSettingsState(SettingsScreenState.Loading)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
                 apiService.getUser()
@@ -51,7 +63,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     user = response.body()!!
-                    renderState(
+                    renderSettingsState(
                         SettingsScreenState.Content(
                             userId = user.id, userName = user.name, userLogin = user.login, userAvatar = user.avatar
                         )
@@ -66,7 +78,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
     }
 
     fun logout(context: Context) {
-        renderState(SettingsScreenState.Loading)
+        renderSettingsState(SettingsScreenState.Loading)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
                 apiService.logout()
@@ -74,7 +86,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     TokenManager.clearToken(context)
-                    renderState(SettingsScreenState.Navigate)
+                    renderSettingsState(SettingsScreenState.NavigateToAuth)
                 }
 
                 999 -> {
@@ -85,7 +97,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
     }
 
     fun rename(result: String) {
-        renderState(SettingsScreenState.Loading)
+        renderSettingsState(SettingsScreenState.Loading)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
                 apiService.userUpdateName(UpdateNameRequest(result))
@@ -93,9 +105,20 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     user = user.copy(name = result)
-                    renderState(
+                    renderSettingsState(
                         SettingsScreenState.Content(
                             userId = user.id, userName = user.name, userLogin = user.login, userAvatar = user.avatar
+                        )
+                    )
+                    renderNameChangeState(NameChangeScreenState.NavigateToSettings)
+                }
+
+                422 -> {
+                    getUser()
+                    val error = Gson().fromJson(response.errorBody()?.string(), AuthErrorBody422::class.java)
+                    renderNameChangeState(
+                        NameChangeScreenState.Error(
+                            renameError = error.errors.Name?.firstOrNull(),
                         )
                     )
                 }
@@ -107,7 +130,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
     }
 
     fun updateAvatar(filePart: MultipartBody.Part) {
-        renderState(SettingsScreenState.Loading)
+        renderSettingsState(SettingsScreenState.Loading)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
                 apiService.updateAvatar(filePart)
@@ -115,7 +138,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     user = user.copy(avatar = response.body()!!)
-                    renderState(
+                    renderSettingsState(
                         SettingsScreenState.Content(
                             userId = user.id, userName = user.name, userLogin = user.login, userAvatar = user.avatar
                         )

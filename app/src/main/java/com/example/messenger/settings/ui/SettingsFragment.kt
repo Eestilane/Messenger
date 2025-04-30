@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
@@ -30,7 +31,7 @@ class SettingsFragment : Fragment() {
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }
-    private val viewModel by viewModels<SettingsViewModel> {
+    private val viewModel by navGraphViewModels<SettingsViewModel>(R.id.navigation_graph) {
         SettingsViewModel.getViewModelFactory(apiService, requireContext(), view)
     }
 
@@ -118,7 +119,7 @@ class SettingsFragment : Fragment() {
             is SettingsScreenState.Loading -> showLoading(state)
             is SettingsScreenState.Content -> showContent(state)
             is SettingsScreenState.Error -> showError(state)
-            is SettingsScreenState.Navigate -> showNavigate(state)
+            is SettingsScreenState.NavigateToAuth -> showNavigateToAuth(state)
         }
     }
 
@@ -144,7 +145,7 @@ class SettingsFragment : Fragment() {
         hideAll()
     }
 
-    private fun showNavigate(state: SettingsScreenState) {
+    private fun showNavigateToAuth(state: SettingsScreenState) {
         findNavController().navigate(com.example.messenger.R.id.action_settingsFragment_to_authFragment)
     }
 }

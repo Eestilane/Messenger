@@ -11,11 +11,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.contacts.ui.models.ContactsScreenState
 import com.example.messenger.data.ApiService
-import com.example.messenger.data.models.UserResponse
 import com.example.messenger.data.models.contacts.ContactRequest
-import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.libs.HandleOperators
-import com.example.messenger.settings.ui.models.SettingsScreenState
 import kotlinx.coroutines.launch
 
 class ContactsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
@@ -67,6 +64,7 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
 
     fun deleteContact(userId: String) {
         viewModelScope.launch {
+            renderState(ContactsScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.deleteContact(ContactRequest(userId))
             }

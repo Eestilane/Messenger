@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.messenger.contacts.ui.models.ContactsScreenState
+import com.example.messenger.contacts.ui.models.RequestsScreenState
+import com.example.messenger.contacts.ui.models.UserSearchScreenState
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.UserSearchResponse
 import com.example.messenger.data.models.contacts.ContactRequest
@@ -17,8 +20,22 @@ import com.example.messenger.libs.HandleOperators
 import kotlinx.coroutines.launch
 
 class UserSearchViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
-    private val _userSearch = MutableLiveData<List<UserSearchResponse>>()
-    val userSearch: LiveData<List<UserSearchResponse>> get() = _userSearch
+    private val _userSearch = MutableLiveData<UserSearchScreenState>(UserSearchScreenState.Loading)
+    val userSearch: LiveData<UserSearchScreenState> get() = _userSearch
+    var lastExpression: String = ""
+
+    val searchUser: (String) -> Unit = DebounceOperators.debounce(
+        300L, viewModelScope,
+        this::onUserSearch
+    )
+
+    init{
+        searchUser("")
+    }
+
+    fun renderState(state: UserSearchScreenState) {
+        _userSearch.value = state
+    }
 
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory =
@@ -33,19 +50,21 @@ class UserSearchViewModel(val apiService: ApiService, val context: Context, val 
             }
     }
 
-    val searchUser: (String) -> Unit = DebounceOperators.debounce(
-        300L, viewModelScope,
-        this::onUserSearch
-    )
-
     fun onUserSearch(newText: String) {
         viewModelScope.launch {
+            lastExpression = newText
+            renderState(UserSearchScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.userSearch(newText)
             }
             when (response.code()) {
                 200 -> {
-                    _userSearch.value = response.body()
+                    val users = response.body()
+                    renderState(
+                        UserSearchScreenState.Content(
+                            users = users!!
+                        )
+                    )
                 }
 
                 999 -> {
@@ -56,11 +75,13 @@ class UserSearchViewModel(val apiService: ApiService, val context: Context, val 
 
     fun addFriendRequest(userId: String) {
         viewModelScope.launch {
+            renderState(UserSearchScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.addContact(ContactRequest(userId))
             }
             when (response.code()) {
                 200 -> {
+                    searchUser(lastExpression)
                 }
 
                 999 -> {

@@ -2,6 +2,7 @@ package com.example.messenger.auth.ui.view_models
 
 import android.content.Context
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class AuthViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _authState = MutableLiveData<AuthScreenState>(AuthScreenState.Content)
-    val authState: MutableLiveData<AuthScreenState> get() = _authState
+    val authState: LiveData<AuthScreenState> get() = _authState
 
     fun renderState(state: AuthScreenState) {
         _authState.postValue(state)

@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.example.messenger.contacts.ui.adapters.RequestsPagerAdapter
 import com.example.messenger.databinding.FragmentContactsRequestsBinding
@@ -37,6 +39,11 @@ class RequestsDialogFragment : DialogFragment() {
 
         binding.toBack.setOnClickListener{
             dismiss()
+        }
+
+        childFragmentManager.setFragmentResultListener("request", viewLifecycleOwner) { key, bundle ->
+            val progressBar = bundle.getBoolean("progressBar")
+            binding.progressBar.isVisible = progressBar
         }
     }
 
