@@ -59,6 +59,7 @@
         android:text=""
         android:textColor="@color/red"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@id/frameRename"
         app:layout_constraintTop_toBottomOf="@id/frameRename" />
 

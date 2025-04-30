@@ -10,12 +10,13 @@ import com.example.messenger.R
 import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.databinding.ItemContactBinding
 
-class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>(), Filterable {
+class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: ItemContactBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     private val contacts = mutableListOf<ContactsResponse>()
     private val filteredContacts = mutableListOf<ContactsResponse>()
+    var lastExpression: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -43,32 +44,25 @@ class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Ad
 
     override fun getItemCount() = filteredContacts.size
 
-    override fun getFilter() = object : Filter() {
-        override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val results = FilterResults()
-            val filtered: MutableList<ContactsResponse> = mutableListOf()
-
-            if (constraint.isNullOrEmpty()) {
-                filtered.addAll(contacts)
-            } else {
-                for (user in contacts) {
-                    if (user.name.contains(constraint, true) || user.login.contains(constraint, true)) {
-                        filtered.add(user)
-                    }
-                }
-            }
-
-            results.values = filtered
-            results.count = filtered.size
-            return results
-        }
-
-        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            filteredContacts.clear()
-            (results?.values as? List<ContactsResponse>)?.let {
-                filteredContacts.addAll(it)
-            }
+    fun filter(exspression: String?){
+        lastExpression = exspression.toString()
+        filteredContacts.clear()
+        if (exspression.isNullOrEmpty()){
+            filteredContacts.addAll(contacts)
             notifyDataSetChanged()
+            return
         }
+
+        for (user in contacts) {
+            if (user.name.contains(exspression!!, true) || user.login.contains(exspression, true)) {
+                filteredContacts.add(user)
+            }
+        }
+
+        notifyDataSetChanged()
+    }
+
+    fun reFilter() {
+        filter(lastExpression)
     }
 }

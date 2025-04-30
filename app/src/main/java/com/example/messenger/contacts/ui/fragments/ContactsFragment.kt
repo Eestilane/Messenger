@@ -49,7 +49,7 @@ class ContactsFragment : Fragment() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                contactsAdapter.filter.filter(newText)
+                contactsAdapter.filter(newText)
                 return true
             }
         })
@@ -94,5 +94,10 @@ class ContactsFragment : Fragment() {
 
     private fun showError(state: ContactsScreenState.Error) {
         hideAll()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        contactsAdapter.reFilter()
     }
 }
