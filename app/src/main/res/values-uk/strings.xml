@@ -18,11 +18,8 @@
     <string name="login">Увійти</string>
     <string name="register">Реєстрація</string>
     <string name="invalidLogin">Неправильний логін</string>
-    <string name="invalidPassword">Неправильний пароль</string>
-    <string name="invalidUserName">Неприпустиме ім\'я користувача</string>
-    <string name="invalidLoginOrPassword">Неправильний логін або пароль</string>
-    <string name="logout">Вийти</string>
-    <string name="user">Користувач: %1s</string>
-    <string name="name">"Ім'я: %1s</string>
-    <string name="logOutOfAccount">Вийти з облікового запису:</string>
+    <string name="user">Користувач:</string>
+    <string name="name">Ім\'я користувача:</string>
+    <string name="changeName">Натисніть, щоб змінити ім\'я користувача</string>
+    <string name="logout">Натисніть, щоб вийти з облікового запису</string>
 </resources>

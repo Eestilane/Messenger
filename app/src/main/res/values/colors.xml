@@ -12,4 +12,9 @@
     <color name="lightGray">#2B2D30</color>
     <color name="veryLightGray">#43454A</color>
     <color name="whiteGray">#D9D9D9</color>
+    <color name="nightThemeBackground">#0C0C0C</color>
+    <color name="nightThemeBlock">#111111</color>
+    <color name="nightThemeLine">#191919</color>
+    <color name="nightThemeGrayText">#777777</color>
+    <color name="nightThemeWhiteText">#EEEEEE</color>
 </resources>

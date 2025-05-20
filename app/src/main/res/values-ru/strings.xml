@@ -18,11 +18,8 @@
     <string name="login">Войти</string>
     <string name="register">Регистрация</string>
     <string name="invalidLogin">Неверный логин</string>
-    <string name="invalidPassword">Неверный пароль</string>
-    <string name="invalidUserName">Недопустимое имя пользователя</string>
-    <string name="invalidLoginOrPassword">Неверный логин или пароль</string>
-    <string name="logout">Выйти</string>
-    <string name="user">Пользователь: %1s</string>
-    <string name="name">"Имя: %1s</string>
-    <string name="logOutOfAccount">Выйти из аккаунта:</string>
+    <string name="user">Пользователь:</string>
+    <string name="name">Имя пользователя:</string>
+    <string name="changeName">Нажмите, чтобы сменить имя пользователя</string>
+    <string name="logout">Нажмите, чтобы выйти из аккаунта</string>
 </resources>

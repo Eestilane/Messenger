@@ -2,8 +2,6 @@ package com.example.messenger.contacts.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.messenger.R
@@ -44,17 +42,17 @@ class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Ad
 
     override fun getItemCount() = filteredContacts.size
 
-    fun filter(exspression: String?){
-        lastExpression = exspression.toString()
+    fun filter(expression: String?){
+        lastExpression = expression.toString()
         filteredContacts.clear()
-        if (exspression.isNullOrEmpty()){
+        if (expression.isNullOrEmpty()){
             filteredContacts.addAll(contacts)
             notifyDataSetChanged()
             return
         }
 
         for (user in contacts) {
-            if (user.name.contains(exspression!!, true) || user.login.contains(exspression, true)) {
+            if (user.name.contains(expression, true) || user.login.contains(expression, true)) {
                 filteredContacts.add(user)
             }
         }
@@ -62,7 +60,7 @@ class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Ad
         notifyDataSetChanged()
     }
 
-    fun reFilter() {
+    fun updateFilter() {
         filter(lastExpression)
     }
 }

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorBackground" format="color|reference" />
-    <attr name="colorText" format="color|reference" />
+    <attr name="colorBackground" format="color" />
+    <attr name="colorSubtext" format="color" />
+    <attr name="colorText" format="color" />
     <attr name="colorLineDetails" format="color|reference" />
     <attr name="colorThumb" format="color|reference" />
     <attr name="colorTrack" format="color|reference" />

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
@@ -19,6 +19,7 @@ import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentSettingsBinding
 import com.example.messenger.libs.ThemeManager
+import com.example.messenger.settings.ui.models.NameChangeScreenState
 import com.example.messenger.settings.ui.models.SettingsScreenState
 import com.example.messenger.settings.ui.view_models.SettingsViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -39,28 +40,23 @@ class SettingsFragment : Fragment() {
         if (uri == null) {
             return@registerForActivityResult
         }
-        val type = requireContext().contentResolver.getType(uri)
-            ?: return@registerForActivityResult
+        val type = requireContext().contentResolver.getType(uri) ?: return@registerForActivityResult
 
-        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
-            ?: return@registerForActivityResult
+        val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(type) ?: return@registerForActivityResult
 
         val requestBody = requireContext().contentResolver.openInputStream(uri).use {
             it?.readBytes()?.toRequestBody(type.toMediaTypeOrNull())
         } ?: return@registerForActivityResult
 
         val filePart = MultipartBody.Part.createFormData(
-            "file",
-            uri.lastPathSegment + "." + extension,
-            requestBody
+            "file", uri.lastPathSegment + "." + extension, requestBody
         );
 
         viewModel.updateAvatar(filePart)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -73,6 +69,12 @@ class SettingsFragment : Fragment() {
             render(settingsData)
         }
 
+        viewModel.navigateToAuth.observe(viewLifecycleOwner) { shouldNavigate ->
+            if (shouldNavigate) {
+                findNavController().navigate(R.id.action_settingsFragment_to_authFragment)
+            }
+        }
+
         binding.themeSwitch.isChecked = ThemeManager.getTheme(requireContext())
         binding.themeSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
@@ -83,7 +85,7 @@ class SettingsFragment : Fragment() {
             ThemeManager.saveTheme(requireContext(), isChecked)
         }
 
-        binding.logout.setOnClickListener {
+        binding.frameLogout.setOnClickListener {
             viewModel.logout(requireContext())
         }
 
@@ -92,7 +94,7 @@ class SettingsFragment : Fragment() {
             viewModel.rename(result.toString())
         }
 
-        binding.rename.setOnClickListener {
+        binding.frameName.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_nameChangeDialogFragment)
         }
 
@@ -119,7 +121,6 @@ class SettingsFragment : Fragment() {
             is SettingsScreenState.Loading -> showLoading(state)
             is SettingsScreenState.Content -> showContent(state)
             is SettingsScreenState.Error -> showError(state)
-            is SettingsScreenState.NavigateToAuth -> showNavigateToAuth(state)
         }
     }
 
@@ -136,16 +137,12 @@ class SettingsFragment : Fragment() {
 
     private fun showContent(state: SettingsScreenState.Content) {
         hideAll()
-        binding.userLogin.text = getString(R.string.user, state.userLogin)
-        binding.userName.text = getString(R.string.name, state.userName)
+        binding.userLogin.text = state.userLogin
+        binding.userName.text = state.userName
         Glide.with(requireContext()).load(state.userAvatar).placeholder(R.drawable.avatar).into(binding.userAvatar)
     }
 
     private fun showError(state: SettingsScreenState.Error) {
         hideAll()
-    }
-
-    private fun showNavigateToAuth(state: SettingsScreenState) {
-        findNavController().navigate(com.example.messenger.R.id.action_settingsFragment_to_authFragment)
     }
 }

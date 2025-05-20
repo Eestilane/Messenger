@@ -51,7 +51,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorLineDetails"/>
+        android:backgroundTint="?colorFragment"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRequestContact"
@@ -63,7 +63,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorLineDetails"/>
+        android:backgroundTint="?colorFragment"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

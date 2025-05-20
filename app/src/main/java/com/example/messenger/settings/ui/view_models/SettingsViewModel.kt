@@ -9,12 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.messenger.auth.ui.models.AuthScreenState
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.UpdateNameRequest
 import com.example.messenger.data.models.UserResponse
 import com.example.messenger.data.models.errors.AuthErrorBody422
 import com.example.messenger.libs.HandleOperators
+import com.example.messenger.libs.SingleLiveEvent
 import com.example.messenger.libs.TokenManager
 import com.example.messenger.settings.ui.models.NameChangeScreenState
 import com.example.messenger.settings.ui.models.SettingsScreenState
@@ -26,8 +26,16 @@ import kotlin.String
 class SettingsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _settingsData = MutableLiveData<SettingsScreenState>(SettingsScreenState.Loading)
     val settingsData: LiveData<SettingsScreenState> get() = _settingsData
+
     private val _renameData = MutableLiveData<NameChangeScreenState>(NameChangeScreenState.Null)
     val renameData: LiveData<NameChangeScreenState> get() = _renameData
+
+    private val _navigateToAuth = SingleLiveEvent<Boolean>()
+    val navigateToAuth: LiveData<Boolean> get() = _navigateToAuth
+
+    private val _navigateToSettings = SingleLiveEvent<Boolean>()
+    val navigateToSettings: LiveData<Boolean> get() = _navigateToSettings
+
     private lateinit var user: UserResponse
 
     init {
@@ -86,7 +94,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     TokenManager.clearToken(context)
-                    renderSettingsState(SettingsScreenState.NavigateToAuth)
+                    _navigateToAuth.postValue(true)
                 }
 
                 999 -> {
@@ -98,6 +106,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
 
     fun rename(result: String) {
         renderSettingsState(SettingsScreenState.Loading)
+        renderNameChangeState(NameChangeScreenState.Null)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
                 apiService.userUpdateName(UpdateNameRequest(result))
@@ -110,7 +119,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
                             userId = user.id, userName = user.name, userLogin = user.login, userAvatar = user.avatar
                         )
                     )
-                    renderNameChangeState(NameChangeScreenState.NavigateToSettings)
+                    _navigateToSettings.postValue(true)
                 }
 
                 422 -> {

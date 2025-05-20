@@ -23,14 +23,9 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="invalidLogin">Invalid login</string>
-    <string name="invalidPassword">Invalid password</string>
-    <string name="invalidUserName">Invalid user name</string>
-    <string name="invalidLoginOrPassword">Invalid login or password</string>
-    <string name="logout">Log out</string>
-    <string name="user">User: %1s</string>
-    <string name="name">"Name: %1s</string>
-    <string name="logOutOfAccount">Log out of account:</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user">User:</string>
+    <string name="name">Username:</string>
+    <string name="changeName">Click to change username</string>
+    <string name="logout">Click to logout</string>
 
 </resources>

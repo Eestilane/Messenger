@@ -1,9 +1,10 @@
 <resources>
 
     <style name="Base.Theme.Messenger" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorBackground">@color/gray</item>
-        <item name="colorText">@color/white</item>
-        <item name="colorLineDetails">@color/veryLightGray</item>
+        <item name="colorBackground">@color/nightThemeBackground</item>
+        <item name="colorSubtext">@color/nightThemeGrayText</item>
+        <item name="colorText">@color/nightThemeWhiteText</item>
+        <item name="colorLineDetails">@color/nightThemeLine</item>
         <item name="colorThumb">@color/thumbDarkTheme</item>
         <item name="colorTrack">@color/trackDarkTheme</item>
         <item name="iconChats">@drawable/chats_white</item>
@@ -15,7 +16,7 @@
         <item name="themeText">@string/darkTheme</item>
         <item name="fontFamily">@font/samsung</item>
         <item name="android:statusBarColor">@color/gray</item>
-        <item name="colorFragment">@color/lightGray</item>
+        <item name="colorFragment">@color/nightThemeBlock</item>
         <item name="colorHintText">@color/veryLightGray</item>
         <item name="avatar">@color/white</item>
     </style>
