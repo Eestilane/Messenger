@@ -1,7 +1,10 @@
 package com.example.messenger.settings.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
@@ -11,7 +14,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
@@ -19,7 +21,6 @@ import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentSettingsBinding
 import com.example.messenger.libs.ThemeManager
-import com.example.messenger.settings.ui.models.NameChangeScreenState
 import com.example.messenger.settings.ui.models.SettingsScreenState
 import com.example.messenger.settings.ui.view_models.SettingsViewModel
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -62,6 +63,7 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -85,17 +87,65 @@ class SettingsFragment : Fragment() {
             ThemeManager.saveTheme(requireContext(), isChecked)
         }
 
-        binding.frameLogout.setOnClickListener {
-            viewModel.logout(requireContext())
-        }
-
         setFragmentResultListener("requestRename") { key, bundle ->
             val result = bundle.getString("resultRename")
             viewModel.rename(result.toString())
         }
 
+        binding.frameName.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    view.setBackgroundColor(getColorFromTheme(R.attr.colorTouchedBackground))
+                    view.isPressed = true
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+                    view.isPressed = false
+                    false
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+                    view.isPressed = false
+                    false
+                }
+
+                else -> false
+            }
+        }
+
         binding.frameName.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_nameChangeDialogFragment)
+        }
+
+        binding.frameLogout.setOnTouchListener { view, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    view.setBackgroundColor(getColorFromTheme(R.attr.colorTouchedBackground))
+                    view.isPressed = true
+                    true
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+                    view.isPressed = false
+                    false
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+                    view.isPressed = false
+                    false
+                }
+
+                else -> false
+            }
+        }
+
+        binding.frameLogout.setOnClickListener {
+            viewModel.logout(requireContext())
         }
 
         binding.userAvatar.setOnClickListener {
@@ -144,5 +194,11 @@ class SettingsFragment : Fragment() {
 
     private fun showError(state: SettingsScreenState.Error) {
         hideAll()
+    }
+
+    private fun getColorFromTheme(attr: Int): Int {
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(attr, typedValue, true)
+        return typedValue.data
     }
 }

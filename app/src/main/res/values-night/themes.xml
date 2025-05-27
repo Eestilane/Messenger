@@ -2,6 +2,7 @@
 
     <style name="Base.Theme.Messenger" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorBackground">@color/nightThemeBackground</item>
+        <item name="colorTouchedBackground">@color/nightThemeTouchedBackground</item>
         <item name="colorSubtext">@color/nightThemeGrayText</item>
         <item name="colorText">@color/nightThemeWhiteText</item>
         <item name="colorLineDetails">@color/nightThemeLine</item>

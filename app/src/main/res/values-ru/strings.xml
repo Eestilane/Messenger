@@ -5,12 +5,12 @@
     <string name="contacts">КОНТАКТЫ</string>
     <string name="settings">НАСТРОЙКИ</string>
     <string name="language">Язык:</string>
-    <string name="author">ⓘАвтор:</string>
+    <string name="author">ⓘ Автор:</string>
     <string name="lightTheme">Тема: Светлая</string>
     <string name="darkTheme">Тема: Тёмная</string>
     <string name="back">←Назад</string>
     <string name="goToChat">Перейти к Чату</string>
-    <string name="version">ⓘВерсия:</string>
+    <string name="version">ⓘ Версия:</string>
     <string name="gleksText">Тут пока пусто…</string>
     <string name="enterLogin">Введите логин</string>
     <string name="enterPassword">Введите пароль</string>

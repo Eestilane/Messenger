@@ -9,14 +9,15 @@
 
     <TextView
         android:id="@+id/settingsText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:text="@string/settings"
         android:textColor="?colorText"
-        android:textSize="24sp"
+        android:background="?colorFragment"
+        android:gravity="center"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,42 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <View
-                android:id="@+id/userAvatarView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:background="?colorFragment"
-                app:layout_constraintBottom_toTopOf="@id/frameUserInfo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/userAvatar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/avatar"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/circleImageView" />
-
-            <View
-                android:id="@+id/viewInBlockUser0"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_below="@id/frameUserInfo"
-                android:layout_marginTop="8dp"
-                android:background="?colorLineDetails"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userAvatar" />
-
             <RelativeLayout
                 android:id="@+id/frameUserInfo"
                 android:layout_width="0dp"
@@ -78,28 +43,43 @@
                 android:background="?colorFragment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewInBlockUser0">
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/userAvatar"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="12dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/avatar"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImageView" />
 
                 <TextView
+                    android:layout_above="@id/userLogin"
+                    android:layout_toEndOf="@id/userAvatar"
                     android:id="@+id/userLoginText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="12dp"
                     android:text="@string/user"
                     android:textColor="?colorSubtext"
                     android:textFontWeight="1"
                     android:textSize="11sp" />
 
                 <TextView
+                    android:layout_alignBottom="@id/userAvatar"
+                    android:layout_toEndOf="@id/userAvatar"
                     android:id="@+id/userLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/userLoginText"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="12dp"
-                    android:layout_marginBottom="8dp"
                     android:text=""
                     android:textColor="?colorText"
                     android:textFontWeight="1"
@@ -111,8 +91,8 @@
                 android:id="@+id/viewInBlockUser1"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_below="@id/frameUserInfo"
                 android:background="?colorLineDetails"
+                app:layout_constraintBottom_toTopOf="@id/frameName"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/frameUserInfo" />
@@ -169,8 +149,8 @@
                 android:id="@+id/viewInBlockUser2"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_below="@id/frameName"
                 android:background="?colorLineDetails"
+                app:layout_constraintBottom_toTopOf="@id/frameLogout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/frameName" />
@@ -313,16 +293,26 @@
 
             </FrameLayout>
 
+            <View
+                android:id="@+id/viewInBlockInfo"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?colorLineDetails"
+                app:layout_constraintBottom_toTopOf="@id/frameAuthor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frameVersion" />
+
             <FrameLayout
                 android:id="@+id/frameVersion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:background="?colorFragment"
                 android:backgroundTint="?colorFragment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frameAuthor">
+                app:layout_constraintTop_toBottomOf="@id/viewInBlockInfo">
 
                 <TextView
                     android:id="@+id/versionText"
@@ -345,7 +335,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="8dp"
-                    android:text="Test 0.04"
+                    android:text="Test 0.1"
                     android:textColor="?colorText"
                     android:textFontWeight="1"
                     android:textSize="14sp" />
@@ -358,10 +348,10 @@
                 android:layout_height="0dp"
                 android:background="#80000000"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/frameLogout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/frameUserInfo" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -369,10 +359,10 @@
                 android:layout_height="wrap_content"
                 android:progressBackgroundTint="?colorText"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/frameLogout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/frameUserInfo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
