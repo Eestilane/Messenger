@@ -7,12 +7,16 @@
     app:startDestination="@id/authFragment">
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.messenger.chats.ui.ChatFragment"
+        android:name="com.example.messenger.chats.ui.fragments.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chats_chat" />
+        tools:layout="@layout/fragment_chats_chat">
+        <argument
+            android:name="chatId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.messenger.chats.ui.ChatsFragment"
+        android:name="com.example.messenger.chats.ui.fragments.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" >
         <action
@@ -22,7 +26,15 @@
             app:exitAnim="@anim/close_frtl"
             app:popEnterAnim="@anim/from_left_to_right"
             app:popExitAnim="@anim/close_fltr"/>
+        <action
+            android:id="@+id/action_chatsFragment_to_createChatDialogFragment"
+            app:destination="@id/createChatDialogFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/createChatDialogFragment"
+        android:name="com.example.messenger.chats.ui.dialogs.CreateChatDialogFragment"
+        android:label="CreateChatDialogFragment"
+        tools:layout="@layout/fragment_chatname" />
     <fragment
         android:id="@+id/contactsFragment"
         android:name="com.example.messenger.contacts.ui.fragments.ContactsFragment"

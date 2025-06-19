@@ -2,18 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chatsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground"
-    tools:context=".chats.ui.fragments.ChatsFragment">
+    tools:context=".contacts.ui.fragments.ContactsFragment">
+
+    <Button
+        android:id="@+id/toBack"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:backgroundTint="?colorBackground"
+        android:gravity="center|top"
+        android:padding="0dp"
+        android:text="←"
+        android:textColor="?colorText"
+        android:textFontWeight="1000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/chatsText"
+        android:id="@+id/contactsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/chats"
+        android:text="Список участников"
         android:textColor="?colorText"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,27 +34,24 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chats"
+        android:id="@+id/rv_search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/chatsText"
+        app:layout_constraintTop_toBottomOf="contactsText"
         tools:itemCount="7"
-        tools:listitem="@layout/item_chat" />
+        tools:listitem="@layout/item_contact" />
 
-    <Button
-        android:id="@+id/chatCreate"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Создать чат"
-        android:textFontWeight="1000"
-        android:textSize="24sp"
+        android:layout_margin="8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

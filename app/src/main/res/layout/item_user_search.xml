@@ -33,7 +33,7 @@
         android:layout_toEndOf="@id/userAvatarCard"
         android:gravity="center_vertical"
         android:padding="8dp"
-        android:text="Пися"
+        android:text="Никнейм"
         android:textColor="?colorText"
         android:textFontWeight="1000"
         android:textSize="21sp" />
@@ -66,7 +66,7 @@
         android:layout_below="@id/viewInItemContact"
         android:layout_toEndOf="@id/userAvatarCard"
         android:padding="8dp"
-        android:text="Попа"
+        android:text="Логин"
         android:textColor="?colorText"
         android:textFontWeight="1"
         android:textSize="18sp" />
