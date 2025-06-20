@@ -2,6 +2,7 @@ package com.example.messenger.data
 
 import com.example.messenger.chats.ui.models.AddUserRequest
 import com.example.messenger.chats.ui.models.Chat
+import com.example.messenger.chats.ui.models.ChatMessagesResponse
 import com.example.messenger.chats.ui.models.CreateChatRequest
 import com.example.messenger.chats.ui.models.RemoveUserRequest
 import com.example.messenger.data.models.LoginRequest
@@ -15,7 +16,6 @@ import com.example.messenger.data.models.contacts.ContactRequest
 import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.data.models.contacts.RequestResponse
 import okhttp3.MultipartBody
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -23,9 +23,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
-import retrofit2.http.Path
 import retrofit2.http.Query
-import java.util.UUID
 
 interface ApiService {
     @POST("/auth/login")
@@ -71,21 +69,6 @@ interface ApiService {
     @PATCH("/users/update/avatar")
     suspend fun updateAvatar(@Part file: MultipartBody.Part): Response<String>
 
-    @POST("hubs/ChatHub/SendMessage")
-    suspend fun sendMessage(@Query("chatId") chatId: UUID, @Query("content") content: String): Response<Unit>
-
-    @POST("hubs/chatHub/EditMessage")
-    suspend fun editMessage(@Query("messageId") messageId: UUID, @Query("content") content: String): Response<Unit>
-
-    @POST("hubs/chatHub/DeleteMessage")
-    suspend fun deleteMessage(@Query("messageId") messageId: UUID): Response<Unit>
-
-    @POST("hubs/chatHub/OnConnectedAsync")
-    suspend fun onConnectedAsync(): Response<Unit>
-
-    @POST("hubs/chatHub/OnDisconnectedAsync")
-    suspend fun onDisconnectedAsync(@Query("exception") exception: String): Response<Unit>
-
     @GET("chats")
     suspend fun getChats(): Response<ApiResponse<List<Chat>>>
 
@@ -93,11 +76,17 @@ interface ApiService {
     suspend fun createChat(@Body request: CreateChatRequest): Response<String>
 
     @GET("chats/get_chat_users")
-    suspend fun getChatUsers(@Query("chatId") chatId: String): Response<List<UserResponse>>
+    suspend fun getChatUsers(@Query("chatId") chatId: String): Response<ApiResponse<List<UserResponse>>>
 
     @POST("chats/add_user_to_chat")
     suspend fun addUserToChat(@Body request: AddUserRequest): Response<Unit>
 
     @POST("chats/remove_user_from_chat")
     suspend fun removeUserFromChat(@Body request: RemoveUserRequest): Response<Unit>
+
+    @PATCH("chats/update/avatar")
+    suspend fun updateChatAvatar()
+
+    @GET("chats/get_chat_messages")
+    suspend fun getChatMessages(@Query("chatId") chatId: String, @Query("limit") limit: Int = 50, @Query("offset") offset: Int = 0): Response<ChatMessagesResponse>
 }

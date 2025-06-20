@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground"
-    tools:context=".contacts.ui.fragments.ContactsFragment">
+    tools:context=".chats.ui.dialogs.AddUserToChatDialogFragment">
 
     <Button
         android:id="@+id/toBack"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/contactsText"
+        android:id="@+id/chatUsersText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -34,12 +34,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_results"
+        android:id="@+id/chatUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="contactsText"
+        app:layout_constraintTop_toBottomOf="@id/chatUsersText"
         tools:itemCount="7"
         tools:listitem="@layout/item_contact" />
 
@@ -52,6 +52,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contactsText" />
+        app:layout_constraintTop_toBottomOf="@id/chatUsersText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

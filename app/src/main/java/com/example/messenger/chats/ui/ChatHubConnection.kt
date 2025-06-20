@@ -1,55 +1,31 @@
 package com.example.messenger.chats.ui
 
-import android.util.Log
 import com.microsoft.signalr.HubConnection
 import com.microsoft.signalr.HubConnectionBuilder
-import com.microsoft.signalr.HubException
 import io.reactivex.rxjava3.core.Single
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx3.await
-import kotlinx.coroutines.withContext
 
 class ChatHubConnection(private val authToken: String) {
     private val connection: HubConnection = HubConnectionBuilder.create("wss://api.nogamenolife.pro/chatHub").withAccessTokenProvider( Single.fromCallable { authToken } ).build()
 
     suspend fun connect() {
-        try {
-            connection.start().await()
-            Log.i("ChatHubConnection", "Успешно подключено к хабу")
-        } catch (e: Exception) {
-            Log.e("ChatHubConnection", "Ошибка подключения: ${e.message}", e)
-        }
+        connection.start().await()
     }
 
     suspend fun sendMessage(chatId: String, content: String) {
-        try {
-            connection.invoke("SendMessage", chatId, content).await()
-            Log.i("ChatHubConnection", "вСЁ ЗАЕБИСЬ")
-        } catch (e: Exception) {
-            Log.e("ChatHubConnection", "Ошибка отправки сообщения: ${e.message}", e)
-        }
+        connection.invoke("SendMessage", chatId, content).await()
     }
 
-    suspend fun editMessage(messageId: String, newContent: String) = withContext(Dispatchers.IO) {
-
-        try {
-            connection.invoke("EditMessage", messageId, newContent)
-            Log.i("ChatHub", "Редактирование прошло заебись")
-        } catch (e: HubException) {
-            Log.e("ChatHub", "Хуита: ${e.message}")
-            throw e
-        } catch (e: Exception) {
-            Log.e("ChatHub", "Хуита", e)
-            throw e
-        }
+    suspend fun editMessage(messageId: String, content: String) {
+        connection.invoke("EditMessage", messageId, content).await()
     }
 
-    suspend fun deleteMessage(messageId: String) = withContext(Dispatchers.IO) {
+    suspend fun deleteMessage(messageId: String) {
         connection.invoke("DeleteMessage", messageId).await()
     }
 
-    fun onMessageReceived(callback: (userId: String, content: String) -> Unit) {
-        connection.on("ReceiveMessage", callback, String::class.java, String::class.java)
+    fun onMessageReceived(callback: (messageId: String, chatId: String, userId: String, content: String) -> Unit) {
+        connection.on("ReceiveMessage", callback, String::class.java, String::class.java, String::class.java, String::class.java)
     }
 
     fun onMessageEdited(callback: (messageId: String, newContent: String) -> Unit) {
@@ -58,6 +34,18 @@ class ChatHubConnection(private val authToken: String) {
 
     fun onMessageDeleted(callback: (messageId: String) -> Unit) {
         connection.on("DeletedMessage", callback, String::class.java)
+    }
+
+    fun onUserAdded(callback: (chatId: String, userId: String) -> Unit) {
+        connection.on("AddedToChat", callback, String::class.java, String::class.java)
+    }
+
+    fun onUserRemoved(callback: (chatId: String, userId: String) -> Unit) {
+        connection.on("RemovedFromChat", callback, String::class.java, String::class.java)
+    }
+
+    fun onAvatarUpdated(callback: (chatId: String, userId: String, link: String) -> Unit) {
+        connection.on("ChatAvatarUpdated", callback, String::class.java, String::class.java, String::class.java)
     }
 
     fun disconnect() {

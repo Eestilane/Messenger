@@ -40,11 +40,7 @@ class AddUserToChatDialogFragment : DialogFragment() {
 
     private val chatId by lazy { arguments?.getString(ARG_CHAT_ID) ?: "" }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentContactsUserSearchBinding.inflate(inflater, container, false)
         return binding.root
     }

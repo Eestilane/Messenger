@@ -47,9 +47,6 @@ class AddUserToChatViewModel(private val apiService: ApiService, private val con
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    private var searchJob: Job? = null
-    private var addUserJob: Job? = null
-
     fun renderState(state: UserSearchScreenState) {
         _userSearch.value = state
     }
@@ -78,12 +75,7 @@ class AddUserToChatViewModel(private val apiService: ApiService, private val con
 
     fun addUserToChat(chatId: String, userId: String) = viewModelScope.launch {
         try {
-            val response = apiService.addUserToChat(AddUserRequest(chatId, userId))
-            if (response.isSuccessful) {
-                _successMessage.postValue("Пользователь добавлен в чат")
-            } else {
-                _errorMessage.postValue("Ошибка добавления пользователя")
-            }
+            apiService.addUserToChat(AddUserRequest(chatId, userId))
         } catch (e: Exception) {
             _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
         }

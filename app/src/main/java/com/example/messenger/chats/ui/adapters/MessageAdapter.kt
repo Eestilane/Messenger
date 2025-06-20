@@ -1,13 +1,14 @@
 package com.example.messenger.chats.ui.adapters
 
-import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import com.example.messenger.databinding.ItemMessageBinding
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.recyclerview.widget.RecyclerView
 import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Message
+import com.example.messenger.databinding.ItemMessageBinding
+import java.time.LocalDateTime
 
 class MessageAdapter (private val onEdit: (messageId: String, currentText: String) -> Unit, private val onDelete: (messageId: String) -> Unit): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
@@ -51,6 +52,12 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
 
     override fun getItemCount() = messages.size
 
+    fun setMessages(newMessages: List<Message>) {
+        messages.clear()
+        messages.addAll(newMessages)
+        notifyDataSetChanged()
+    }
+
     fun addMessage(message: Message) {
         messages.add(message)
         notifyItemInserted(messages.size - 1)
@@ -59,7 +66,11 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     fun updateMessage(messageId: String, newText: String) {
         val position = messages.indexOfFirst { it.id == messageId }
         if (position != -1) {
-            messages[position] = messages[position].copy(content = newText)
+            val updatedMessage = messages[position].copy(
+                content = newText,
+                editedAt = LocalDateTime.now().toString()
+            )
+            messages[position] = updatedMessage
             notifyItemChanged(position)
         }
     }

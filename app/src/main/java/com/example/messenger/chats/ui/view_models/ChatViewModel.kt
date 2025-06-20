@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.UserResponse
 import kotlinx.coroutines.launch
@@ -27,25 +28,28 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
         }
     }
 
-    private val _messages = MutableLiveData<MutableList<String>>(mutableListOf())
-    val messages: LiveData<MutableList<String>> = _messages
-
     private val _chatUsers = MutableLiveData<List<UserResponse>>()
     val chatUsers: LiveData<List<UserResponse>> = _chatUsers
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
-    fun loadChatUsers(chatId: String) = viewModelScope.launch {
-        try {
-            val response = apiService.getChatUsers(chatId)
+    private val _messages = MutableLiveData<List<Message>>(emptyList())
+    val messages: LiveData<List<Message>> = _messages
+
+    private val _loading = MutableLiveData<Boolean>(false)
+    val loading: LiveData<Boolean> = _loading
+
+    fun loadMessages(chatId: String) {
+        viewModelScope.launch {
+            _loading.value = true
+            val response = apiService.getChatMessages(chatId)
             if (response.isSuccessful) {
-                _chatUsers.postValue(response.body() ?: emptyList())
+                _messages.value = response.body()?.data ?: emptyList()
             } else {
-                _errorMessage.postValue("Ошибка загрузки пользователей")
+                _errorMessage.value = "Ошибка загрузки сообщений"
             }
-        } catch (e: Exception) {
-            _errorMessage.postValue("Ошибка сети")
+
         }
     }
 
