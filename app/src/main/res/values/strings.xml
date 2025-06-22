@@ -20,6 +20,7 @@
     <string name="enterLogin">Enter login</string>
     <string name="enterPassword">Enter password</string>
     <string name="enterUserName">Enter user name</string>
+    <string name="enterChatName">Enter chat name</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="invalidLogin">Invalid login</string>

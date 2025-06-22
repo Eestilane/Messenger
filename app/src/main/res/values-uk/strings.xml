@@ -15,6 +15,7 @@
     <string name="enterLogin">Введіть логін</string>
     <string name="enterPassword">Введіть пароль</string>
     <string name="enterUserName">Введіть ім\'я користувача</string>
+    <string name="enterChatName">Введіть назву чату</string>
     <string name="login">Увійти</string>
     <string name="register">Реєстрація</string>
     <string name="invalidLogin">Неправильний логін</string>

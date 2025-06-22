@@ -17,7 +17,7 @@
         android:textColor="?colorText"
         android:background="?colorFragment"
         android:gravity="center"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -10,60 +10,72 @@
     <TextView
         android:id="@+id/contactsText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="@string/contacts"
         android:textColor="?colorText"
-        android:textSize="24sp"
+        android:textSize="18sp"
+        android:textFontWeight="1000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_element"
+        android:background="?colorFragment"
+        android:paddingStart="8dp"
         android:queryHint="Поиск контактов"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/addContact"
         app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:visibility="gone"
-        android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         tools:itemCount="7"
         tools:listitem="@layout/item_contact" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/user_search"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorFragment"/>
+    <FrameLayout
+        android:id="@+id/addContact"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:background="?colorFragment"
+        app:layout_constraintTop_toTopOf="@id/searchView"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/addContactInFrame"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/add" />
+
+    </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRequestContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/fabAddContact"
-        android:src="@drawable/incoming_requests"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorFragment"/>
+        android:backgroundTint="?colorFragment"
+        android:src="@drawable/incoming_requests"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"

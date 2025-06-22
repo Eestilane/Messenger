@@ -92,57 +92,57 @@ class SettingsFragment : Fragment() {
             viewModel.rename(result.toString())
         }
 
-        binding.frameName.setOnTouchListener { view, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    view.setBackgroundColor(getColorFromTheme(R.attr.colorTouchedBackground))
-                    view.isPressed = true
-                    true
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
-                    view.isPressed = false
-                    false
-                }
-
-                MotionEvent.ACTION_CANCEL -> {
-                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
-                    view.isPressed = false
-                    false
-                }
-
-                else -> false
-            }
-        }
+//        binding.frameName.setOnTouchListener { view, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    view.setBackgroundColor(getColorFromTheme(R.attr.colorTouchedBackground))
+//                    view.isPressed = true
+//                    true
+//                }
+//
+//                MotionEvent.ACTION_UP -> {
+//                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+//                    view.isPressed = false
+//                    false
+//                }
+//
+//                MotionEvent.ACTION_CANCEL -> {
+//                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+//                    view.isPressed = false
+//                    false
+//                }
+//
+//                else -> false
+//            }
+//        }
 
         binding.frameName.setOnClickListener {
             findNavController().navigate(R.id.action_settingsFragment_to_nameChangeDialogFragment)
         }
 
-        binding.frameLogout.setOnTouchListener { view, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    view.setBackgroundColor(getColorFromTheme(R.attr.colorTouchedBackground))
-                    view.isPressed = true
-                    true
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
-                    view.isPressed = false
-                    false
-                }
-
-                MotionEvent.ACTION_CANCEL -> {
-                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
-                    view.isPressed = false
-                    false
-                }
-
-                else -> false
-            }
-        }
+//        binding.frameLogout.setOnTouchListener { view, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    view.setBackgroundColor(getColorFromTheme(R.attr.colorTouchedBackground))
+//                    view.isPressed = true
+//                    true
+//                }
+//
+//                MotionEvent.ACTION_UP -> {
+//                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+//                    view.isPressed = false
+//                    false
+//                }
+//
+//                MotionEvent.ACTION_CANCEL -> {
+//                    view.setBackgroundColor(getColorFromTheme(R.attr.colorFragment))
+//                    view.isPressed = false
+//                    false
+//                }
+//
+//                else -> false
+//            }
+//        }
 
         binding.frameLogout.setOnClickListener {
             viewModel.logout(requireContext())

@@ -7,48 +7,56 @@
     android:background="?colorBackground"
     tools:context=".contacts.ui.fragments.ContactsFragment">
 
-    <Button
+    <FrameLayout
         android:id="@+id/toBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorBackground"
-        android:gravity="center|top"
-        android:padding="0dp"
-        android:text="←"
-        android:textColor="?colorText"
-        android:textFontWeight="1000"
-        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/declineInFrame"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/to_back" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/contactsText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="56dp"
+        android:gravity="center"
         android:text="Добавить пользователя"
         android:textColor="?colorText"
-        android:textSize="24sp"
+        android:textFontWeight="1000"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/toBack"
         app:layout_constraintTop_toTopOf="parent" />
 
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_element"
-        android:queryHint="Поиск контактов"
+        android:layout_height="48dp"
+        android:paddingStart="8dp"
+        android:layout_marginTop="8dp"
+        android:paddingEnd="8dp"
+        android:background="?colorFragment"
+        android:queryHint="Поиск пользователей"
         app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/searchView"
