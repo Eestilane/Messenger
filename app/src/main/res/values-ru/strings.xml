@@ -5,7 +5,7 @@
     <string name="contacts">КОНТАКТЫ</string>
     <string name="settings">НАСТРОЙКИ</string>
     <string name="language">Язык:</string>
-    <string name="author">ⓘ Автор:</string>
+    <string name="authors">ⓘ Авторы:</string>
     <string name="lightTheme">Тема: Светлая</string>
     <string name="darkTheme">Тема: Тёмная</string>
     <string name="back">←Назад</string>

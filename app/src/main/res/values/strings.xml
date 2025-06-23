@@ -10,7 +10,7 @@
     <string name="contacts">CONTACTS</string>
     <string name="settings">SETTINGS</string>
     <string name="language">Language:</string>
-    <string name="author">ⓘ Author:</string>
+    <string name="authors">ⓘ Authors:</string>
     <string name="lightTheme">Theme: Light</string>
     <string name="darkTheme">Theme: Dark</string>
     <string name="back">←BACK</string>

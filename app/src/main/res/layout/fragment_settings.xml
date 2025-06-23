@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorBackground"
+    android:orientation="vertical"
     tools:context=".settings.ui.SettingsFragment">
 
     <TextView
         android:id="@+id/settingsText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="@string/settings"
         android:textColor="?colorText"
-        android:background="?colorFragment"
-        android:gravity="center"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textFontWeight="1000"
+        android:textSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settingsText">
+        android:layout_marginBottom="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,9 +42,9 @@
                     android:id="@+id/userAvatar"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_marginStart="12dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/avatar"
                     app:layout_constraintDimensionRatio="1:1"
@@ -59,31 +52,41 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView" />
 
-                <TextView
-                    android:layout_above="@id/userLogin"
-                    android:layout_toEndOf="@id/userAvatar"
-                    android:id="@+id/userLoginText"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/userFrame"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:text="@string/user"
-                    android:textColor="?colorSubtext"
-                    android:textFontWeight="1"
-                    android:textSize="11sp" />
-
-                <TextView
+                    android:layout_alignTop="@id/userAvatar"
                     android:layout_alignBottom="@id/userAvatar"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_toEndOf="@id/userAvatar"
-                    android:id="@+id/userLogin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:text=""
-                    android:textColor="?colorText"
-                    android:textFontWeight="1"
-                    android:textSize="14sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/userLoginText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/user"
+                        android:textColor="?colorSubtext"
+                        android:textFontWeight="1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/userLogin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text=""
+                        android:textColor="?colorText"
+                        android:textFontWeight="1000"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -111,12 +114,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
                     android:text="@string/name"
                     android:textColor="?colorSubtext"
                     android:textFontWeight="1"
-                    android:textSize="11sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/userName"
@@ -124,11 +127,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/userNameText"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
+                    android:layout_marginStart="16dp"
                     android:text=""
                     android:textColor="?colorText"
-                    android:textFontWeight="1"
-                    android:textSize="14sp" />
+                    android:textFontWeight="1000"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/rename"
@@ -136,12 +139,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/userName"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="12dp"
                     android:text="@string/changeName"
                     android:textColor="?colorSubtext"
                     android:textFontWeight="1"
-                    android:textSize="11sp" />
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
@@ -170,9 +173,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
                     android:text="@string/logout"
                     android:textColor="?colorText"
                     android:textFontWeight="1"
@@ -196,9 +199,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
                     android:text="?themeText"
                     android:textColor="?colorText"
                     android:textFontWeight="1"
@@ -209,7 +212,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="16dp"
                     android:padding="0dp"
                     app:thumbTint="?colorThumb"
                     app:trackTint="?colorTrack" />
@@ -233,9 +236,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
                     android:text="@string/language"
                     android:textColor="?colorText"
                     android:textFontWeight="1"
@@ -246,7 +249,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="16dp"
                     android:backgroundTint="?colorThumb"
                     android:gravity="center_horizontal"
                     android:padding="0dp"
@@ -270,10 +273,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/author"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/authors"
                     android:textColor="?colorText"
                     android:textFontWeight="1"
                     android:textSize="14sp" />
@@ -283,12 +286,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Eestilane"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="Eestilane &amp; Yolo"
                     android:textColor="@color/nightThemeGrayText"
-                    android:textFontWeight="1"
+                    android:textFontWeight="1000"
                     android:textSize="14sp" />
 
             </FrameLayout>
@@ -319,9 +322,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
                     android:text="@string/version"
                     android:textColor="?colorText"
                     android:textFontWeight="1"
@@ -332,12 +335,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="12dp"
                     android:text="Test 0.1"
                     android:textColor="?colorText"
-                    android:textFontWeight="1"
+                    android:textFontWeight="1000"
                     android:textSize="14sp" />
 
             </FrameLayout>
@@ -368,4 +371,4 @@
 
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
