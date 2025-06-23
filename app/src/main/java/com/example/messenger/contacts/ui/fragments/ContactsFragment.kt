@@ -98,11 +98,6 @@ class ContactsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        contactsAdapter.updateFilter()
-    }
-
-    override fun onPause() {
-        super.onPause()
         viewModel.getContacts()
     }
 }
