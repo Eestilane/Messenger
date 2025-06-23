@@ -11,7 +11,7 @@
     <string name="back">←Назад</string>
     <string name="goToChat">Перейти к Чату</string>
     <string name="version">ⓘ Версия:</string>
-    <string name="gleksText">Тут пока пусто…</string>
+    <string name="randomText">Тут пока пусто…</string>
     <string name="enterLogin">Введите логин</string>
     <string name="enterPassword">Введите пароль</string>
     <string name="enterUserName">Введите имя пользователя</string>
@@ -23,4 +23,8 @@
     <string name="name">Имя пользователя:</string>
     <string name="changeName">Нажмите, чтобы сменить имя пользователя</string>
     <string name="logout">Нажмите, чтобы выйти из аккаунта</string>
+    <string name="cancel">Отмена</string>
+    <string name="next">Далее</string>
+    <string name="save">Сохранить</string>
+    <string name="editYourName">Редактирование имени</string>
 </resources>

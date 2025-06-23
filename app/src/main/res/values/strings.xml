@@ -16,7 +16,7 @@
     <string name="back">←BACK</string>
     <string name="goToChat">Go to Chat</string>
     <string name="version">ⓘ Version:</string>
-    <string name="gleksText">It\'s empty now…</string>
+    <string name="randomText">It\'s empty now…</string>
     <string name="enterLogin">Enter login</string>
     <string name="enterPassword">Enter password</string>
     <string name="enterUserName">Enter user name</string>
@@ -28,5 +28,8 @@
     <string name="name">Username:</string>
     <string name="changeName">Click to change username</string>
     <string name="logout">Click to logout</string>
-
+    <string name="cancel">Cancel</string>
+    <string name="next">Next</string>
+    <string name="save">Save</string>
+    <string name="editYourName">Edit your name</string>
 </resources>

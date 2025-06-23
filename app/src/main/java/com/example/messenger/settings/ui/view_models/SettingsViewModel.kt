@@ -50,6 +50,10 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
         _renameData.postValue(state)
     }
 
+    fun resetRenameError() {
+        _renameData.value = NameChangeScreenState.Null
+    }
+
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory = viewModelFactory {
             initializer {

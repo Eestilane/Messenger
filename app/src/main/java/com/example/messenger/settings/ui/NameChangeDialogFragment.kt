@@ -45,7 +45,10 @@ class NameChangeDialogFragment : DialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         binding.cancelButton.setOnClickListener {
-            findNavController().navigateUp()
+            viewModel.resetRenameError()
+            binding.root.post {
+                findNavController().navigateUp()
+            }
         }
 
         binding.okButton.setOnClickListener {
