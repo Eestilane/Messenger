@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.data.ApiService
+import com.example.messenger.data.models.ChangePasswordRequest
 import com.example.messenger.data.models.UpdateNameRequest
 import com.example.messenger.data.models.UserResponse
 import com.example.messenger.data.models.errors.AuthErrorBody422
@@ -112,6 +113,25 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
         }
     }
 
+    fun logoutAll(context: Context) {
+        renderSettingsState(SettingsScreenState.Loading)
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.logoutAll()
+            }
+            when (response.code()) {
+                200 -> {
+                    TokenManager.clearToken(context)
+                    _navigateToAuth.postValue(true)
+                }
+
+                999 -> {
+
+                }
+            }
+        }
+    }
+
     fun rename(result: String) {
         renderSettingsState(SettingsScreenState.Loading)
         renderNameChangeState(NameChangeScreenState.Null)
@@ -138,6 +158,29 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
                             renameError = error.errors.Name?.firstOrNull(),
                         )
                     )
+                }
+
+                999 -> {
+                }
+            }
+        }
+    }
+
+    fun changePassword(newPassword: String) {
+        renderSettingsState(SettingsScreenState.Loading)
+        renderNameChangeState(NameChangeScreenState.Null)
+        viewModelScope.launch {
+            val response = HandleOperators.handleRequest {
+                apiService.changePassword(ChangePasswordRequest(password = newPassword))
+            }
+            when (response.code()) {
+                200 -> {
+                    renderSettingsState(
+                        SettingsScreenState.Content(
+                            userId = user.id, userName = user.name, userLogin = user.login, userAvatar = user.avatar
+                        )
+                    )
+                    _navigateToSettings.postValue(true)
                 }
 
                 999 -> {

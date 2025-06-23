@@ -5,6 +5,7 @@ import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.ChatMessagesResponse
 import com.example.messenger.chats.ui.models.CreateChatRequest
 import com.example.messenger.chats.ui.models.RemoveUserRequest
+import com.example.messenger.data.models.ChangePasswordRequest
 import com.example.messenger.data.models.LoginRequest
 import com.example.messenger.data.models.LoginResponse
 import com.example.messenger.data.models.RegisterRequest
@@ -36,6 +37,9 @@ interface ApiService {
     @POST("/auth/logout")
     suspend fun logout(): Response<Unit>
 
+    @POST("/auth/logout_all")
+    suspend fun logoutAll(): Response<Unit>
+
     @GET("/users/user")
     suspend fun getUser(): Response<UserResponse>
 
@@ -44,6 +48,9 @@ interface ApiService {
 
     @PATCH("/users/update/name")
     suspend fun userUpdateName(@Body request: UpdateNameRequest): Response<Unit>
+
+    @PATCH("/users/update/password")
+    suspend fun changePassword(@Body request: ChangePasswordRequest): Response<Unit>
 
     @GET("/contacts")
     suspend fun getContacts(): Response<List<ContactsResponse>>
@@ -91,5 +98,6 @@ interface ApiService {
 
     @GET("chats/get_chat_messages")
     suspend fun getChatMessages(@Query("chatId") chatId: String, @Query("limit") limit: Int = 50, @Query("offset") offset: Int = 0): Response<ChatMessagesResponse>
+
 
 }

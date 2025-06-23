@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.UserResponse

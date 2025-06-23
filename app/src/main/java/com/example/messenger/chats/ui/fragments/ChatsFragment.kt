@@ -66,7 +66,7 @@ class ChatsFragment : Fragment() {
 
     }
 
-    private fun navigateToChat(chat: Chat) {
+    fun navigateToChat(chat: Chat) {
         findNavController().navigate(R.id.action_chatsFragment_to_chatFragment,
             bundleOf(
                 "chatId" to chat.id,

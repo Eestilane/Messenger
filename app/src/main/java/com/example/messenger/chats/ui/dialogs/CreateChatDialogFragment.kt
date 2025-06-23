@@ -12,6 +12,7 @@ import com.example.messenger.databinding.FragmentChatsCreateChatBinding
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.bumptech.glide.Glide
+import com.example.messenger.chats.ui.fragments.ChatsFragment
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
 
 class CreateChatDialogFragment : DialogFragment() {
@@ -53,7 +54,24 @@ class CreateChatDialogFragment : DialogFragment() {
             }
         }
 
-        viewModel.navigateToChat.observe(viewLifecycleOwner) { chatId -> chatId?.let { dismiss() } }
+        viewModel.navigateToChat.observe(viewLifecycleOwner) { chat ->
+            chat?.let {
+                dismiss()
+
+                (parentFragment as? ChatsFragment)?.navigateToChat(chat)
+
+                viewModel.onChatNavigated()
+            }
+        }
+
+        viewModel.currentChatAvatar.observe(viewLifecycleOwner) { avatarUrl ->
+            avatarUrl?.let {
+                Glide.with(this)
+                    .load(it)
+                    .circleCrop()
+                    .into(binding.chatAvatar)
+            }
+        }
 
         binding.chatAvatar.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

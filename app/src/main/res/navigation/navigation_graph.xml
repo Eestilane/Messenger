@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_settingsFragment_to_nameChangeDialogFragment"
             app:destination="@id/nameChangeDialogFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_passwordChangeDialogFragment"
+            app:destination="@id/passwordChangeDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/authFragment"
@@ -80,4 +83,9 @@
         android:name="com.example.messenger.settings.ui.NameChangeDialogFragment"
         android:label="fragment_settings_name_change"
         tools:layout="@layout/fragment_settings_name_change" />
+    <dialog
+        android:id="@+id/passwordChangeDialogFragment"
+        android:name="com.example.messenger.settings.ui.PasswordChangeDialogFragment"
+        android:label="fragment_settings_name_change"
+        tools:layout="@layout/fragment_settings_password_change" />
 </navigation>

@@ -22,7 +22,6 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
 
         fun bind(message: Message) {
             binding.apply {
-                senderName.text = message.senderId
 
                 messageText.text = message.content
 

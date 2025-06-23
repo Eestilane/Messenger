@@ -148,8 +148,13 @@ class SettingsFragment : Fragment() {
 //            }
 //        }
 
-        binding.changePassword.setOnClickListener {
-            viewModel.logout(requireContext())
+        setFragmentResultListener("requestPassword") { key, bundle ->
+            val newPassword = bundle.getString("newPassword").toString()
+            viewModel.changePassword(newPassword)
+        }
+
+        binding.frameChangePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_settingsFragment_to_passwordChangeDialogFragment)
         }
 
         binding.frameLogout.setOnClickListener {
@@ -157,7 +162,7 @@ class SettingsFragment : Fragment() {
         }
 
         binding.frameLogoutAll.setOnClickListener {
-            viewModel.logout(requireContext())
+            viewModel.logoutAll(requireContext())
         }
 
 

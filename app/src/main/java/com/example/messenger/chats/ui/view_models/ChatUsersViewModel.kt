@@ -18,18 +18,10 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-class ChatUsersViewModel(
-    private val apiService: ApiService,
-    private val context: Context,
-    private val view: View?
-) : ViewModel() {
+class ChatUsersViewModel(private val apiService: ApiService, private val context: Context, private val view: View?) : ViewModel() {
 
     companion object {
-        fun getViewModelFactory(
-            apiService: ApiService,
-            context: Context,
-            view: View?
-        ): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 ChatUsersViewModel(apiService, context, view)
             }
