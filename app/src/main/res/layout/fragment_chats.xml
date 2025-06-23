@@ -11,38 +11,62 @@
     <TextView
         android:id="@+id/chatsText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="@string/chats"
         android:textColor="?colorText"
-        android:textSize="24sp"
+        android:textFontWeight="1000"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:background="?colorFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chatsText" />
+
+    <LinearLayout
+        android:id="@+id/chatCreate"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/rounded_element"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view1">
+
+        <ImageView
+            android:id="@+id/addSymbolInFrame"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/add" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="@string/createNewChat"
+            android:textColor="?colorText"
+            android:textFontWeight="1000"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/chatsText"
-        app:layout_constraintBottom_toTopOf="@id/chatCreate"
+        app:layout_constraintTop_toBottomOf="@id/view1"
         tools:itemCount="7"
         tools:listitem="@layout/item_chat" />
-
-    <Button
-        android:id="@+id/chatCreate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Создать чат"
-        android:textFontWeight="1000"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

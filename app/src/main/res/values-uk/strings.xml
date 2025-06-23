@@ -29,4 +29,5 @@
     <string name="next">Наступний</string>
     <string name="save">Зберегти</string>
     <string name="editYourName">Редагування імені</string>
+    <string name="createNewChat">Створити новий чат</string>
 </resources>
