@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/avatar" />
+            android:src="@drawable/chat_placeholder" />
 
     </androidx.cardview.widget.CardView>
 
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/chatAvatarCard"
         android:layout_alignBottom="@id/chatAvatarCard"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="24dp"
         android:layout_toEndOf="@id/chatAvatarCard">
 
         <TextView

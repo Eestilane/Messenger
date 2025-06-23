@@ -23,7 +23,7 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) ->
         with(holder.binding) {
             val chat = chats[position]
             chatName.text = chats[position].name
-            Glide.with(holder.itemView).load(chats[position].avatar).placeholder(R.drawable.avatar).circleCrop().into(chatAvatar)
+            Glide.with(holder.itemView).load(chats[position].avatar).placeholder(R.drawable.chat_placeholder).circleCrop().into(chatAvatar)
             val (message, time) = lastMessages[chats[position].id] ?: Pair("Создан чат ${chats[position].name}", "")
             lastMessage.text = message
             timeLastMessage.text = time
