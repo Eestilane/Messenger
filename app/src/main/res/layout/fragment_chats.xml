@@ -27,6 +27,7 @@
         android:layout_margin="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/chatsText"
+        app:layout_constraintBottom_toTopOf="@id/chatCreate"
         tools:itemCount="7"
         tools:listitem="@layout/item_chat" />
 

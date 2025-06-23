@@ -4,24 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.DialogFragment
 import com.example.messenger.R
-import com.example.messenger.databinding.FragmentChatnameBinding
+import com.example.messenger.databinding.FragmentChatsCreateChatBinding
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.bumptech.glide.Glide
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
 
 class CreateChatDialogFragment : DialogFragment() {
-    private var _binding: FragmentChatnameBinding? = null
+    private var _binding: FragmentChatsCreateChatBinding? = null
     private val binding get() = _binding!!
     private val viewModel by navGraphViewModels<ChatsViewModel>(R.id.navigation_graph)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentChatnameBinding.inflate(inflater, container, false)
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri == null) return@registerForActivityResult
+
+        viewModel.setAvatarUri(uri)
+        Glide.with(this)
+            .load(uri)
+            .circleCrop()
+            .into(binding.chatAvatar)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentChatsCreateChatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,12 +48,15 @@ class CreateChatDialogFragment : DialogFragment() {
 
         binding.okButton.setOnClickListener {
             val chatName = binding.enterChatName.text.toString().trim()
-            viewModel.createChat(chatName)
-            dismiss()
+            if (chatName.isNotEmpty()) {
+                viewModel.createChat(chatName)
+            }
         }
 
-        viewModel.navigateToChat.observe(viewLifecycleOwner) {
-            it?.let { dismiss() }
+        viewModel.navigateToChat.observe(viewLifecycleOwner) { chatId -> chatId?.let { dismiss() } }
+
+        binding.chatAvatar.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
     }

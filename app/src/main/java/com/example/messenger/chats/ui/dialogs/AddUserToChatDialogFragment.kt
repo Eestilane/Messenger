@@ -5,25 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.messenger.chats.ui.adapters.UserSearchForAddAdapter
 import com.example.messenger.chats.ui.view_models.AddUserToChatViewModel
-import com.example.messenger.contacts.ui.models.UserSearchScreenState
+import com.example.messenger.contacts.ui.models.ContactsScreenState
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentContactsUserSearchBinding
+import com.example.messenger.databinding.FragmentAddContactsToChatBinding
 
 class AddUserToChatDialogFragment : DialogFragment() {
-    private var _binding: FragmentContactsUserSearchBinding? = null
+    private var _binding: FragmentAddContactsToChatBinding? = null
     private val binding get() = _binding!!
     private lateinit var userSearchAdapter: UserSearchForAddAdapter
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }
     private val viewModel by viewModels<AddUserToChatViewModel> {
-        AddUserToChatViewModel.getViewModelFactory(apiService, requireContext(), view)
+        AddUserToChatViewModel.getViewModelFactory(apiService, requireContext())
     }
 
     companion object {
@@ -41,38 +40,22 @@ class AddUserToChatDialogFragment : DialogFragment() {
     private val chatId by lazy { arguments?.getString(ARG_CHAT_ID) ?: "" }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentContactsUserSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentAddContactsToChatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.contacts.observe(viewLifecycleOwner) { contacts ->
+            render(contacts)
+        }
 
         userSearchAdapter = UserSearchForAddAdapter(
-            onClick = { user ->
-                viewModel.addUserToChat(chatId, user.id)
+            onClick = { contact -> viewModel.addUserToChat(chatId, contact.id)
             }
         )
 
         binding.rvSearchResults.adapter = userSearchAdapter
-
-        viewModel.userSearch.observe(viewLifecycleOwner) { state ->
-            render(state)
-        }
-
-        viewModel.successMessage.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                viewModel.onSuccessMessageShown()
-            }
-        }
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            error?.let {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                viewModel.onErrorMessageShown()
-            }
-        }
 
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -82,7 +65,7 @@ class AddUserToChatDialogFragment : DialogFragment() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.searchUser(newText.toString())
+                userSearchAdapter.filter(newText)
                 return true
             }
         })
@@ -92,11 +75,11 @@ class AddUserToChatDialogFragment : DialogFragment() {
         }
     }
 
-    private fun render(state: UserSearchScreenState) {
+    private fun render(state: ContactsScreenState) {
         when (state) {
-            is UserSearchScreenState.Loading -> showLoading(state)
-            is UserSearchScreenState.Content -> showContent(state)
-            is UserSearchScreenState.Error -> showError(state)
+            is ContactsScreenState.Loading -> showLoading(state)
+            is ContactsScreenState.Content -> showContent(state)
+            is ContactsScreenState.Error -> showError(state)
         }
     }
 
@@ -105,19 +88,29 @@ class AddUserToChatDialogFragment : DialogFragment() {
         binding.rvSearchResults.isVisible = false
     }
 
-    private fun showLoading(state: UserSearchScreenState.Loading) {
+    private fun showLoading(state: ContactsScreenState.Loading) {
         hideAll()
         binding.progressBar.isVisible = true
     }
 
-    private fun showContent(state: UserSearchScreenState.Content) {
+    private fun showContent(state: ContactsScreenState.Content) {
         hideAll()
-        userSearchAdapter.setUsers(state.users)
         binding.rvSearchResults.isVisible = true
+        userSearchAdapter.setContacts(state.contacts)
     }
 
-    private fun showError(state: UserSearchScreenState.Error) {
+    private fun showError(state: ContactsScreenState.Error) {
         hideAll()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        userSearchAdapter.updateFilter()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.getContacts()
     }
 
     override fun onDestroyView() {

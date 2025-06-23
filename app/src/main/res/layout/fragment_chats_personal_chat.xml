@@ -8,7 +8,7 @@
     tools:context=".chats.ui.fragments.ChatFragment">
 
     <TextView
-        android:id="@+id/chatText"
+        android:id="@+id/personalChatText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -24,33 +24,31 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/chatText"
-        app:layout_constraintBottom_toTopOf="@id/messageInput"
+        app:layout_constraintTop_toBottomOf="@id/personalChatText"
         />
 
-    <EditText
-        android:id="@+id/messageInput"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:hint="Введите сообщение"
-        android:inputType="textMultiLine"
-        android:maxLines="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/sendMessage"
-        />
+        android:padding="8dp">
 
-    <Button
-        android:id="@+id/sendMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Отправить"
-        app:layout_constraintStart_toEndOf="@id/messageInput"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Введите сообщение"
+            android:inputType="textMultiLine"
+            android:maxLines="3"/>
+
+        <Button
+            android:id="@+id/sendMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отправить"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/toBack"
@@ -66,13 +64,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
-
-    <Button
-        android:id="@+id/addUserButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

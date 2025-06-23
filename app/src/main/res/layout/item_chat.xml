@@ -30,6 +30,17 @@
         android:textColor="@color/gray"
         android:layout_marginStart="16dp"
         android:textSize="18dp"
-        android:text="zov" />
+        android:text="" />
+
+    <TextView
+        android:id="@+id/timeLastMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:layout_marginStart="16dp"
+        android:textSize="18dp"
+        android:text=""
+        android:layout_alignParentRight="true"
+        />
 
 </RelativeLayout>

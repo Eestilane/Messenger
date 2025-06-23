@@ -28,8 +28,8 @@ class ChatHubConnection(private val authToken: String) {
         connection.on("ReceiveMessage", callback, String::class.java, String::class.java, String::class.java, String::class.java)
     }
 
-    fun onMessageEdited(callback: (messageId: String, newContent: String) -> Unit) {
-        connection.on("EditedMessage", callback, String::class.java, String::class.java)
+    fun onMessageEdited(callback: (messageId: String, chatId: String, content: String) -> Unit) {
+        connection.on("EditedMessage", callback, String::class.java, String::class.java, String::class.java)
     }
 
     fun onMessageDeleted(callback: (messageId: String) -> Unit) {

@@ -9,6 +9,8 @@ import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.databinding.ItemMessageBinding
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class MessageAdapter (private val onEdit: (messageId: String, currentText: String) -> Unit, private val onDelete: (messageId: String) -> Unit): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
@@ -17,11 +19,35 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemMessageBinding.bind(itemView)
 
+
         fun bind(message: Message) {
-            binding.messageText.text = message.content
-            binding.root.setOnLongClickListener {
-                showContextMenu(it, message)
-                true
+            binding.apply {
+                senderName.text = message.senderId
+
+                messageText.text = message.content
+
+                timeText.text = formatTime(message.sentAt)
+
+                if (message.editedAt != null) {
+                    editedIndicator.visibility = View.VISIBLE
+                } else {
+                    editedIndicator.visibility = View.GONE
+                }
+
+                root.setOnLongClickListener {
+                    showContextMenu(it, message)
+                    true
+                }
+            }
+        }
+
+        private fun formatTime(isoTime: String): String {
+            return try {
+                val utcTime = LocalDateTime.parse(isoTime).atZone(ZoneId.of("UTC"))
+                val moscowTime = utcTime.withZoneSameInstant(ZoneId.of("Europe/Moscow"))
+                moscowTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+            } catch (e: Exception) {
+                isoTime
             }
         }
 
@@ -54,13 +80,14 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
 
     fun setMessages(newMessages: List<Message>) {
         messages.clear()
-        messages.addAll(newMessages)
+        messages.addAll(newMessages.sortedBy { it.sentAt })
         notifyDataSetChanged()
     }
 
     fun addMessage(message: Message) {
-        messages.add(message)
-        notifyItemInserted(messages.size - 1)
+        val insertPos = messages.indexOfFirst { LocalDateTime.parse(it.sentAt) > LocalDateTime.parse(message.sentAt) }.takeIf { it != -1 } ?: messages.size
+        messages.add(insertPos, message)
+        notifyItemInserted(insertPos)
     }
 
     fun updateMessage(messageId: String, newText: String) {

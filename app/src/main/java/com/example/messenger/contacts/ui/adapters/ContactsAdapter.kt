@@ -8,9 +8,8 @@ import com.example.messenger.R
 import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.databinding.ItemContactBinding
 
-class ContactsAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
-    inner class ViewHolder(val binding: ItemContactBinding) :
-        RecyclerView.ViewHolder(binding.root)
+class ContactsAdapter(val onClick: (ContactsResponse) -> Unit):RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+    inner class ViewHolder(val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root)
 
     private val contacts = mutableListOf<ContactsResponse>()
     private val filteredContacts = mutableListOf<ContactsResponse>()

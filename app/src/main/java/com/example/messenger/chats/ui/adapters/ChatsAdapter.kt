@@ -3,13 +3,16 @@ package com.example.messenger.chats.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.messenger.chats.ui.fragments.ChatFragment
+import com.bumptech.glide.Glide
+import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.databinding.ItemChatBinding
 
-class ChatsAdapter(private var chats: List<Chat>, private val onClick: (chatId: String) -> Unit) : RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
-    inner class ViewHolder(val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root)
+class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
 
+    private val lastMessages = mutableMapOf<String, Pair<String, String>>()
+
+    inner class ViewHolder(val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -18,11 +21,13 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (chatId: 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.binding) {
+            val chat = chats[position]
             chatName.text = chats[position].name
-            root.setOnClickListener {
-                ChatFragment.currentChatName = chats[position].name
-                onClick(chats[position].id)
-            }
+            Glide.with(holder.itemView).load(chats[position].avatar).placeholder(R.drawable.avatar).circleCrop().into(chatAvatar)
+            val (message, time) = lastMessages[chats[position].id] ?: Pair("Создан чат ${chats[position].name}", "")
+            lastMessage.text = message
+            timeLastMessage.text = time
+            root.setOnClickListener { onClick(chat) }
         }
     }
 
@@ -30,6 +35,12 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (chatId: 
 
     fun updateList(newChats: List<Chat>) {
         chats = newChats
+        notifyDataSetChanged()
+    }
+
+    fun updateLastMessage(chatId: String, message: String, time: String) {
+        lastMessages[chatId] = Pair(message, time)
+        chats = chats.sortedByDescending { lastMessages[it.id]?.second ?: "" }
         notifyDataSetChanged()
     }
 }

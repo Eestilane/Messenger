@@ -1,7 +1,7 @@
 package com.example.messenger.chats.ui.view_models
 
 import android.content.Context
-import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,59 +10,46 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.messenger.chats.ui.models.AddUserRequest
-import com.example.messenger.contacts.ui.models.UserSearchScreenState
+import com.example.messenger.contacts.ui.models.ContactsScreenState
 import com.example.messenger.data.ApiService
-import com.example.messenger.data.models.UserSearchResponse
-import com.example.messenger.libs.DebounceOperators
 import com.example.messenger.libs.HandleOperators
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class AddUserToChatViewModel(private val apiService: ApiService, private val context: Context, private val view: View?) : ViewModel() {
+class AddUserToChatViewModel(private val apiService: ApiService, private val context: Context) : ViewModel() {
 
     companion object {
-        fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(apiService: ApiService, context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                AddUserToChatViewModel(apiService, context, view)
+                AddUserToChatViewModel(
+                    apiService = apiService,
+                    context = context)
             }
         }
     }
-    var lastExpression: String = ""
 
-    val searchUser: (String) -> Unit = DebounceOperators.debounce(
-        300L, viewModelScope,
-        this::onUserSearch
-    )
+    private val _contacts = MutableLiveData<ContactsScreenState>(ContactsScreenState.Loading)
+    val contacts: LiveData<ContactsScreenState> get() = _contacts
 
     init{
-        searchUser("")
+        getContacts()
     }
 
-    private val _userSearch = MutableLiveData<UserSearchScreenState>(UserSearchScreenState.Loading)
-    val userSearch: LiveData<UserSearchScreenState> get() = _userSearch
-
-    private val _successMessage = MutableLiveData<String?>()
-    val successMessage: LiveData<String?> = _successMessage
-
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> = _errorMessage
-
-    fun renderState(state: UserSearchScreenState) {
-        _userSearch.value = state
+    fun renderState(state: ContactsScreenState) {
+        _contacts.value = state
     }
 
-    fun onUserSearch(newText: String) {
+    fun getContacts() {
         viewModelScope.launch {
-            lastExpression = newText
+            renderState(ContactsScreenState.Loading)
             val response = HandleOperators.handleRequest {
-                apiService.userSearch(newText)
+                apiService.getContacts()
             }
             when (response.code()) {
                 200 -> {
-                    val users = response.body()
+                    val contacts = response.body()!!
                     renderState(
-                        UserSearchScreenState.Content(
-                            users = users!!
+                        ContactsScreenState.Content(
+                            contacts = contacts
                         )
                     )
                 }
@@ -77,15 +64,7 @@ class AddUserToChatViewModel(private val apiService: ApiService, private val con
         try {
             apiService.addUserToChat(AddUserRequest(chatId, userId))
         } catch (e: Exception) {
-            _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
+            Toast.makeText(context, "Ошибка сети: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    fun onSuccessMessageShown() {
-        _successMessage.value = null
-    }
-
-    fun onErrorMessageShown() {
-        _errorMessage.value = null
     }
 }

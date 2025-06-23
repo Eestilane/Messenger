@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Create chat"
+        android:text="Chat name"
         android:textColor="?colorText"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,29 +24,26 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorFragment"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toTopOf="@id/renameError"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chatAvatar"
         app:layout_constraintTop_toBottomOf="@id/textChatName">
 
         <EditText
             android:id="@+id/enterChatName"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:gravity="start|center"
             android:hint="@string/enterChatName"
             android:inputType="text"
             android:textColor="?colorText"
             android:textColorHint="?colorHintText"
             android:textSize="21sp" />
-
     </FrameLayout>
 
     <TextView
@@ -69,13 +66,13 @@
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="?colorFragment"
+        android:layout_marginRight="16dp"
+        android:backgroundTint="@color/white"
         android:text="Cancel"
         android:textColor="?colorText"
         android:textSize="21sp"
         app:layout_constraintBaseline_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ok_button"
-        app:layout_constraintStart_toStartOf="@id/frameChatName"
         app:layout_constraintTop_toBottomOf="@id/renameError" />
 
     <Button
@@ -84,13 +81,23 @@
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="?colorFragment"
+        android:backgroundTint="@color/white"
         android:text="Ok"
         android:textColor="@color/red"
         android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/frameChatName"
-        app:layout_constraintStart_toEndOf="@id/cancel_button"
-        app:layout_constraintTop_toBottomOf="@id/renameError" />
+        app:layout_constraintTop_toBottomOf="@id/renameError"
+        />
+
+    <ImageView
+        android:id="@+id/chatAvatar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/avatar"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textChatName"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

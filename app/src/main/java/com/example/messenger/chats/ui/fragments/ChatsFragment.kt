@@ -11,6 +11,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.R
 import com.example.messenger.chats.ui.adapters.ChatsAdapter
+import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentChatsBinding
@@ -25,10 +26,7 @@ class ChatsFragment : Fragment() {
     private val viewModel by navGraphViewModels<ChatsViewModel>(R.id.navigation_graph) {
         ChatsViewModel.getViewModelFactory(apiService, requireContext())
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentChatsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,15 +38,15 @@ class ChatsFragment : Fragment() {
             findNavController().navigate(R.id.action_chatsFragment_to_createChatDialogFragment)
         }
 
-        viewModel.navigateToChat.observe(viewLifecycleOwner) { chatId ->
-            chatId?.let {
+        viewModel.navigateToChat.observe(viewLifecycleOwner) { chat ->
+            chat?.let {
                 navigateToChat(it)
                 viewModel.onChatNavigated()
             }
         }
 
-        chatsAdapter = ChatsAdapter(emptyList()) { chatId ->
-            navigateToChat(chatId)
+        chatsAdapter = ChatsAdapter(emptyList()) { chat ->
+            navigateToChat(chat)
         }
 
         binding.chats.layoutManager = LinearLayoutManager(requireContext())
@@ -56,15 +54,27 @@ class ChatsFragment : Fragment() {
 
         viewModel.chats.observe(viewLifecycleOwner) { chats ->
             chatsAdapter.updateList(chats)
+            chats.forEach { chat ->
+                viewModel.loadLastMessage(chat.id) { message, time ->
+                    activity?.runOnUiThread {
+                        chatsAdapter.updateLastMessage(chat.id, message, time)
+                    }
+                }
+            }
         }
-
         viewModel.loadChats()
-
 
     }
 
-    private fun navigateToChat(chatId: String) {
-        findNavController().navigate(R.id.action_chatsFragment_to_chatFragment, bundleOf("chatId" to chatId))
+    private fun navigateToChat(chat: Chat) {
+        findNavController().navigate(R.id.action_chatsFragment_to_chatFragment,
+            bundleOf(
+                "chatId" to chat.id,
+                "chatName" to chat.name,
+                "avatar" to chat.avatar,
+                "ownerId" to chat.ownerId
+            )
+        )
     }
 
     override fun onDestroyView() {

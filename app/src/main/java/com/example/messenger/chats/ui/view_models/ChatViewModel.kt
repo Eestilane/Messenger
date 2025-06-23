@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.UserResponse
@@ -51,6 +52,12 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
             }
 
         }
+    }
+
+    fun removeMessage(messageId: String) {
+        val currentMessages = _messages.value?.toMutableList() ?: mutableListOf()
+        currentMessages.removeAll { it.id == messageId }
+        _messages.value = currentMessages
     }
 
 }

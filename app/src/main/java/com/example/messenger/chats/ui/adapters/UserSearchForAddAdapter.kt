@@ -5,15 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.messenger.R
-import com.example.messenger.data.models.UserSearchResponse
+import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.databinding.ItemUserSearchBinding
 
-class UserSearchForAddAdapter(private val onClick: (UserSearchResponse) -> Unit) : RecyclerView.Adapter<UserSearchForAddAdapter.ViewHolder>() {
+class UserSearchForAddAdapter(val onClick: (ContactsResponse) -> Unit) : RecyclerView.Adapter<UserSearchForAddAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: ItemUserSearchBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-
-    private var users = mutableListOf<UserSearchResponse>()
+    private val contacts = mutableListOf<ContactsResponse>()
+    private val filteredContacts = mutableListOf<ContactsResponse>()
+    var lastExpression: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserSearchForAddAdapter.ViewHolder {
         val binding = ItemUserSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,19 +23,44 @@ class UserSearchForAddAdapter(private val onClick: (UserSearchResponse) -> Unit)
 
     override fun onBindViewHolder(holder: UserSearchForAddAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            userName.text = users[position].name
-            userLogin.text = users[position].login
-            Glide.with(holder.itemView).load(users[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
+            userName.text = contacts[position].name
+            userLogin.text = contacts[position].login
+            Glide.with(holder.itemView).load(contacts[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
             add.setOnClickListener {
-                onClick(users[position])
+                onClick(filteredContacts[position])
             }
         }
     }
 
-    override fun getItemCount() = users.size
+    override fun getItemCount() = filteredContacts.size
 
-    fun setUsers(newUsers: List<UserSearchResponse>) {
-        users = newUsers.toMutableList()
+    fun setContacts (newContacts: List<ContactsResponse>) {
+        contacts.clear()
+        contacts.addAll(newContacts)
+        filteredContacts.clear()
+        filteredContacts.addAll(newContacts)
         notifyDataSetChanged()
+    }
+
+    fun filter(expression: String?){
+        lastExpression = expression.toString()
+        filteredContacts.clear()
+        if (expression.isNullOrEmpty()){
+            filteredContacts.addAll(contacts)
+            notifyDataSetChanged()
+            return
+        }
+
+        for (contact in contacts) {
+            if (contact.name.contains(expression, true) || contact.login.contains(expression, true)) {
+                filteredContacts.add(contact)
+            }
+        }
+
+        notifyDataSetChanged()
+    }
+
+    fun updateFilter() {
+        filter(lastExpression)
     }
 }

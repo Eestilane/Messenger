@@ -16,6 +16,7 @@ import com.example.messenger.data.models.contacts.ContactRequest
 import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.data.models.contacts.RequestResponse
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -84,9 +85,11 @@ interface ApiService {
     @POST("chats/remove_user_from_chat")
     suspend fun removeUserFromChat(@Body request: RemoveUserRequest): Response<Unit>
 
+    @Multipart
     @PATCH("chats/update/avatar")
-    suspend fun updateChatAvatar()
+    suspend fun updateChatAvatar(@Part file: MultipartBody.Part, @Part("chatId") chatId: RequestBody): Response<String>
 
     @GET("chats/get_chat_messages")
     suspend fun getChatMessages(@Query("chatId") chatId: String, @Query("limit") limit: Int = 50, @Query("offset") offset: Int = 0): Response<ChatMessagesResponse>
+
 }

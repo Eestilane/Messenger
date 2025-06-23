@@ -7,28 +7,6 @@
     android:background="?colorBackground"
     tools:context=".chats.ui.dialogs.AddUserToChatDialogFragment">
 
-    <TextView
-        android:id="@+id/chatName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Чат"
-        android:textColor="?colorText"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <ImageView
-        android:id="@+id/chatAvatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintEnd_toStartOf="@id/chatName"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
     <Button
         android:id="@+id/toBack"
         android:layout_width="48dp"
@@ -44,27 +22,38 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/chatUsersText"
+        android:id="@+id/contactsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Список участников"
+        android:text="Добавить пользователя"
         android:textColor="?colorText"
         android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/chatName"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_element"
+        android:queryHint="Поиск контактов"
+        app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatUsers"
+        android:id="@+id/rv_search_results"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/chatUsersText"
+        app:layout_constraintTop_toBottomOf="@id/searchView"
         tools:itemCount="7"
-        tools:listitem="@layout/item_contact" />
+        tools:listitem="@layout/item_user_search" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -75,6 +64,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatUsersText" />
+        app:layout_constraintTop_toBottomOf="@id/searchView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

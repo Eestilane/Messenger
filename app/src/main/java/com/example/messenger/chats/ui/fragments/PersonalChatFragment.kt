@@ -6,33 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.chats.ui.ChatHubConnection
-import com.example.messenger.chats.ui.adapters.ChatUsersAdapter
 import com.example.messenger.chats.ui.adapters.MessageAdapter
-import com.example.messenger.chats.ui.dialogs.AddUserToChatDialogFragment
-import com.example.messenger.chats.ui.dialogs.ChatUsersDialogFragment
-import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.chats.ui.view_models.ChatViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentChatsChatBinding
+import com.example.messenger.databinding.FragmentChatsPersonalChatBinding
 import com.example.messenger.libs.TokenManager
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class ChatFragment : Fragment() {
-    private var _binding: FragmentChatsChatBinding? = null
+class PersonalChatFragment : Fragment() {
+    private var _binding: FragmentChatsPersonalChatBinding? = null
     private val binding get() = _binding!!
     private lateinit var messageAdapter: MessageAdapter
-    private lateinit var chatUsersAdapter: ChatUsersAdapter
+    private val chatId by lazy { arguments?.getString("chatId") ?: "" }
+    private val chatName = arguments?.getString("chatName") ?: "Чат"
     private lateinit var chatHub: ChatHubConnection
-    private lateinit var chat: Chat
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }
@@ -41,53 +36,32 @@ class ChatFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentChatsChatBinding.inflate(inflater, container, false)
-
+        _binding = FragmentChatsPersonalChatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val chatId = arguments?.getString("chatId") ?: run {
-            findNavController().navigateUp()
-            return
-        }
-        val chatName = arguments?.getString("chatName") ?: ""
-        val ownerId = arguments?.getString("ownerId") ?: ""
-        val avatar = arguments?.getString("avatar")
-
-        chat = Chat(chatId, ownerId, chatName, avatar)
-
-        viewModel.chatUsers.observe(viewLifecycleOwner) { chatUsers ->
-            chatUsersAdapter.setChatUsers(chatUsers)
-        }
-
         initChatHub()
         setupRecyclerView()
         loadInitialMessages()
-        setAllBindings()
 
-    }
-
-    private fun setAllBindings() {
-        binding.chatText.text = chat.name
+        binding.personalChatText.text = chatName
 
         binding.toBack.setOnClickListener {
             findNavController().navigateUp()
         }
 
-        binding.chatText.setOnClickListener {
-            ChatUsersDialogFragment.newInstance(chat).show(childFragmentManager, "ChatUsersDialog")
+        binding.personalChatText.setOnClickListener {
+            //ChatUsersDialogFragment.newInstance(chatId).show(childFragmentManager, "ChatUsersDialogFragment")
         }
 
         binding.sendMessage.setOnClickListener {
             sendMessage()
         }
 
-        binding.addUserButton.setOnClickListener {
-            AddUserToChatDialogFragment.newInstance(chat.id).show(childFragmentManager, "AddUserToChatDialog")
-        }
+
     }
 
     private fun initChatHub() {
@@ -119,30 +93,6 @@ class ChatFragment : Fragment() {
             onMessageDeleted { messageId ->
                 activity?.runOnUiThread {
                     messageAdapter.removeMessage(messageId)
-                    viewModel.removeMessage(messageId)
-                }
-            }
-
-            onUserAdded { chatId, userId ->
-                if (chatId == this@ChatFragment.chat.id) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context,"Пользователь добавлен", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-            onUserRemoved { chatId, userId ->
-                if (chatId == this@ChatFragment.chat.id) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context,"Пользователь удалён", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-
-            onAvatarUpdated { chatId, userId, link ->
-                if (chatId == this@ChatFragment.chat.id) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context,"Аватар чата обновлён", Toast.LENGTH_LONG).show()
-                    }
                 }
             }
 
@@ -154,7 +104,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun loadInitialMessages() {
-        viewModel.loadMessages(chat.id)
+        viewModel.loadMessages(chatId)
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
             messageAdapter.setMessages(messages)
             if (messages.isNotEmpty()) {
@@ -181,7 +131,7 @@ class ChatFragment : Fragment() {
         val text = binding.messageInput.text.toString().trim()
         if (text.isNotEmpty()) {
             lifecycleScope.launch {
-                chatHub.sendMessage(chat.id, text)
+                chatHub.sendMessage(chatId, text)
                 binding.messageInput.text.clear()
             }
         }
@@ -201,10 +151,10 @@ class ChatFragment : Fragment() {
         }
 
         AlertDialog.Builder(requireContext()).setTitle("Редактировать сообщение").setView(editText).setPositiveButton("Сохранить") { _, _ ->
-                val content = editText.text.toString()
-                lifecycleScope.launch {
-                    chatHub.editMessage(messageId, content)
-                }
+            val content = editText.text.toString()
+            lifecycleScope.launch {
+                chatHub.editMessage(messageId, content)
+            }
         }.setNegativeButton("Отмена", null).show()
     }
 
@@ -213,7 +163,6 @@ class ChatFragment : Fragment() {
             .setPositiveButton("Удалить") { _, _ ->
                 lifecycleScope.launch {
                     chatHub.deleteMessage(messageId)
-                    viewModel.removeMessage(messageId)
                 }
             }.setNegativeButton("Отмена", null).show()
     }

@@ -8,10 +8,9 @@ import com.example.messenger.R
 import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.ItemContactBinding
 
-class ChatUsersAdapter (private val onClick: (UserResponse) -> Unit) : RecyclerView.Adapter<ChatUsersAdapter.ViewHolder>() {
-    inner class ViewHolder(val binding: ItemContactBinding) :
-        RecyclerView.ViewHolder(binding.root)
-
+class ChatUsersAdapter (
+    private val onDeleteClick: (UserResponse) -> Unit) :RecyclerView.Adapter<ChatUsersAdapter.ViewHolder>() {
+    inner class ViewHolder(val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root)
 
     private var chatUsers = mutableListOf<UserResponse>()
 
@@ -26,7 +25,7 @@ class ChatUsersAdapter (private val onClick: (UserResponse) -> Unit) : RecyclerV
             userLogin.text = chatUsers[position].login
             Glide.with(holder.itemView).load(chatUsers[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
             delete.setOnClickListener {
-                onClick(chatUsers[position])
+                onDeleteClick(chatUsers[position])
             }
         }
     }
