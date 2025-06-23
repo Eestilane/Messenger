@@ -46,6 +46,10 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
         _settingsData.postValue(state)
     }
 
+    fun resetNavigation() {
+        _navigateToAuth.postValue(false)
+    }
+
     fun renderNameChangeState(state: NameChangeScreenState) {
         _renameData.postValue(state)
     }

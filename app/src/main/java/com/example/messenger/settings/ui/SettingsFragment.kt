@@ -14,8 +14,10 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import androidx.navigation.navOptions
 import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.data.RetrofitClient
@@ -73,7 +75,9 @@ class SettingsFragment : Fragment() {
 
         viewModel.navigateToAuth.observe(viewLifecycleOwner) { shouldNavigate ->
             if (shouldNavigate) {
-                findNavController().navigate(R.id.action_settingsFragment_to_authFragment)
+                val navOptions = NavOptions.Builder().setPopUpTo(R.id.navigation_graph, true).build()
+                findNavController().navigate(R.id.action_settingsFragment_to_authFragment, null, navOptions)
+                viewModel.resetNavigation()
             }
         }
 
