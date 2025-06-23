@@ -22,7 +22,9 @@
     <string name="user">Користувач:</string>
     <string name="name">Ім\'я користувача:</string>
     <string name="changeName">Натисніть, щоб змінити ім\'я користувача</string>
-    <string name="logout">Натисніть, щоб вийти з облікового запису</string>
+    <string name="changePassword">Натисніть, щоб змінити пароль</string>
+    <string name="logout">Вийти з облікового запису</string>
+    <string name="logoutAll">Вийти з облікового запису з усіх пристроїв</string>
     <string name="cancel">Скасувати</string>
     <string name="next">Наступний</string>
     <string name="save">Зберегти</string>

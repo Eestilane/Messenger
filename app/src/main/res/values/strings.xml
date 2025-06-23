@@ -27,7 +27,9 @@
     <string name="user">User:</string>
     <string name="name">Username:</string>
     <string name="changeName">Click to change username</string>
+    <string name="changePassword">Click to change password</string>
     <string name="logout">Click to logout</string>
+    <string name="logoutAll">Click to logout all</string>
     <string name="cancel">Cancel</string>
     <string name="next">Next</string>
     <string name="save">Save</string>

@@ -8,11 +8,6 @@
         <item name="colorLineDetails">@color/nightThemeLine</item>
         <item name="colorThumb">@color/thumbDarkTheme</item>
         <item name="colorTrack">@color/trackDarkTheme</item>
-        <item name="iconChats">@drawable/chats_white</item>
-        <item name="iconContacts">@drawable/contacts_white</item>
-        <item name="iconSettings">@drawable/settings_white</item>
-        <item name="iconUserSearch">@drawable/user_search_white</item>
-        <item name="iconIncomingRequests">@drawable/incoming_requests_white</item>
         <item name="iconThumb">@drawable/night_theme</item>
         <item name="themeText">@string/darkTheme</item>
         <item name="fontFamily">@font/samsung</item>

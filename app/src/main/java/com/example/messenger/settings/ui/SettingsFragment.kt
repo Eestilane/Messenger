@@ -148,9 +148,18 @@ class SettingsFragment : Fragment() {
 //            }
 //        }
 
+        binding.changePassword.setOnClickListener {
+            viewModel.logout(requireContext())
+        }
+
         binding.frameLogout.setOnClickListener {
             viewModel.logout(requireContext())
         }
+
+        binding.frameLogoutAll.setOnClickListener {
+            viewModel.logout(requireContext())
+        }
+
 
         binding.userAvatar.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly))

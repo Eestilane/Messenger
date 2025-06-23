@@ -153,20 +153,53 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:background="?colorLineDetails"
-                app:layout_constraintBottom_toTopOf="@id/frameLogout"
+                app:layout_constraintBottom_toTopOf="@id/frameChangePassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/frameName" />
 
             <FrameLayout
-                android:id="@+id/frameLogout"
+                android:id="@+id/frameChangePassword"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/viewInBlockUser2"
                 android:background="?colorFragment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/viewInBlockUser2">
+
+                <TextView
+                    android:id="@+id/changePassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/changePassword"
+                    android:textColor="?colorText"
+                    android:textFontWeight="1"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+            <View
+                android:id="@+id/viewInBlockUser3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?colorLineDetails"
+                app:layout_constraintBottom_toTopOf="@id/frameLogout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frameChangePassword" />
+
+            <FrameLayout
+                android:id="@+id/frameLogout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?colorFragment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/viewInBlockUser3">
 
                 <TextView
                     android:id="@+id/userLogout"
@@ -183,6 +216,40 @@
 
             </FrameLayout>
 
+            <View
+                android:id="@+id/viewInBlockUser4"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="?colorLineDetails"
+                app:layout_constraintBottom_toTopOf="@id/frameLogoutAll"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/frameLogout" />
+
+            <FrameLayout
+                android:id="@+id/frameLogoutAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?colorFragment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/viewInBlockUser4">
+
+                <TextView
+                    android:id="@+id/userLogoutAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/logoutAll"
+                    android:textColor="?colorText"
+                    android:textFontWeight="1"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
             <FrameLayout
                 android:id="@+id/frameTheme"
                 android:layout_width="0dp"
@@ -192,7 +259,7 @@
                 android:backgroundTint="?colorFragment"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frameLogout">
+                app:layout_constraintTop_toBottomOf="@id/frameLogoutAll">
 
                 <TextView
                     android:id="@+id/themeText"
@@ -351,7 +418,7 @@
                 android:layout_height="0dp"
                 android:background="#80000000"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/frameLogout"
+                app:layout_constraintBottom_toBottomOf="@id/frameLogoutAll"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/frameUserInfo" />
@@ -362,7 +429,7 @@
                 android:layout_height="wrap_content"
                 android:progressBackgroundTint="?colorText"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@id/frameLogout"
+                app:layout_constraintBottom_toBottomOf="@id/frameLogoutAll"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/frameUserInfo" />

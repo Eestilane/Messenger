@@ -3,17 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/chatsFragment"
-        android:icon="?iconChats"
+        android:icon="@drawable/chat_icon"
         android:title=""
         android:iconTint="?colorText"/>
     <item
         android:id="@+id/contactsFragment"
-        android:icon="?iconContacts"
+        android:icon="@drawable/contacts"
         android:title=""
         android:iconTint="?colorText"/>
     <item
         android:id="@+id/settingsFragment"
-        android:icon="?iconSettings"
+        android:icon="@drawable/settings"
         android:title=""
         android:iconTint="?colorText"/>
 </menu>

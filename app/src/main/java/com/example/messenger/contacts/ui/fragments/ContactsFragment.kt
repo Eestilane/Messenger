@@ -58,7 +58,7 @@ class ContactsFragment : Fragment() {
             UserSearchDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
 
-        binding.fabRequestContact.setOnClickListener {
+        binding.requestContact.setOnClickListener {
             RequestsDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
     }

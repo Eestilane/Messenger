@@ -22,7 +22,9 @@
     <string name="user">Пользователь:</string>
     <string name="name">Имя пользователя:</string>
     <string name="changeName">Нажмите, чтобы сменить имя пользователя</string>
-    <string name="logout">Нажмите, чтобы выйти из аккаунта</string>
+    <string name="changePassword">Нажмите, чтобы сменить пароль</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="logoutAll">Выйти из аккаунта со всех устройств</string>
     <string name="cancel">Отмена</string>
     <string name="next">Далее</string>
     <string name="save">Сохранить</string>
