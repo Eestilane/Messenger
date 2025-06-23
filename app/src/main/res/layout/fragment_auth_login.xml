@@ -7,57 +7,32 @@
     android:background="?colorBackground"
     tools:context=".auth.ui.fragments.LoginFragment">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/startGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="8dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/endGuideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="8dp" />
-
-    <TextView
-        android:id="@+id/loginText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/login"
-        android:textColor="?colorText"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <FrameLayout
         android:id="@+id/frameLogin"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorFragment"
+        android:background="?colorFragment"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         app:layout_constraintBottom_toTopOf="@id/loginError"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintTop_toBottomOf="@id/loginText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed">
 
         <EditText
             android:id="@+id/enterLogin"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:gravity="start|center"
             android:hint="@string/enterLogin"
             android:inputType="text"
             android:textColor="?colorText"
             android:textColorHint="?colorHintText"
-            android:textSize="21sp" />
+            android:textSize="18sp" />
 
     </FrameLayout>
 
@@ -65,11 +40,10 @@
         android:id="@+id/loginError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:text=""
-        android:textColor="@color/red"
-        android:textSize="12sp"
+        android:textColor="?colorSubtext"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/framePassword"
         app:layout_constraintStart_toStartOf="@id/frameLogin"
         app:layout_constraintTop_toBottomOf="@id/frameLogin" />
@@ -78,26 +52,27 @@
         android:id="@+id/framePassword"
         android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_element"
-        android:backgroundTint="?colorFragment"
+        android:background="?colorFragment"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         app:layout_constraintBottom_toTopOf="@id/passwordError"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginError">
 
         <EditText
             android:id="@+id/enterPassword"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:gravity="start|center"
             android:hint="@string/enterPassword"
             android:inputType="textPassword"
             android:textColor="?colorText"
             android:textColorHint="?colorHintText"
-            android:textSize="21sp" />
+            android:textSize="18sp" />
 
     </FrameLayout>
 
@@ -105,11 +80,10 @@
         android:id="@+id/passwordError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:text=""
-        android:textColor="@color/red"
-        android:textSize="12sp"
+        android:textColor="?colorSubtext"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/loginOrPasswordError"
         app:layout_constraintStart_toStartOf="@id/framePassword"
         app:layout_constraintTop_toBottomOf="@id/framePassword" />
@@ -118,11 +92,10 @@
         android:id="@+id/loginOrPasswordError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:text=""
-        android:textColor="@color/red"
-        android:textSize="12sp"
+        android:textColor="?colorSubtext"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/loginButton"
         app:layout_constraintStart_toStartOf="@id/framePassword"
         app:layout_constraintTop_toBottomOf="@id/passwordError" />
@@ -132,13 +105,14 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="?colorFragment"
+        android:backgroundTint="?colorBackground"
         android:text="@string/login"
         android:textColor="?colorText"
-        android:textSize="21sp"
+        android:textFontWeight="1000"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/endGuideline"
-        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/loginOrPasswordError" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
