@@ -18,4 +18,10 @@
     <color name="nightThemeLine">#191919</color>
     <color name="nightThemeGrayText">#777777</color>
     <color name="nightThemeWhiteText">#EEEEEE</color>
+    <color name="dayThemeBackground">#F0F0F0</color>
+    <color name="dayThemeTouchedBackground">#F0F0F0</color>
+    <color name="dayThemeBlock">#FFFFFF</color>
+    <color name="dayThemeLine">#F2F2F2</color>
+    <color name="dayThemeGrayText">#82858A</color>
+    <color name="dayThemeBlackText">#333333</color>
 </resources>
