@@ -21,11 +21,7 @@
         tools:layout="@layout/fragment_chats" >
         <action
             android:id="@+id/action_chatsFragment_to_chatFragment"
-            app:destination="@id/chatFragment"
-            app:enterAnim="@anim/from_right_to_left"
-            app:exitAnim="@anim/close_frtl"
-            app:popEnterAnim="@anim/from_left_to_right"
-            app:popExitAnim="@anim/close_fltr"/>
+            app:destination="@id/chatFragment"/>
         <action
             android:id="@+id/action_chatsFragment_to_createChatDialogFragment"
             app:destination="@id/createChatDialogFragment" />
@@ -47,9 +43,7 @@
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/action_settingsFragment_to_authFragment"
-            app:destination="@id/authFragment"
-            app:enterAnim="@anim/from_right_to_left"
-            app:exitAnim="@anim/close_frtl"/>
+            app:destination="@id/authFragment"/>
         <action
             android:id="@+id/action_settingsFragment_to_nameChangeDialogFragment"
             app:destination="@id/nameChangeDialogFragment" />
@@ -64,9 +58,7 @@
         tools:layout="@layout/fragment_auth" >
         <action
             android:id="@+id/action_authFragment_to_chatsFragment"
-            app:destination="@id/chatsFragment"
-            app:enterAnim="@anim/from_right_to_left"
-            app:exitAnim="@anim/close_frtl"/>
+            app:destination="@id/chatsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
