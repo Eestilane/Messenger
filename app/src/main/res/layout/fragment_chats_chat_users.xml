@@ -7,74 +7,150 @@
     android:background="?colorBackground"
     tools:context=".chats.ui.dialogs.AddUserToChatDialogFragment">
 
-    <TextView
-        android:id="@+id/chatName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Чат"
-        android:textColor="?colorText"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <ImageView
-        android:id="@+id/chatAvatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_launcher_background"
-        app:layout_constraintEnd_toStartOf="@id/chatName"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
-    <Button
+    <FrameLayout
         android:id="@+id/toBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/rounded_element"
         android:backgroundTint="?colorBackground"
-        android:gravity="center|top"
-        android:padding="0dp"
-        android:text="←"
-        android:textColor="?colorText"
-        android:textFontWeight="1000"
-        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/declineInFrame"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/to_back" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/chatUsersText"
         android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="56dp"
+        android:gravity="center"
+        android:text="@string/chatInfo"
+        android:textColor="?colorText"
+        android:textFontWeight="1000"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/toBack"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/chatInfo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Список участников"
+        android:background="?colorFragment"
+        app:layout_constraintTop_toBottomOf="@id/chatUsersText">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/chatAvatarCard"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:cardCornerRadius="36dp">
+
+            <ImageView
+                android:id="@+id/chatAvatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/chat_placeholder" />
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/chatInfoFrame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/chatAvatarCard"
+            android:layout_alignBottom="@id/chatAvatarCard"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@id/addUsers"
+            android:layout_toEndOf="@id/chatAvatarCard"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/chatName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="?colorText"
+                android:textFontWeight="1000"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/chatUsersCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Участники"
+                android:textColor="?colorSubtext"
+                android:textFontWeight="1"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/addUsers"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@id/chatAvatarCard"
+            android:layout_alignBottom="@id/chatAvatarCard"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/rounded_element">
+
+            <ImageView
+                android:id="@+id/addUsersInFrame"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/contacts_add" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/chatUsersListText"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/chatParticipants"
         android:textColor="?colorText"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/chatName"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textFontWeight="1000"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chatInfo"
+        app:layout_constraintBottom_toTopOf="@id/chatUsers"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/chatUsersText"
+        app:layout_constraintTop_toBottomOf="@id/chatUsersListText"
         tools:itemCount="7"
-        tools:listitem="@layout/item_contact" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatUsersText" />
+        tools:listitem="@layout/item_chat_users" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

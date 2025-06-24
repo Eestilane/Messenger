@@ -36,4 +36,10 @@
     <string name="editYourName">Edit your name</string>
     <string name="editYourPassword">Edit your password</string>
     <string name="createNewChat">Create new chat</string>
+    <string name="addUser">Add user</string>
+    <string name="searchContact">Search contact</string>
+    <string name="searchUser">Search user</string>
+    <string name="requestManagement">Request management</string>
+    <string name="chatInfo">Chat info</string>
+    <string name="chatParticipants">Chat participants</string>
 </resources>

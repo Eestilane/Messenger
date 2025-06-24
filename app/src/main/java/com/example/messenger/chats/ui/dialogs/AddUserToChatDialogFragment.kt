@@ -12,10 +12,10 @@ import com.example.messenger.chats.ui.adapters.UserSearchForAddAdapter
 import com.example.messenger.chats.ui.view_models.AddUserToChatViewModel
 import com.example.messenger.contacts.ui.models.ContactsScreenState
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentAddContactsToChatBinding
+import com.example.messenger.databinding.FragmentChatsAddContactsToChatBinding
 
 class AddUserToChatDialogFragment : DialogFragment() {
-    private var _binding: FragmentAddContactsToChatBinding? = null
+    private var _binding: FragmentChatsAddContactsToChatBinding? = null
     private val binding get() = _binding!!
     private lateinit var userSearchAdapter: UserSearchForAddAdapter
     private val apiService by lazy {
@@ -40,7 +40,7 @@ class AddUserToChatDialogFragment : DialogFragment() {
     private val chatId by lazy { arguments?.getString(ARG_CHAT_ID) ?: "" }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentAddContactsToChatBinding.inflate(inflater, container, false)
+        _binding = FragmentChatsAddContactsToChatBinding.inflate(inflater, container, false)
         return binding.root
     }
 

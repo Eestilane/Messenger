@@ -31,4 +31,10 @@
     <string name="editYourName">Редактирование имени</string>
     <string name="editYourPassword">Редактирование пароля</string>
     <string name="createNewChat">Создать новый чат</string>
+    <string name="addUser">Добавить пользователя</string>
+    <string name="searchContact">Найти контакт</string>
+    <string name="searchUser">Найти пользователя</string>
+    <string name="requestManagement">Управление запросами</string>
+    <string name="chatInfo">Сведения о чате</string>
+    <string name="chatParticipants">Участники чата</string>
 </resources>
