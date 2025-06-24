@@ -23,7 +23,6 @@ class CreateChatDialogFragment : DialogFragment() {
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri == null) return@registerForActivityResult
 
-        viewModel.setAvatarUri(uri)
         Glide.with(this)
             .load(uri)
             .circleCrop()
@@ -61,15 +60,6 @@ class CreateChatDialogFragment : DialogFragment() {
                 (parentFragment as? ChatsFragment)?.navigateToChat(chat)
 
                 viewModel.onChatNavigated()
-            }
-        }
-
-        viewModel.currentChatAvatar.observe(viewLifecycleOwner) { avatarUrl ->
-            avatarUrl?.let {
-                Glide.with(this)
-                    .load(it)
-                    .circleCrop()
-                    .into(binding.chatAvatar)
             }
         }
 

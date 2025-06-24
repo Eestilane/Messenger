@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.R
 import com.example.messenger.chats.ui.adapters.ChatsAdapter
 import com.example.messenger.chats.ui.models.Chat
+import com.example.messenger.chats.ui.models.ChatsState
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentChatsBinding
@@ -20,24 +21,43 @@ class ChatsFragment : Fragment() {
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var chatsAdapter: ChatsAdapter
-    private val apiService by lazy {
-        RetrofitClient.create(requireContext(), view)
-    }
+    private val apiService by lazy { RetrofitClient.create(requireContext(), view) }
+
     private val viewModel by navGraphViewModels<ChatsViewModel>(R.id.navigation_graph) {
         ChatsViewModel.getViewModelFactory(apiService, requireContext())
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentChatsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
+        setupListeners()
+        observeViewModel()
+        viewModel.loadChats()
+    }
 
+    private fun setupRecyclerView() {
+        chatsAdapter = ChatsAdapter(emptyList()) { chat ->
+            navigateToChat(chat)
+        }
+        binding.chats.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = chatsAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun setupListeners() {
         binding.chatCreate.setOnClickListener {
             findNavController().navigate(R.id.action_chatsFragment_to_createChatDialogFragment)
         }
+    }
 
+    private fun observeViewModel() {
         viewModel.navigateToChat.observe(viewLifecycleOwner) { chat ->
             chat?.let {
                 navigateToChat(it)
@@ -45,25 +65,27 @@ class ChatsFragment : Fragment() {
             }
         }
 
-        chatsAdapter = ChatsAdapter(emptyList()) { chat ->
-            navigateToChat(chat)
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is ChatsState.Loading -> showLoading()
+                is ChatsState.Success -> {
+                    hideLoading()
+                    chatsAdapter.updateList(state.chats)
+                    loadLastMessages(state.chats)
+                }
+                is ChatsState.Error -> hideLoading()
+            }
         }
+    }
 
-        binding.chats.layoutManager = LinearLayoutManager(requireContext())
-        binding.chats.adapter = chatsAdapter
-
-        viewModel.chats.observe(viewLifecycleOwner) { chats ->
-            chatsAdapter.updateList(chats)
-            chats.forEach { chat ->
-                viewModel.loadLastMessage(chat.id) { message, time ->
-                    activity?.runOnUiThread {
-                        chatsAdapter.updateLastMessage(chat.id, message, time)
-                    }
+    private fun loadLastMessages(chats: List<Chat>) {
+        chats.forEach { chat ->
+            viewModel.loadLastMessage(chat.id) { message, time ->
+                activity?.runOnUiThread {
+                    chatsAdapter.updateLastMessage(chat.id, message, time)
                 }
             }
         }
-        viewModel.loadChats()
-
     }
 
     fun navigateToChat(chat: Chat) {
@@ -75,6 +97,16 @@ class ChatsFragment : Fragment() {
                 "ownerId" to chat.ownerId
             )
         )
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+        binding.chats.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.GONE
+        binding.chats.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
