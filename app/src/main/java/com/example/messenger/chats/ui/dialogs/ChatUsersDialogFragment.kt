@@ -76,10 +76,7 @@ class ChatUsersDialogFragment : DialogFragment() {
     }
 
     private fun setupUI() {
-        dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         chat.avatar?.takeIf { it.isNotEmpty() }?.let { url ->
             Glide.with(requireContext())
