@@ -59,4 +59,17 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
         _messages.value = currentMessages
     }
 
+    fun loadChatUsers(chatId: String) = viewModelScope.launch {
+        try {
+            val response = apiService.getChatUsers(chatId)
+            if (response.isSuccessful) {
+                _chatUsers.postValue(response.body()?.data ?: emptyList())
+            } else {
+                _errorMessage.postValue("Ошибка загрузки участников чата")
+            }
+        } catch (e: Exception) {
+            _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
+        }
+    }
+
 }

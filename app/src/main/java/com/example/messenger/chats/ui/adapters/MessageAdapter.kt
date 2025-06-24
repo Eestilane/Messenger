@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.data.models.UserResponse
@@ -13,91 +14,91 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class MessageAdapter (
-    private val onEdit: (messageId: String, currentText: String) -> Unit,
-    private val onDelete: (messageId: String) -> Unit,
-    private val currentUser: UserResponse
-): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+class MessageAdapter (private val onEdit: (messageId: String, currentText: String) -> Unit, private val onDelete: (messageId: String) -> Unit, ): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+
+    inner class ViewHolder(val binding: ItemMessageBinding): RecyclerView.ViewHolder(binding.root)
 
     private val messages = mutableListOf<Message>()
+    private val usersCache = mutableMapOf<String, UserResponse>()
     private val timeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm") }
     private val utcZone = ZoneId.of("UTC")
     private val moscowZone = ZoneId.of("Europe/Moscow")
-    private val userNamesCache = mutableMapOf<String, String>().apply {
-        put(currentUser.id, currentUser.name)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.ViewHolder {
+        val binding = ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val binding = ItemMessageBinding.bind(itemView)
+    override fun onBindViewHolder(holder: MessageAdapter.ViewHolder, position: Int) {
+        with(holder.binding) {
+            val message = messages[position]
+
+            val senderId = message.senderId
+
+            val user = usersCache[senderId]
+
+            senderName.text = user?.name ?: "Unknown"
 
 
-        fun bind(message: Message) {
-            binding.apply {
+            messageText.text = message.content
+            timeText.text = formatTime(message.sentAt)
+            if (messages[position].editedAt != null) {
+                editedIndicator.visibility = View.VISIBLE
+            } else {
+                editedIndicator.visibility = View.GONE
+            }
 
-                senderName.text = userNamesCache[message.senderId] ?: "User ${message.senderId.takeLast(4)}"
+            user?.avatar?.let { avatarUrl ->
+                Glide.with(holder.itemView.context)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.avatar)
+                    .error(R.drawable.avatar)
+                    .circleCrop()
+                    .into(userAvatar)
+            }
 
-                if (message.senderId == currentUser.id) {
-                    senderName.text = "Вы"
-                } else {
-                    senderName.text = "Участник ${message.senderId.takeLast(4)}"
-                    senderName.visibility = View.VISIBLE
-                }
-
-                messageText.text = message.content
-
-                timeText.text = formatTime(message.sentAt)
-
-                if (message.editedAt != null) {
-                    editedIndicator.visibility = View.VISIBLE
-                } else {
-                    editedIndicator.visibility = View.GONE
-                }
-
-
-                root.setOnLongClickListener {
-                    showContextMenu(it, message)
-                    true
-                }
+            root.setOnLongClickListener {
+                showContextMenu(it, messages[position])
+                true
             }
         }
-
-        private fun formatTime(isoTime: String): String {
-            return try {
-                LocalDateTime.parse(isoTime).atZone(utcZone).withZoneSameInstant(moscowZone).format(timeFormatter)
-            } catch (e: Exception) {
-                isoTime
-            }
-        }
-
-        private fun showContextMenu(view: View, message: Message) {
-            PopupMenu(view.context, view).apply {
-                menuInflater.inflate(R.menu.message_menu, menu)
-                setOnMenuItemClickListener { item ->
-                    when (item.itemId) {
-                        R.id.edit -> onEdit(message.id, message.content)
-                        R.id.delete -> onDelete(message.id)
-                    }
-                    true
-                }
-                show()
-            }
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_message, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(messages[position])
     }
 
     override fun getItemCount() = messages.size
 
-    fun updateUserCache(userId: String, userName: String) {
-        userNamesCache[userId] = userName
+    fun updateUsersCache(users: List<UserResponse>) {
+        usersCache.clear()
+        users.forEach { user ->
+            usersCache[user.id] = user
+        }
+        notifyDataSetChanged()
+    }
+
+    fun addUserToCache(user: UserResponse) {
+        usersCache[user.id] = user
+        notifyDataSetChanged()
+    }
+
+    private fun formatTime(isoTime: String): String {
+        return try {
+            LocalDateTime.parse(isoTime).atZone(utcZone).withZoneSameInstant(moscowZone).format(timeFormatter)
+        } catch (e: Exception) {
+            isoTime
+        }
+    }
+
+    private fun showContextMenu(view: View, message: Message) {
+        PopupMenu(view.context, view).apply {
+            menuInflater.inflate(R.menu.message_menu, menu)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.edit -> onEdit(message.id, message.content)
+                    R.id.delete -> onDelete(message.id)
+                }
+                true
+            }
+            show()
+        }
     }
 
     fun setMessages(newMessages: List<Message>) {

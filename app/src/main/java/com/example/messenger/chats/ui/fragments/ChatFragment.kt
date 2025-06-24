@@ -51,24 +51,14 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadCurrentUser()
+        initializeChat()
+        setupRecyclerView()
+        initChatHub()
+        loadInitialMessages()
+        setAllBindings()
 
-    }
+        viewModel.loadChatUsers(chat.id)
 
-    private fun loadCurrentUser() {
-        lifecycleScope.launch {
-            val response = apiService.getUser()
-            if (response.isSuccessful) {
-                currentUser = response.body() ?: throw IllegalStateException("User data is null")
-
-                // 2. После загрузки пользователя инициализируем чат
-                initializeChat()
-                setupRecyclerView()
-                initChatHub()
-                loadInitialMessages()
-                setAllBindings()
-            }
-        }
     }
 
     private fun initializeChat() {
@@ -81,6 +71,8 @@ class ChatFragment : Fragment() {
         val avatar = arguments?.getString("avatar") ?: ""
 
         chat = Chat(chatId, ownerId, chatName, avatar)
+
+        viewModel.loadChatUsers(chatId)
     }
 
     private fun setAllBindings() {
@@ -170,7 +162,6 @@ class ChatFragment : Fragment() {
         messageAdapter = MessageAdapter(
             onEdit = { messageId, currentText -> showEditDialog(messageId, currentText) },
             onDelete = { messageId -> confirmDelete(messageId) },
-            currentUser = currentUser
         )
 
         binding.recyclerView.apply {
@@ -178,6 +169,10 @@ class ChatFragment : Fragment() {
                 stackFromEnd = true
             }
             adapter = messageAdapter
+        }
+
+        viewModel.chatUsers.observe(viewLifecycleOwner) { users ->
+            messageAdapter.updateUsersCache(users)
         }
     }
 
