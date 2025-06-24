@@ -37,4 +37,5 @@
     <string name="requestManagement">Управление запросами</string>
     <string name="chatInfo">Сведения о чате</string>
     <string name="chatParticipants">Участники чата</string>
+    <string name="deleteChat">Удалить чат</string>
 </resources>

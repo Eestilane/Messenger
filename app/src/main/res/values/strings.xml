@@ -42,4 +42,5 @@
     <string name="requestManagement">Request management</string>
     <string name="chatInfo">Chat info</string>
     <string name="chatParticipants">Chat participants</string>
+    <string name="deleteChat">Delete chat</string>
 </resources>
