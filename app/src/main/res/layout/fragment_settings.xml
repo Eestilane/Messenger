@@ -405,7 +405,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="12dp"
-                    android:text="Test 0.1"
+                    android:text="Release 1.0"
                     android:textColor="?colorText"
                     android:textFontWeight="1000"
                     android:textSize="14sp" />

@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.rx3.await
 
 class ChatHubConnection(private val authToken: String) {
-    private val connection: HubConnection = HubConnectionBuilder.create("wss://api.nogamenolife.pro/chatHub").withAccessTokenProvider( Single.fromCallable { authToken } ).build()
+    private val connection: HubConnection = HubConnectionBuilder.create("http://188.120.254.231:8080/").withAccessTokenProvider( Single.fromCallable { authToken } ).build()
 
     suspend fun connect() {
         connection.start().await()
