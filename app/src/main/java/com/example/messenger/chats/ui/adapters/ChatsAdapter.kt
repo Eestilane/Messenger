@@ -7,12 +7,17 @@ import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.databinding.ItemChatBinding
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
-class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) -> Unit) : RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
+class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) -> Unit) :
+    RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
 
-    private val lastMessages = mutableMapOf<String, Pair<String, String>>()
+    private val lastMessages = mutableMapOf<String, Pair<String, LocalDateTime?>>()
+    private val moscowZone = ZoneId.of("Europe/Moscow")
 
-    inner class ViewHolder(val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,25 +27,43 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) ->
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.binding) {
             val chat = chats[position]
-            chatName.text = chats[position].name
-            Glide.with(holder.itemView).load(chats[position].avatar).placeholder(R.drawable.chat_placeholder).circleCrop().into(chatAvatar)
-            val (message, time) = lastMessages[chats[position].id] ?: Pair("Создан чат ${chats[position].name}", "")
+            chatName.text = chat.name
+            Glide.with(holder.itemView)
+                .load(chat.avatar)
+                .placeholder(R.drawable.chat_placeholder)
+                .circleCrop()
+                .into(chatAvatar)
+
+            val (message, date) = lastMessages[chat.id] ?: Pair("Нет сообщений", null)
+
             lastMessage.text = message
-            timeLastMessage.text = time
+            timeLastMessage.text = date?.let { formatMessageTime(it) } ?: ""
             root.setOnClickListener { onClick(chat) }
+        }
+    }
+
+    private fun formatMessageTime(dateTime: LocalDateTime): String {
+        if (dateTime.isBefore(LocalDateTime.of(2000, 1, 1, 0, 0))) {
+            return ""
+        }
+        val now = LocalDateTime.now(moscowZone)
+        return when {
+            dateTime.isAfter(now.minusDays(1)) -> dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+            dateTime.isAfter(now.minusDays(7)) -> dateTime.format(DateTimeFormatter.ofPattern("E"))
+            else -> dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yy"))
         }
     }
 
     override fun getItemCount() = chats.size
 
     fun updateList(newChats: List<Chat>) {
-        chats = newChats
+        chats = newChats.sortedByDescending { lastMessages[it.id]?.second ?: LocalDateTime.MIN }
         notifyDataSetChanged()
     }
 
-    fun updateLastMessage(chatId: String, message: String, time: String) {
-        lastMessages[chatId] = Pair(message, time)
-        chats = chats.sortedByDescending { lastMessages[it.id]?.second ?: "" }
-        notifyDataSetChanged()
+    fun updateLastMessage(chatId: String, message: String, dateTime: LocalDateTime) {
+        val moscowTime = dateTime?.atZone(ZoneId.systemDefault()) ?.withZoneSameInstant(moscowZone) ?.toLocalDateTime()
+        lastMessages[chatId] = Pair(message, moscowTime)
+        updateList(chats)
     }
 }

@@ -171,7 +171,7 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
         renderNameChangeState(NameChangeScreenState.Null)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
-                apiService.changePassword(ChangePasswordRequest(password = newPassword))
+                apiService.changePassword(ChangePasswordRequest(newPassword))
             }
             when (response.code()) {
                 200 -> {

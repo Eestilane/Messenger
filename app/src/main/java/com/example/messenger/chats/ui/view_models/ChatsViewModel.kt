@@ -48,11 +48,18 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
     private val _currentChatAvatar = MutableLiveData<String>()
     val currentChatAvatar: LiveData<String> = _currentChatAvatar
 
+    private val _sortedChats = MutableLiveData<List<Chat>>(emptyList())
+    val sortedChats: LiveData<List<Chat>> = _sortedChats
+
+    private val lastMessagesMap = mutableMapOf<String, Pair<String, LocalDateTime>>()
+
     fun loadChats() = viewModelScope.launch {
         try {
             val response = apiService.getChats()
             if (response.isSuccessful) {
-                _chats.value = response.body()?.data ?: emptyList()
+                val chats = response.body()?.data ?: emptyList()
+                _chats.value = chats
+                loadLastMessagesForAllChats(chats)
             } else {
                 _errorMessage.value = "Ошибка загрузки чатов: ${response.message()}"
             }
@@ -60,6 +67,45 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
             _errorMessage.value = "Ошибка загрузки чатов: ${e.message}"
         }
     }
+
+    private fun loadLastMessagesForAllChats(chats: List<Chat>) {
+        viewModelScope.launch {
+            chats.forEach { chat ->
+                loadLastMessage(chat.id) { message, dateTime ->
+                    lastMessagesMap[chat.id] = Pair(message, dateTime)
+                    if (lastMessagesMap.size == chats.size) {
+                        sortChatsByLastMessage()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun sortChatsByLastMessage() {
+        val sorted = _chats.value?.sortedByDescending { chat ->
+            lastMessagesMap[chat.id]?.second ?: LocalDateTime.MIN
+        } ?: emptyList()
+
+        _sortedChats.postValue(sorted)
+    }
+
+    fun loadLastMessage(chatId: String, callback: (String, LocalDateTime) -> Unit) =
+        viewModelScope.launch {
+            try {
+                val response = apiService.getChatMessages(chatId, limit = 1)
+                if (response.isSuccessful) {
+                    val lastMessage = response.body()?.data?.firstOrNull()
+                    lastMessage?.let {
+                        val dateTime = LocalDateTime.parse(it.sentAt)
+                        callback(it.content, dateTime)
+                    } ?: callback("Нет сообщений", LocalDateTime.MIN)
+                } else {
+                    callback("Ошибка загрузки", LocalDateTime.MIN)
+                }
+            } catch (e: Exception) {
+                callback("Ошибка: ${e.message}", LocalDateTime.MIN)
+            }
+        }
 
     fun createChat(name: String, avatarUri: Uri? = null) = viewModelScope.launch {
         try {
@@ -112,23 +158,6 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
         }
     }
 
-    fun loadLastMessage(chatId: String, callback: (String, String) -> Unit) = viewModelScope.launch {
-        try {
-            val response = apiService.getChatMessages(chatId, limit = 1)
-            if (response.isSuccessful) {
-                val lastMessage = response.body()?.data?.firstOrNull()
-                lastMessage?.let {
-                    val time = formatTime(it.sentAt)
-                    callback(it.content, time)
-                } ?: callback("Нет сообщений", "")
-            } else {
-                callback("Ошибка загрузки", "")
-            }
-        } catch (e: Exception) {
-            callback("Ошибка: ${e.message}", "")
-        }
-    }
-
     fun onChatNavigated() {
         _navigateToChat.value = null
     }
@@ -137,13 +166,4 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
         _avatarUri.value = uri
     }
 
-    private fun formatTime(isoTime: String): String {
-        return try {
-            val utcTime = LocalDateTime.parse(isoTime).atZone(ZoneId.of("UTC"))
-            val moscowTime = utcTime.withZoneSameInstant(ZoneId.of("Europe/Moscow"))
-            moscowTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-        } catch (e: Exception) {
-            isoTime
-        }
-    }
 }
