@@ -183,6 +183,7 @@
             android:id="@+id/chatUsers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?colorLineDetails"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="100"
             tools:listitem="@layout/item_chat_users" />

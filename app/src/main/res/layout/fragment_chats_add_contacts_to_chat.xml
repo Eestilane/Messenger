@@ -45,10 +45,10 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:paddingStart="8dp"
         android:layout_marginTop="8dp"
-        android:paddingEnd="8dp"
         android:background="?colorFragment"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:queryHint="@string/searchContact"
         app:layout_constraintTop_toBottomOf="@id/contactsText" />
 
@@ -58,13 +58,14 @@
         android:layout_height="match_parent"
         android:layout_marginTop="112dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toBottomOf="@id/searchView"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchView">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_results"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?colorLineDetails"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="100"
