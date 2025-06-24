@@ -21,6 +21,7 @@ import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.chats.ui.view_models.ChatViewModel
 import com.example.messenger.data.RetrofitClient
+import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.FragmentChatsChatBinding
 import com.example.messenger.libs.TokenManager
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ class ChatFragment : Fragment() {
     private lateinit var chatUsersAdapter: ChatUsersAdapter
     private lateinit var chatHub: ChatHubConnection
     private lateinit var chat: Chat
+    private lateinit var currentUser: UserResponse
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }
@@ -49,25 +51,36 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadCurrentUser()
+
+    }
+
+    private fun loadCurrentUser() {
+        lifecycleScope.launch {
+            val response = apiService.getUser()
+            if (response.isSuccessful) {
+                currentUser = response.body() ?: throw IllegalStateException("User data is null")
+
+                // 2. После загрузки пользователя инициализируем чат
+                initializeChat()
+                setupRecyclerView()
+                initChatHub()
+                loadInitialMessages()
+                setAllBindings()
+            }
+        }
+    }
+
+    private fun initializeChat() {
         val chatId = arguments?.getString("chatId") ?: run {
             findNavController().navigateUp()
             return
         }
         val chatName = arguments?.getString("chatName") ?: ""
         val ownerId = arguments?.getString("ownerId") ?: ""
-        val avatar = arguments?.getString("avatar")
+        val avatar = arguments?.getString("avatar") ?: ""
 
         chat = Chat(chatId, ownerId, chatName, avatar)
-
-        viewModel.chatUsers.observe(viewLifecycleOwner) { chatUsers ->
-            chatUsersAdapter.setChatUsers(chatUsers)
-        }
-
-        initChatHub()
-        setupRecyclerView()
-        loadInitialMessages()
-        setAllBindings()
-
     }
 
     private fun setAllBindings() {
@@ -153,20 +166,11 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun loadInitialMessages() {
-        viewModel.loadMessages(chat.id)
-        viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            messageAdapter.setMessages(messages)
-            if (messages.isNotEmpty()) {
-                binding.recyclerView.scrollToPosition(messages.size - 1)
-            }
-        }
-    }
-
     private fun setupRecyclerView() {
         messageAdapter = MessageAdapter(
             onEdit = { messageId, currentText -> showEditDialog(messageId, currentText) },
-            onDelete = { messageId -> confirmDelete(messageId) }
+            onDelete = { messageId -> confirmDelete(messageId) },
+            currentUser = currentUser
         )
 
         binding.recyclerView.apply {
@@ -174,6 +178,16 @@ class ChatFragment : Fragment() {
                 stackFromEnd = true
             }
             adapter = messageAdapter
+        }
+    }
+
+    private fun loadInitialMessages() {
+        viewModel.loadMessages(chat.id)
+        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+            messageAdapter.setMessages(messages)
+            if (messages.isNotEmpty()) {
+                binding.recyclerView.scrollToPosition(messages.size - 1)
+            }
         }
     }
 

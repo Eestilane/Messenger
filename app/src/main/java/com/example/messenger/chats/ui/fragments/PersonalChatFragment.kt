@@ -114,10 +114,10 @@ class PersonalChatFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        messageAdapter = MessageAdapter(
-            onEdit = { messageId, currentText -> showEditDialog(messageId, currentText) },
-            onDelete = { messageId -> confirmDelete(messageId) }
-        )
+        //messageAdapter = MessageAdapter(
+            //onEdit = { messageId, currentText -> showEditDialog(messageId, currentText) },
+            //onDelete = { messageId -> confirmDelete(messageId) }
+        //)
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {

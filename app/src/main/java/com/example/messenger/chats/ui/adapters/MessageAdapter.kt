@@ -7,14 +7,25 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Message
+import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.ItemMessageBinding
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class MessageAdapter (private val onEdit: (messageId: String, currentText: String) -> Unit, private val onDelete: (messageId: String) -> Unit): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+class MessageAdapter (
+    private val onEdit: (messageId: String, currentText: String) -> Unit,
+    private val onDelete: (messageId: String) -> Unit,
+    private val currentUser: UserResponse
+): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     private val messages = mutableListOf<Message>()
+    private val timeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm") }
+    private val utcZone = ZoneId.of("UTC")
+    private val moscowZone = ZoneId.of("Europe/Moscow")
+    private val userNamesCache = mutableMapOf<String, String>().apply {
+        put(currentUser.id, currentUser.name)
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemMessageBinding.bind(itemView)
@@ -22,6 +33,15 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
 
         fun bind(message: Message) {
             binding.apply {
+
+                senderName.text = userNamesCache[message.senderId] ?: "User ${message.senderId.takeLast(4)}"
+
+                if (message.senderId == currentUser.id) {
+                    senderName.text = "Вы"
+                } else {
+                    senderName.text = "Участник ${message.senderId.takeLast(4)}"
+                    senderName.visibility = View.VISIBLE
+                }
 
                 messageText.text = message.content
 
@@ -33,6 +53,7 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
                     editedIndicator.visibility = View.GONE
                 }
 
+
                 root.setOnLongClickListener {
                     showContextMenu(it, message)
                     true
@@ -42,9 +63,7 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
 
         private fun formatTime(isoTime: String): String {
             return try {
-                val utcTime = LocalDateTime.parse(isoTime).atZone(ZoneId.of("UTC"))
-                val moscowTime = utcTime.withZoneSameInstant(ZoneId.of("Europe/Moscow"))
-                moscowTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                LocalDateTime.parse(isoTime).atZone(utcZone).withZoneSameInstant(moscowZone).format(timeFormatter)
             } catch (e: Exception) {
                 isoTime
             }
@@ -76,6 +95,10 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     }
 
     override fun getItemCount() = messages.size
+
+    fun updateUserCache(userId: String, userName: String) {
+        userNamesCache[userId] = userName
+    }
 
     fun setMessages(newMessages: List<Message>) {
         messages.clear()
