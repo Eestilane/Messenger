@@ -104,6 +104,10 @@ class ChatUsersDialogFragment : DialogFragment() {
         binding.addUsersInFrame.setOnClickListener {
             AddUserToChatDialogFragment.newInstance(chat.id).show(childFragmentManager, "AddUserToChatDialog")
         }
+
+        binding.deleteChat.setOnClickListener {
+            viewModel.deleteChat(chat.id)
+        }
     }
 
     private fun setupObservers() {

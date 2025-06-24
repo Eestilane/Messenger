@@ -16,7 +16,6 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) ->
 
     private val lastMessages = mutableMapOf<String, Pair<String, LocalDateTime?>>()
     private val moscowZone = ZoneId.of("Europe/Moscow")
-
     inner class ViewHolder(val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,7 +34,6 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) ->
                 .into(chatAvatar)
 
             val (message, date) = lastMessages[chat.id] ?: Pair("Нет сообщений", null)
-
             lastMessage.text = message
             timeLastMessage.text = date?.let { formatMessageTime(it) } ?: ""
             root.setOnClickListener { onClick(chat) }

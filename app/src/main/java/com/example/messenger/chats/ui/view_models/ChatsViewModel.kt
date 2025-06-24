@@ -53,25 +53,19 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
         }
     }
 
-    private fun loadLastMessages(chats: List<Chat>) {
-        viewModelScope.launch {
-            chats.forEach { chat -> loadLastMessage(chat.id) { message, dateTime ->
-                lastMessagesMap[chat.id] = message to dateTime }
-            }
+    private fun loadLastMessages(chats: List<Chat>) = viewModelScope.launch {
+        chats.forEach { chat -> loadLastMessage(chat.id) { message, dateTime -> lastMessagesMap[chat.id] = message to dateTime }
         }
     }
 
     fun loadLastMessage(chatId: String, callback: (String, LocalDateTime) -> Unit) = viewModelScope.launch {
         try {
-            val response = withContext(Dispatchers.IO) {
-                apiService.getChatMessages(chatId, limit = 1)
-            }
+            val response = withContext(Dispatchers.IO) { apiService.getChatMessages(chatId, limit = 1) }
             if (response.isSuccessful) {
                 val lastMessage = response.body()?.data?.firstOrNull()
                 lastMessage?.let {
                     val dateTime = LocalDateTime.parse(it.sentAt)
-                    callback(it.content, dateTime)
-                } ?: callback("Нет сообщений", LocalDateTime.MIN)
+                    callback(it.content, dateTime) } ?: callback("Нет сообщений", LocalDateTime.MIN)
             } else {
                 callback("Ошибка загрузки", LocalDateTime.MIN)
             }

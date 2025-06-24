@@ -37,6 +37,7 @@ class ChatsFragment : Fragment() {
         setupRecyclerView()
         setupListeners()
         observeViewModel()
+
         viewModel.loadChats()
     }
 

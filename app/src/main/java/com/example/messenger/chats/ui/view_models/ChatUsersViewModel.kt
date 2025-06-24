@@ -106,6 +106,14 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
         }
     }
 
+    fun deleteChat(chatId: String) = viewModelScope.launch {
+        try {
+            apiService.deleteChat(chatId)
+        } catch (e: Exception) {
+            _errorMessage.postValue("Ошибка: ${e.localizedMessage}")
+        }
+    }
+
     fun onSuccessMessageShown() {
         _successMessage.value = null
     }

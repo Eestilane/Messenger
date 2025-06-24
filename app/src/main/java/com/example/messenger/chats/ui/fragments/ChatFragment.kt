@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.chats.ui.ChatHubConnection
-import com.example.messenger.chats.ui.adapters.ChatUsersAdapter
 import com.example.messenger.chats.ui.adapters.MessageAdapter
 import com.example.messenger.chats.ui.dialogs.AddUserToChatDialogFragment
 import com.example.messenger.chats.ui.dialogs.ChatUsersDialogFragment
@@ -21,7 +20,6 @@ import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.chats.ui.view_models.ChatViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.FragmentChatsChatBinding
 import com.example.messenger.libs.TokenManager
 import kotlinx.coroutines.launch
@@ -31,10 +29,8 @@ class ChatFragment : Fragment() {
     private var _binding: FragmentChatsChatBinding? = null
     private val binding get() = _binding!!
     private lateinit var messageAdapter: MessageAdapter
-    private lateinit var chatUsersAdapter: ChatUsersAdapter
     private lateinit var chatHub: ChatHubConnection
     private lateinit var chat: Chat
-    private lateinit var currentUser: UserResponse
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }

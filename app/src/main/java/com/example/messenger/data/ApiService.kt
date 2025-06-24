@@ -4,6 +4,7 @@ import com.example.messenger.chats.ui.models.AddUserRequest
 import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.ChatMessagesResponse
 import com.example.messenger.chats.ui.models.CreateChatRequest
+import com.example.messenger.chats.ui.models.CreateDirectChatRequest
 import com.example.messenger.chats.ui.models.RemoveUserRequest
 import com.example.messenger.data.models.ChangePasswordRequest
 import com.example.messenger.data.models.LoginRequest
@@ -20,6 +21,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -99,5 +101,12 @@ interface ApiService {
     @GET("chats/get_chat_messages")
     suspend fun getChatMessages(@Query("chatId") chatId: String, @Query("limit") limit: Int = 50, @Query("offset") offset: Int = 0): Response<ChatMessagesResponse>
 
+    @DELETE ("chats/delete_chat")
+    suspend fun deleteChat(@Query("chatId") chatId: String): Response<Unit>
 
+    @POST("/chats/create_direct_chat")
+    suspend fun createDirectChat(@Body request: CreateDirectChatRequest): Response<String>
+
+    @GET("/chats/get_direct_chat")
+    suspend fun getDirectChat(@Query("userId") userId: String): Response<String>
 }
