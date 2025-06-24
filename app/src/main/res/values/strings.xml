@@ -34,5 +34,6 @@
     <string name="next">Next</string>
     <string name="save">Save</string>
     <string name="editYourName">Edit your name</string>
+    <string name="editYourPassword">Edit your password</string>
     <string name="createNewChat">Create new chat</string>
 </resources>

@@ -16,6 +16,7 @@ import com.example.messenger.data.models.LoginResponse
 import com.example.messenger.data.models.RegisterRequest
 import com.example.messenger.data.models.errors.AuthErrorBody422
 import com.example.messenger.libs.HandleOperators
+import com.example.messenger.libs.SingleLiveEvent
 import com.example.messenger.libs.TokenManager
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -24,8 +25,15 @@ class AuthViewModel(val apiService: ApiService, val context: Context, val view: 
     private val _authState = MutableLiveData<AuthScreenState>(AuthScreenState.Content)
     val authState: LiveData<AuthScreenState> get() = _authState
 
+    private val _navigateToChats = SingleLiveEvent<Boolean>()
+    val navigateToChats: LiveData<Boolean> get() = _navigateToChats
+
     fun renderState(state: AuthScreenState) {
         _authState.postValue(state)
+    }
+
+    fun resetNavigation() {
+        _navigateToChats.postValue(false)
     }
 
     companion object {
@@ -52,8 +60,8 @@ class AuthViewModel(val apiService: ApiService, val context: Context, val view: 
                 200 -> {
                     with(response.body() as LoginResponse) {
                         TokenManager.saveToken(context, token)
-                        renderState(AuthScreenState.Navigate)
                     }
+                    _navigateToChats.postValue(true)
                 }
 
                 400 -> {
@@ -92,8 +100,8 @@ class AuthViewModel(val apiService: ApiService, val context: Context, val view: 
                 200 -> {
                     with(response.body() as LoginResponse) {
                         TokenManager.saveToken(context, token)
-                        renderState(AuthScreenState.Navigate)
                     }
+                    _navigateToChats.postValue(true)
                 }
 
                 422 -> {

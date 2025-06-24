@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.messenger.R
 import com.example.messenger.auth.ui.models.AuthScreenState
@@ -42,6 +43,14 @@ class RegisterFragment : Fragment() {
             render(authState)
         }
 
+        viewModel.navigateToChats.observe(viewLifecycleOwner) { shouldNavigate ->
+            if (shouldNavigate) {
+                val navOptions = NavOptions.Builder().setPopUpTo(R.id.navigation_graph, true).build()
+                findNavController().navigate(R.id.action_authFragment_to_chatsFragment, null, navOptions)
+                viewModel.resetNavigation()
+            }
+        }
+
         binding.registerButton.setOnClickListener{
             viewModel.register(login = binding.enterLogin.text.toString(), password = binding.enterPassword.text.toString(), name = binding.enterName.text.toString(), context = requireContext())
         }
@@ -52,7 +61,6 @@ class RegisterFragment : Fragment() {
             is AuthScreenState.Loading -> showLoading(state)
             is AuthScreenState.Content -> showContent(state)
             is AuthScreenState.Error -> showError(state)
-            is AuthScreenState.Navigate -> showNavigate(state)
         }
     }
 
@@ -89,9 +97,5 @@ class RegisterFragment : Fragment() {
             binding.nameError.isVisible = true
             binding.nameError.text = state.nameError
         }
-    }
-
-    private fun showNavigate(state: AuthScreenState){
-        findNavController().navigate(R.id.action_authFragment_to_chatsFragment)
     }
 }

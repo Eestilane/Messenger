@@ -213,10 +213,4 @@ class SettingsFragment : Fragment() {
     private fun showError(state: SettingsScreenState.Error) {
         hideAll()
     }
-
-    private fun getColorFromTheme(attr: Int): Int {
-        val typedValue = TypedValue()
-        requireContext().theme.resolveAttribute(attr, typedValue, true)
-        return typedValue.data
-    }
 }

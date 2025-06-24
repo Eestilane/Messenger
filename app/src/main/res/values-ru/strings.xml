@@ -29,5 +29,6 @@
     <string name="next">Далее</string>
     <string name="save">Сохранить</string>
     <string name="editYourName">Редактирование имени</string>
+    <string name="editYourPassword">Редактирование пароля</string>
     <string name="createNewChat">Создать новый чат</string>
 </resources>

@@ -18,6 +18,7 @@ import com.example.messenger.libs.HandleOperators
 import com.example.messenger.libs.SingleLiveEvent
 import com.example.messenger.libs.TokenManager
 import com.example.messenger.settings.ui.models.NameChangeScreenState
+import com.example.messenger.settings.ui.models.PasswordChangeScreenState
 import com.example.messenger.settings.ui.models.SettingsScreenState
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -30,6 +31,9 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
 
     private val _renameData = MutableLiveData<NameChangeScreenState>(NameChangeScreenState.Null)
     val renameData: LiveData<NameChangeScreenState> get() = _renameData
+
+    private val _passwordChangeData = MutableLiveData<PasswordChangeScreenState>(PasswordChangeScreenState.Null)
+    val passwordChangeData: LiveData<PasswordChangeScreenState> get() = _passwordChangeData
 
     private val _navigateToAuth = SingleLiveEvent<Boolean>()
     val navigateToAuth: LiveData<Boolean> get() = _navigateToAuth
@@ -57,6 +61,14 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
 
     fun resetRenameError() {
         _renameData.value = NameChangeScreenState.Null
+    }
+
+    fun renderPasswordChangeState(state: PasswordChangeScreenState) {
+        _passwordChangeData.postValue(state)
+    }
+
+    fun resetPasswordChangeError() {
+        _passwordChangeData.value = PasswordChangeScreenState.Null
     }
 
     companion object {
@@ -168,19 +180,24 @@ class SettingsViewModel(val apiService: ApiService, val context: Context, val vi
 
     fun changePassword(newPassword: String) {
         renderSettingsState(SettingsScreenState.Loading)
-        renderNameChangeState(NameChangeScreenState.Null)
+        renderPasswordChangeState(PasswordChangeScreenState.Null)
         viewModelScope.launch {
             val response = HandleOperators.handleRequest {
                 apiService.changePassword(ChangePasswordRequest(newPassword))
             }
             when (response.code()) {
                 200 -> {
-                    renderSettingsState(
-                        SettingsScreenState.Content(
-                            userId = user.id, userName = user.name, userLogin = user.login, userAvatar = user.avatar
+                    _navigateToSettings.postValue(true)
+                }
+
+                422 -> {
+                    getUser()
+                    val error = Gson().fromJson(response.errorBody()?.string(), AuthErrorBody422::class.java)
+                    renderPasswordChangeState(
+                        PasswordChangeScreenState.Error(
+                            passwordChangeError = error.errors.Password?.firstOrNull(),
                         )
                     )
-                    _navigateToSettings.postValue(true)
                 }
 
                 999 -> {

@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import com.example.messenger.R
 import com.example.messenger.databinding.FragmentSettingsPasswordChangeBinding
 import com.example.messenger.settings.ui.models.NameChangeScreenState
+import com.example.messenger.settings.ui.models.PasswordChangeScreenState
 import com.example.messenger.settings.ui.view_models.SettingsViewModel
 
 class PasswordChangeDialogFragment : DialogFragment() {
@@ -28,8 +29,8 @@ class PasswordChangeDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.renameData.observe(viewLifecycleOwner) { renameData ->
-            render(renameData)
+        viewModel.passwordChangeData.observe(viewLifecycleOwner) { passwordChangeData ->
+            render(passwordChangeData)
         }
 
         viewModel.navigateToSettings.observe(viewLifecycleOwner) { shouldNavigate ->
@@ -41,14 +42,14 @@ class PasswordChangeDialogFragment : DialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         binding.cancelButton.setOnClickListener {
-            viewModel.resetRenameError()
+            viewModel.resetPasswordChangeError()
             binding.root.post {
                 findNavController().navigateUp()
             }
         }
 
         binding.okButton.setOnClickListener {
-            setFragmentResult("requestPassword", bundleOf("newPassword" to binding.enterName.text.toString()))
+            setFragmentResult("requestPassword", bundleOf("newPassword" to binding.enterPassword.text.toString()))
         }
     }
 
@@ -59,23 +60,23 @@ class PasswordChangeDialogFragment : DialogFragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        render(NameChangeScreenState.Null)
+        render(PasswordChangeScreenState.Null)
     }
 
-    private fun render(state: NameChangeScreenState) {
+    private fun render(state: PasswordChangeScreenState) {
         when (state) {
-            is NameChangeScreenState.Null -> hideAll()
-            is NameChangeScreenState.Error -> showError(state)
+            is PasswordChangeScreenState.Null -> hideAll()
+            is PasswordChangeScreenState.Error -> showError(state)
         }
     }
 
     private fun hideAll() {
-        binding.renameError.isVisible = false
+        binding.passwordChangeError.isVisible = false
     }
 
-    private fun showError(state: NameChangeScreenState.Error) {
+    private fun showError(state: PasswordChangeScreenState.Error) {
         hideAll()
-        binding.renameError.isVisible = true
-        binding.renameError.text = state.renameError
+        binding.passwordChangeError.isVisible = true
+        binding.passwordChangeError.text = state.passwordChangeError
     }
 }
