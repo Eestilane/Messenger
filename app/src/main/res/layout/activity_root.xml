@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         app:itemBackground="?colorBackground"
-        app:itemIconTint="?colorText"
+        app:itemIconTint="?colorSubtext"
         app:itemRippleColor="?colorFragment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

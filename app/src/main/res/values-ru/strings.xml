@@ -38,4 +38,7 @@
     <string name="chatInfo">Сведения о чате</string>
     <string name="chatParticipants">Участники чата</string>
     <string name="deleteChat">Удалить чат</string>
+    <string name="noMessages">Нет сообщений</string>
+    <string name="enterMessage">Введите сообщение</string>
+    <string name="edited">изменено</string>
 </resources>

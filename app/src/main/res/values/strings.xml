@@ -43,4 +43,7 @@
     <string name="chatInfo">Chat info</string>
     <string name="chatParticipants">Chat participants</string>
     <string name="deleteChat">Delete chat</string>
+    <string name="noMessages">No messages</string>
+    <string name="enterMessage">Enter message</string>
+    <string name="edited">edited</string>
 </resources>
