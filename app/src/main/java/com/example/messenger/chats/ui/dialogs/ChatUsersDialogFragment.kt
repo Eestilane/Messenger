@@ -100,6 +100,10 @@ class ChatUsersDialogFragment : DialogFragment() {
 
         binding.toBack.setOnClickListener { dismiss() }
         binding.chatAvatar.setOnClickListener { pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }
+
+        binding.addUsersInFrame.setOnClickListener {
+            AddUserToChatDialogFragment.newInstance(chat.id).show(childFragmentManager, "AddUserToChatDialog")
+        }
     }
 
     private fun setupObservers() {

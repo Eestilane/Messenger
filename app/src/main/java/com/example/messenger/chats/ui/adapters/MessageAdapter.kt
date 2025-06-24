@@ -32,14 +32,9 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     override fun onBindViewHolder(holder: MessageAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
             val message = messages[position]
-
             val senderId = message.senderId
-
             val user = usersCache[senderId]
-
             senderName.text = user?.name ?: "Unknown"
-
-
             messageText.text = message.content
             timeText.text = formatTime(message.sentAt)
             if (messages[position].editedAt != null) {
@@ -49,13 +44,7 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
             }
 
             user?.avatar?.let { avatarUrl ->
-                Glide.with(holder.itemView.context)
-                    .load(avatarUrl)
-                    .placeholder(R.drawable.avatar)
-                    .error(R.drawable.avatar)
-                    .circleCrop()
-                    .into(userAvatar)
-            }
+                Glide.with(holder.itemView.context).load(avatarUrl).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar) }
 
             root.setOnLongClickListener {
                 showContextMenu(it, messages[position])
@@ -67,16 +56,12 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     override fun getItemCount() = messages.size
 
     fun updateUsersCache(users: List<UserResponse>) {
+        val oldSize = usersCache.size
         usersCache.clear()
-        users.forEach { user ->
-            usersCache[user.id] = user
+        usersCache.putAll(users.associateBy { it.id })
+        if (oldSize != usersCache.size) {
+            notifyDataSetChanged()
         }
-        notifyDataSetChanged()
-    }
-
-    fun addUserToCache(user: UserResponse) {
-        usersCache[user.id] = user
-        notifyDataSetChanged()
     }
 
     private fun formatTime(isoTime: String): String {

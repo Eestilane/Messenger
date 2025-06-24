@@ -132,6 +132,7 @@ class ChatFragment : Fragment() {
                 if (chatId == this@ChatFragment.chat.id) {
                     activity?.runOnUiThread {
                         Toast.makeText(context,"Пользователь добавлен", Toast.LENGTH_LONG).show()
+                        viewModel.loadChatUsers(chatId)
                     }
                 }
             }
@@ -139,6 +140,7 @@ class ChatFragment : Fragment() {
                 if (chatId == this@ChatFragment.chat.id) {
                     activity?.runOnUiThread {
                         Toast.makeText(context,"Пользователь удалён", Toast.LENGTH_LONG).show()
+                        viewModel.loadChatUsers(chatId)
                     }
                 }
             }
