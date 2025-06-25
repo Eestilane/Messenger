@@ -11,7 +11,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.R
 import com.example.messenger.chats.ui.adapters.ChatsAdapter
-import com.example.messenger.chats.ui.models.Chat
+import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.ChatsState
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
 import com.example.messenger.data.RetrofitClient
@@ -72,30 +72,20 @@ class ChatsFragment : Fragment() {
                 is ChatsState.Success -> {
                     hideLoading()
                     chatsAdapter.updateList(state.chats)
-                    loadLastMessages(state.chats)
                 }
                 is ChatsState.Error -> hideLoading()
             }
         }
     }
 
-    private fun loadLastMessages(chats: List<Chat>) {
-        chats.forEach { chat ->
-            viewModel.loadLastMessage(chat.id) { message, time ->
-                activity?.runOnUiThread {
-                    chatsAdapter.updateLastMessage(chat.id, message, time)
-                }
-            }
-        }
-    }
-
-    fun navigateToChat(chat: Chat) {
+    fun navigateToChat(parameters: ChatNavigationParameters) {
         findNavController().navigate(R.id.action_chatsFragment_to_chatFragment,
             bundleOf(
-                "chatId" to chat.id,
-                "chatName" to chat.name,
-                "avatar" to chat.avatar,
-                "ownerId" to chat.ownerId
+                "chatId" to parameters.id,
+                "ownerId" to parameters.ownerId,
+                "chatName" to parameters.name,
+                "avatar" to parameters.avatar,
+                "isDirect" to parameters.isDirect,
             )
         )
     }

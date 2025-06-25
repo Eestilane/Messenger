@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.chats.ui.adapters.ChatUsersAdapter
-import com.example.messenger.chats.ui.models.Chat
+import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.view_models.ChatUsersViewModel
 import com.example.messenger.data.RetrofitClient
 import com.example.messenger.databinding.FragmentChatsChatUsersBinding
@@ -22,7 +22,7 @@ class ChatUsersDialogFragment : DialogFragment() {
     private var _binding: FragmentChatsChatUsersBinding? = null
     private val binding get() = _binding!!
     private lateinit var chatUsersAdapter: ChatUsersAdapter
-    private lateinit var chat: Chat
+    private lateinit var chat: ChatNavigationParameters
 
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
@@ -38,18 +38,14 @@ class ChatUsersDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val ARG_CHAT_ID = "chat_id"
-        private const val ARG_CHAT_NAME = "chat_name"
-        private const val ARG_CHAT_OWNER_ID = "chat_owner_id"
-        private const val ARG_CHAT_AVATAR = "chat_avatar"
-
-        fun newInstance(chat: Chat): ChatUsersDialogFragment {
+        fun newInstance(chat: ChatNavigationParameters): ChatUsersDialogFragment {
             return ChatUsersDialogFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_CHAT_ID, chat.id)
-                    putString(ARG_CHAT_NAME, chat.name)
-                    putString(ARG_CHAT_OWNER_ID, chat.ownerId)
-                    putString(ARG_CHAT_AVATAR, chat.avatar)
+                    putString("chat_id", chat.id)
+                    putString("chat_name", chat.name)
+                    putString("owner_id", chat.ownerId)
+                    putString("avatar", chat.avatar)
+                    putBoolean("isDirect", chat.isDirect)
                 }
             }
         }
@@ -64,11 +60,13 @@ class ChatUsersDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val chatId = arguments?.getString(ARG_CHAT_ID) ?: return dismiss()
-        val chatName = arguments?.getString(ARG_CHAT_NAME) ?: return dismiss()
-        val ownerId = arguments?.getString(ARG_CHAT_OWNER_ID) ?: return dismiss()
-        val avatar = arguments?.getString(ARG_CHAT_AVATAR)
-        chat = Chat(chatId, ownerId, chatName, avatar)
+        chat = ChatNavigationParameters(
+            id = requireArguments().getString("chat_id") ?: return dismiss(),
+            ownerId = requireArguments().getString("owner_id") ?: return dismiss(),
+            name = requireArguments().getString("chat_name") ?: return dismiss(),
+            avatar = requireArguments().getString("avatar"),
+            isDirect = requireArguments().getBoolean("isDirect")
+        )
 
         setupUI()
         setupObservers()
@@ -99,6 +97,7 @@ class ChatUsersDialogFragment : DialogFragment() {
         }
 
         binding.toBack.setOnClickListener { dismiss() }
+
         binding.chatAvatar.setOnClickListener { pickMedia.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }
 
         binding.addUsersInFrame.setOnClickListener {

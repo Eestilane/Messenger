@@ -6,16 +6,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Chat
+import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.databinding.ItemChatBinding
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) -> Unit) :
-    RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
+class ChatsAdapter(private var chats: List<Chat>, private val onClick: (ChatNavigationParameters) -> Unit): RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
 
-    private val lastMessages = mutableMapOf<String, Pair<String, LocalDateTime?>>()
+
     private val moscowZone = ZoneId.of("Europe/Moscow")
+    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
+    private val utcZone = ZoneId.of("UTC")
+
     inner class ViewHolder(val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,41 +32,33 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (Chat) ->
         with(holder.binding) {
             val chat = chats[position]
             chatName.text = chat.name
-            Glide.with(holder.itemView)
-                .load(chat.avatar)
-                .placeholder(R.drawable.chat_placeholder)
-                .circleCrop()
-                .into(chatAvatar)
-
-            val (message, date) = lastMessages[chat.id] ?: Pair("Нет сообщений", null)
-            lastMessage.text = message
-            timeLastMessage.text = date?.let { formatMessageTime(it) } ?: ""
-            root.setOnClickListener { onClick(chat) }
+            Glide.with(holder.itemView).load(chat.avatar).placeholder(R.drawable.chat_placeholder).circleCrop().into(chatAvatar)
+            lastMessage.text = chat.lastMessage?.content ?: "Нет сообщений"
+            timeLastMessage.text = formatTime(chat.lastMessage?.sentAt)
+            root.setOnClickListener {
+                onClick.invoke(ChatNavigationParameters(chat.id, chat.ownerId, chat.name, chat.avatar, chat.isDirect))
+            }
         }
     }
 
-    private fun formatMessageTime(dateTime: LocalDateTime): String {
-        if (dateTime.isBefore(LocalDateTime.of(2000, 1, 1, 0, 0))) {
-            return ""
-        }
-        val now = LocalDateTime.now(moscowZone)
-        return when {
-            dateTime.isAfter(now.minusDays(1)) -> dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-            dateTime.isAfter(now.minusDays(7)) -> dateTime.format(DateTimeFormatter.ofPattern("E"))
-            else -> dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yy"))
+    private fun formatTime(isoTime: String?): String? {
+        return try {
+            val messageTime = LocalDateTime.parse(isoTime).atZone(utcZone).withZoneSameInstant(moscowZone)
+            val now = ZonedDateTime.now(moscowZone)
+            when {
+                messageTime.toLocalDate() == now.toLocalDate() -> messageTime.format(timeFormatter)
+                messageTime.toLocalDate() == now.minusDays(1).toLocalDate() -> "Вчера, " + messageTime.format(timeFormatter)
+                else -> messageTime.format(dateFormatter)
+            }
+        } catch (e: Exception) {
+            null
         }
     }
 
     override fun getItemCount() = chats.size
 
     fun updateList(newChats: List<Chat>) {
-        chats = newChats.sortedByDescending { lastMessages[it.id]?.second ?: LocalDateTime.MIN }
+        chats = newChats.sortedByDescending { chat -> chat.lastMessage?.sentAt?.let { LocalDateTime.parse(it) } ?: LocalDateTime.MIN }
         notifyDataSetChanged()
-    }
-
-    fun updateLastMessage(chatId: String, message: String, dateTime: LocalDateTime) {
-        val moscowTime = dateTime?.atZone(ZoneId.systemDefault()) ?.withZoneSameInstant(moscowZone) ?.toLocalDateTime()
-        lastMessages[chatId] = Pair(message, moscowTime)
-        updateList(chats)
     }
 }

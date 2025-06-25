@@ -16,7 +16,7 @@ import com.example.messenger.chats.ui.ChatHubConnection
 import com.example.messenger.chats.ui.adapters.MessageAdapter
 import com.example.messenger.chats.ui.dialogs.AddUserToChatDialogFragment
 import com.example.messenger.chats.ui.dialogs.ChatUsersDialogFragment
-import com.example.messenger.chats.ui.models.Chat
+import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.chats.ui.view_models.ChatViewModel
 import com.example.messenger.data.RetrofitClient
@@ -30,7 +30,7 @@ class ChatFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var chatHub: ChatHubConnection
-    private lateinit var chat: Chat
+    private lateinit var chat: ChatNavigationParameters
     private val apiService by lazy {
         RetrofitClient.create(requireContext(), view)
     }
@@ -50,7 +50,7 @@ class ChatFragment : Fragment() {
         initializeChat()
         setupRecyclerView()
         initChatHub()
-        loadInitialMessages()
+        loadChatMessages()
         setAllBindings()
 
         viewModel.loadChatUsers(chat.id)
@@ -62,11 +62,12 @@ class ChatFragment : Fragment() {
             findNavController().navigateUp()
             return
         }
-        val chatName = arguments?.getString("chatName") ?: ""
         val ownerId = arguments?.getString("ownerId") ?: ""
+        val chatName = arguments?.getString("chatName") ?: ""
         val avatar = arguments?.getString("avatar") ?: ""
+        val isDirect = arguments?.getBoolean("isDirect") ?: true
 
-        chat = Chat(chatId, ownerId, chatName, avatar)
+        chat = ChatNavigationParameters(chatId, ownerId, chatName, avatar, isDirect)
 
         viewModel.loadChatUsers(chatId)
     }
@@ -92,11 +93,9 @@ class ChatFragment : Fragment() {
     }
 
     private fun initChatHub() {
-        val token = TokenManager.getToken(requireContext())
-            ?: throw IllegalStateException("Токен не найден")
+        val token = TokenManager.getToken(requireContext()) ?: throw IllegalStateException("Токен не найден")
 
         chatHub = ChatHubConnection(token).apply {
-
             onMessageReceived { messageId, chatId, userId, content ->
                 val message = Message(
                     id = messageId,
@@ -169,12 +168,10 @@ class ChatFragment : Fragment() {
             adapter = messageAdapter
         }
 
-        viewModel.chatUsers.observe(viewLifecycleOwner) { users ->
-            messageAdapter.updateUsersCache(users)
-        }
+        viewModel.chatUsers.observe(viewLifecycleOwner) { users -> messageAdapter.updateUsersCache(users) }
     }
 
-    private fun loadInitialMessages() {
+    private fun loadChatMessages() {
         viewModel.loadMessages(chat.id)
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
             messageAdapter.setMessages(messages)
