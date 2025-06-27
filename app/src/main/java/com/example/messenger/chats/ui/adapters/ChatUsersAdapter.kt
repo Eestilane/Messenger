@@ -23,16 +23,19 @@ class ChatUsersAdapter (
 
     override fun onBindViewHolder(holder: ChatUsersAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            if (chatUsers[position].id == ownerId) {
-                userName.text = chatUsers[position].name + " (админ)"
+            val user = chatUsers[position]
+            userName.text = if (user.id == ownerId) {
                 deleteInFrame.visibility = View.GONE
+                "${user.name} (админ)"
             } else {
-                userName.text = chatUsers[position].name
+                user.name
             }
-            userLogin.text = chatUsers[position].login
-            Glide.with(holder.itemView).load(chatUsers[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
+            userLogin.text = user.login
+            user.avatar?.takeIf{ it.isNotEmpty() }?.let { url ->
+                Glide.with(holder.itemView).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).into(userAvatar)
+            }
             deleteInFrame.setOnClickListener {
-                onDeleteClick(chatUsers[position])
+                onDeleteClick(user)
             }
         }
     }

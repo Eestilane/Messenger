@@ -23,11 +23,15 @@ class UserSearchForAddAdapter(val onClick: (ContactsResponse) -> Unit) : Recycle
 
     override fun onBindViewHolder(holder: UserSearchForAddAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            userName.text = contacts[position].name
-            userLogin.text = contacts[position].login
-            Glide.with(holder.itemView).load(contacts[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
+            val contact = contacts[position]
+            val filteredContact = filteredContacts[position]
+            userName.text = contact.name
+            userLogin.text = contact.login
+            contact.avatar?.takeIf { it.isNotEmpty() }?.let { url ->
+                Glide.with(holder.itemView).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
+            }
             add.setOnClickListener {
-                onClick(filteredContacts[position])
+                onClick(filteredContact)
             }
         }
     }
@@ -56,7 +60,6 @@ class UserSearchForAddAdapter(val onClick: (ContactsResponse) -> Unit) : Recycle
                 filteredContacts.add(contact)
             }
         }
-
         notifyDataSetChanged()
     }
 

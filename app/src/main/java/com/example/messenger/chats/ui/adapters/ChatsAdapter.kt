@@ -32,7 +32,9 @@ class ChatsAdapter(private var chats: List<Chat>, private val onClick: (ChatNavi
         with(holder.binding) {
             val chat = chats[position]
             chatName.text = chat.name
-            Glide.with(holder.itemView).load(chat.avatar).placeholder(R.drawable.chat_placeholder).circleCrop().into(chatAvatar)
+            chat.avatar?.takeIf { it.isNotEmpty() }?.let { url ->
+                Glide.with(holder.itemView).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(chatAvatar)
+            }
             lastMessage.text = chat.lastMessage?.content ?: "Нет сообщений"
             timeLastMessage.text = formatTime(chat.lastMessage?.sentAt)
             root.setOnClickListener {

@@ -34,20 +34,15 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
             val message = messages[position]
             val senderId = message.senderId
             val user = usersCache[senderId]
-            senderName.text = user?.name ?: "Unknown"
+            senderName.text = user?.name
             messageText.text = message.content
             timeText.text = formatTime(message.sentAt)
-            if (messages[position].editedAt != null) {
-                editedIndicator.visibility = View.VISIBLE
-            } else {
-                editedIndicator.visibility = View.GONE
+            editedIndicator.visibility = message.editedAt?.let { View.VISIBLE } ?: View.GONE
+            user?.avatar?.let { url ->
+                Glide.with(holder.itemView.context).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
             }
-
-            user?.avatar?.let { avatarUrl ->
-                Glide.with(holder.itemView.context).load(avatarUrl).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar) }
-
             root.setOnLongClickListener {
-                showContextMenu(it, messages[position])
+                showContextMenu(it, message)
                 true
             }
         }
