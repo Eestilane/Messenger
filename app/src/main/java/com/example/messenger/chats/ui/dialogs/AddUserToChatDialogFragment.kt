@@ -26,18 +26,16 @@ class AddUserToChatDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val ARG_CHAT_ID = "chat_id"
-
         fun newInstance(chatId: String): AddUserToChatDialogFragment {
             return AddUserToChatDialogFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_CHAT_ID, chatId)
+                    putString("chat_id", chatId)
                 }
             }
         }
     }
 
-    private val chatId by lazy { arguments?.getString(ARG_CHAT_ID) ?: "" }
+    private val chatId by lazy { arguments?.getString("chat_id") ?: "" }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentChatsAddContactsToChatBinding.inflate(inflater, container, false)

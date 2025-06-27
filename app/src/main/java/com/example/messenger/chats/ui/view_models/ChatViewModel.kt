@@ -18,13 +18,7 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
 
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                ChatViewModel(
-                    apiService = apiService,
-                    context = context,
-                    view = view
-                )
-            }
+            initializer { ChatViewModel(apiService = apiService, context = context, view = view) }
         }
     }
 
@@ -53,12 +47,6 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
         }
     }
 
-    fun removeMessage(messageId: String) {
-        val currentMessages = _messages.value?.toMutableList() ?: mutableListOf()
-        currentMessages.removeAll { it.id == messageId }
-        _messages.value = currentMessages
-    }
-
     fun loadChatUsers(chatId: String) = viewModelScope.launch {
         try {
             val response = apiService.getChatUsers(chatId)
@@ -70,6 +58,12 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
         } catch (e: Exception) {
             _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
         }
+    }
+
+    fun removeMessage(messageId: String) {
+        val currentMessages = _messages.value?.toMutableList() ?: mutableListOf()
+        currentMessages.removeAll { it.id == messageId }
+        _messages.value = currentMessages
     }
 
 }

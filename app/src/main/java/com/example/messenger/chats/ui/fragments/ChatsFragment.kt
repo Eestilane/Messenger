@@ -36,7 +36,7 @@ class ChatsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupListeners()
-        observeViewModel()
+        setupObservers()
 
         viewModel.loadChats()
     }
@@ -58,7 +58,7 @@ class ChatsFragment : Fragment() {
         }
     }
 
-    private fun observeViewModel() {
+    private fun setupObservers() {
         viewModel.navigateToChat.observe(viewLifecycleOwner) { chat ->
             chat?.let {
                 navigateToChat(it)

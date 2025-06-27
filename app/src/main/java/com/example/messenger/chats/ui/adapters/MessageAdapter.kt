@@ -101,10 +101,7 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     fun updateMessage(messageId: String, newText: String) {
         val position = messages.indexOfFirst { it.id == messageId }
         if (position != -1) {
-            val updatedMessage = messages[position].copy(
-                content = newText,
-                editedAt = LocalDateTime.now().toString()
-            )
+            val updatedMessage = messages[position].copy(content = newText, editedAt = LocalDateTime.now().toString())
             messages[position] = updatedMessage
             notifyItemChanged(position)
         }

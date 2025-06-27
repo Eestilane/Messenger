@@ -58,7 +58,7 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
             }
             val chatId = response.body() ?: return@launch
             val ownerId = getOwnerId().toString()
-            val newChat = ChatNavigationParameters(chatId, ownerId ,name.trim(), null, false)
+            val newChat = ChatNavigationParameters(chatId, ownerId, name.trim(), null, false)
             _navigateToChat.postValue(newChat)
         } catch (e: Exception) {
             _state.value = ChatsState.Error("Ошибка создания чата")

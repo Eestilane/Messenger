@@ -77,18 +77,14 @@ class ChatUsersDialogFragment : DialogFragment() {
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         chat.avatar?.takeIf { it.isNotEmpty() }?.let { url ->
-            Glide.with(requireContext())
-                .load(url)
-                .placeholder(R.drawable.avatar)
-                .error(R.drawable.avatar)
-                .circleCrop()
-                .into(binding.chatAvatar)
+            Glide.with(requireContext()).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(binding.chatAvatar)
         }
 
         binding.chatName.text = chat.name
 
         chatUsersAdapter = ChatUsersAdapter(
-            onDeleteClick = { user -> viewModel.removeUserFromChat(chat.id, user.id) }
+            onDeleteClick = { user -> viewModel.removeUserFromChat(chat.id, user.id) },
+            ownerId = chat.ownerId
         )
 
         binding.chatUsers.apply {
@@ -107,6 +103,7 @@ class ChatUsersDialogFragment : DialogFragment() {
         binding.deleteChat.setOnClickListener {
             viewModel.deleteChat(chat.id)
         }
+
     }
 
     private fun setupObservers() {
@@ -130,12 +127,7 @@ class ChatUsersDialogFragment : DialogFragment() {
 
         viewModel.currentChatAvatar.observe(viewLifecycleOwner) { newAvatarUrl ->
             newAvatarUrl?.takeIf { it.isNotEmpty() }?.let { url ->
-                Glide.with(requireContext())
-                    .load(url)
-                    .placeholder(R.drawable.avatar)
-                    .error(R.drawable.avatar)
-                    .circleCrop()
-                    .into(binding.chatAvatar)
+                Glide.with(requireContext()).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(binding.chatAvatar)
                 (parentFragment as? OnAvatarUpdatedListener)?.onAvatarUpdated(url)
             }
         }

@@ -1,15 +1,16 @@
 package com.example.messenger.chats.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.messenger.R
 import com.example.messenger.data.models.UserResponse
 import com.example.messenger.databinding.ItemChatUsersBinding
-import com.example.messenger.databinding.ItemContactBinding
 
 class ChatUsersAdapter (
+    private val ownerId: String,
     private val onDeleteClick: (UserResponse) -> Unit) :RecyclerView.Adapter<ChatUsersAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: ItemChatUsersBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -22,10 +23,15 @@ class ChatUsersAdapter (
 
     override fun onBindViewHolder(holder: ChatUsersAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            userName.text = chatUsers[position].name
+            if (chatUsers[position].id == ownerId) {
+                userName.text = chatUsers[position].name + " (админ)"
+                deleteInFrame.visibility = View.GONE
+            } else {
+                userName.text = chatUsers[position].name
+            }
             userLogin.text = chatUsers[position].login
             Glide.with(holder.itemView).load(chatUsers[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
-            delete.setOnClickListener {
+            deleteInFrame.setOnClickListener {
                 onDeleteClick(chatUsers[position])
             }
         }

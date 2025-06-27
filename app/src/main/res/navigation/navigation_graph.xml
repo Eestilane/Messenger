@@ -10,9 +10,6 @@
         android:name="com.example.messenger.chats.ui.fragments.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chats_chat">
-        <argument
-            android:name="chatId"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/chatsFragment"

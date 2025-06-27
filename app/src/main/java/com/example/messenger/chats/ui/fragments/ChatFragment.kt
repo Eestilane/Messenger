@@ -50,26 +50,28 @@ class ChatFragment : Fragment() {
         initializeChat()
         setupRecyclerView()
         initChatHub()
-        loadChatMessages()
         setAllBindings()
-
-        viewModel.loadChatUsers(chat.id)
 
     }
 
     private fun initializeChat() {
-        val chatId = arguments?.getString("chatId") ?: run {
-            findNavController().navigateUp()
-            return
-        }
+        val chatId = arguments?.getString("chatId") ?: run { findNavController().navigateUp(); return }
         val ownerId = arguments?.getString("ownerId") ?: ""
         val chatName = arguments?.getString("chatName") ?: ""
         val avatar = arguments?.getString("avatar") ?: ""
-        val isDirect = arguments?.getBoolean("isDirect") ?: true
+        val isDirect = arguments?.getBoolean("isDirect") ?: false
 
         chat = ChatNavigationParameters(chatId, ownerId, chatName, avatar, isDirect)
 
         viewModel.loadChatUsers(chatId)
+
+        viewModel.loadMessages(chat.id)
+        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+            messageAdapter.setMessages(messages)
+            if (messages.isNotEmpty()) {
+                binding.recyclerView.scrollToPosition(messages.size - 1)
+            }
+        }
     }
 
     private fun setAllBindings() {
@@ -96,6 +98,7 @@ class ChatFragment : Fragment() {
         val token = TokenManager.getToken(requireContext()) ?: throw IllegalStateException("Токен не найден")
 
         chatHub = ChatHubConnection(token).apply {
+
             onMessageReceived { messageId, chatId, userId, content ->
                 val message = Message(
                     id = messageId,
@@ -106,7 +109,8 @@ class ChatFragment : Fragment() {
                     editedAt = null,
                     viewed = false
                 )
-                addMessageToChat(message)
+                messageAdapter.addMessage(message)
+                binding.recyclerView.scrollToPosition(messageAdapter.itemCount - 1)
             }
 
             onMessageEdited { messageId, chatId, content ->
@@ -148,7 +152,6 @@ class ChatFragment : Fragment() {
                 }
             }
 
-
             lifecycleScope.launch {
                 connect()
             }
@@ -171,16 +174,6 @@ class ChatFragment : Fragment() {
         viewModel.chatUsers.observe(viewLifecycleOwner) { users -> messageAdapter.updateUsersCache(users) }
     }
 
-    private fun loadChatMessages() {
-        viewModel.loadMessages(chat.id)
-        viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            messageAdapter.setMessages(messages)
-            if (messages.isNotEmpty()) {
-                binding.recyclerView.scrollToPosition(messages.size - 1)
-            }
-        }
-    }
-
     private fun sendMessage() {
         val text = binding.messageInput.text.toString().trim()
         if (text.isNotEmpty()) {
@@ -188,13 +181,6 @@ class ChatFragment : Fragment() {
                 chatHub.sendMessage(chat.id, text)
                 binding.messageInput.text.clear()
             }
-        }
-    }
-
-    private fun addMessageToChat(message: Message) {
-        requireActivity().runOnUiThread {
-            messageAdapter.addMessage(message)
-            binding.recyclerView.scrollToPosition(messageAdapter.itemCount - 1)
         }
     }
 
