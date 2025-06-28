@@ -26,7 +26,7 @@ class MessageAdapter (
     private val timeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm") }
     private val utcZone = ZoneId.of("UTC")
     private val moscowZone = ZoneId.of("Europe/Moscow")
-    private var currentUserId: String? = null
+    private lateinit var currentUserId: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.ViewHolder {
         val binding = ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)

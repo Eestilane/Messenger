@@ -11,7 +11,6 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.R
 import com.example.messenger.chats.ui.adapters.ChatsAdapter
-import com.example.messenger.chats.ui.adapters.MessageAdapter
 import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.ChatsState
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
@@ -22,7 +21,7 @@ class ChatsFragment : Fragment() {
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var chatsAdapter: ChatsAdapter
-    private var currentUserId: String? = null
+    private lateinit var currentUserId: String
     private val apiService by lazy { RetrofitClient.create(requireContext(), view) }
 
     private val viewModel by navGraphViewModels<ChatsViewModel>(R.id.navigation_graph) {
@@ -79,7 +78,7 @@ class ChatsFragment : Fragment() {
             }
         }
 
-        viewModel.loadUserId().observe(viewLifecycleOwner) { userId ->
+        viewModel.currentUserId.observe(viewLifecycleOwner) { userId ->
             currentUserId = userId
         }
     }

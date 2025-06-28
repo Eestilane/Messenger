@@ -16,7 +16,7 @@ import com.example.messenger.databinding.FragmentChatsCreateChatBinding
 class CreateChatDialogFragment : DialogFragment() {
     private var _binding: FragmentChatsCreateChatBinding? = null
     private val binding get() = _binding!!
-    private var currentUserId: String? = null
+    private lateinit var currentUserId: String
     private val viewModel by navGraphViewModels<ChatsViewModel>(R.id.navigation_graph)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -44,7 +44,7 @@ class CreateChatDialogFragment : DialogFragment() {
             }
         }
 
-        viewModel.loadUserId().observe(viewLifecycleOwner) { userId ->
+        viewModel.currentUserId.observe(viewLifecycleOwner) { userId ->
             currentUserId = userId
         }
 

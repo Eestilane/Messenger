@@ -12,7 +12,6 @@ import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.ChatsState
 import com.example.messenger.chats.ui.models.CreateChatRequest
 import com.example.messenger.data.ApiService
-import com.example.messenger.data.models.UserResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,7 +34,7 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
     val navigateToChat: LiveData<ChatNavigationParameters?> = _navigateToChat
 
     private val _currentUserId = MutableLiveData<String>()
-    val currentUserId: LiveData<String?> = _currentUserId
+    val currentUserId: LiveData<String> = _currentUserId
 
     init {
         loadUserId()
@@ -75,11 +74,12 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
         }
     }
 
-    fun loadUserId(): LiveData<String> {
-        viewModelScope.launch {
+    private fun loadUserId() = viewModelScope.launch {
+        try {
             _currentUserId.value = apiService.getUser().body()?.id
+        } catch (e: Exception) {
+            _state.value = ChatsState.Error("Ошибка получения ID")
         }
-        return _currentUserId
     }
 
     fun onChatNavigated() {
