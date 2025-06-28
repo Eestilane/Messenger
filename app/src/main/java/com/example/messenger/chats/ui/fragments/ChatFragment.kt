@@ -1,6 +1,7 @@
 package com.example.messenger.chats.ui.fragments
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -47,14 +48,15 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initializeChat()
         setupRecyclerView()
+        initializeChat()
         initChatHub()
         setAllBindings()
 
     }
 
     private fun initializeChat() {
+        val userId = arguments?.getString("userId") ?: run { findNavController().navigateUp(); return }
         val chatId = arguments?.getString("chatId") ?: run { findNavController().navigateUp(); return }
         val ownerId = arguments?.getString("ownerId") ?: ""
         val chatName = arguments?.getString("chatName") ?: ""
@@ -72,6 +74,7 @@ class ChatFragment : Fragment() {
                 binding.recyclerView.scrollToPosition(messages.size - 1)
             }
         }
+        messageAdapter.setCurrentUserId(userId)
     }
 
     private fun setAllBindings() {

@@ -11,6 +11,7 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.R
 import com.example.messenger.chats.ui.adapters.ChatsAdapter
+import com.example.messenger.chats.ui.adapters.MessageAdapter
 import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.ChatsState
 import com.example.messenger.chats.ui.view_models.ChatsViewModel
@@ -21,6 +22,7 @@ class ChatsFragment : Fragment() {
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!
     private lateinit var chatsAdapter: ChatsAdapter
+    private var currentUserId: String? = null
     private val apiService by lazy { RetrofitClient.create(requireContext(), view) }
 
     private val viewModel by navGraphViewModels<ChatsViewModel>(R.id.navigation_graph) {
@@ -43,7 +45,7 @@ class ChatsFragment : Fragment() {
 
     private fun setupRecyclerView() {
         chatsAdapter = ChatsAdapter(emptyList()) { chat ->
-            navigateToChat(chat)
+            navigateToChat(chat, userId = currentUserId)
         }
         binding.chats.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -61,7 +63,7 @@ class ChatsFragment : Fragment() {
     private fun setupObservers() {
         viewModel.navigateToChat.observe(viewLifecycleOwner) { chat ->
             chat?.let {
-                navigateToChat(it)
+                navigateToChat(it, userId = currentUserId)
                 viewModel.onChatNavigated()
             }
         }
@@ -76,9 +78,13 @@ class ChatsFragment : Fragment() {
                 is ChatsState.Error -> hideLoading()
             }
         }
+
+        viewModel.loadUserId().observe(viewLifecycleOwner) { userId ->
+            currentUserId = userId
+        }
     }
 
-    fun navigateToChat(parameters: ChatNavigationParameters) {
+    fun navigateToChat(parameters: ChatNavigationParameters, userId: String?) {
         findNavController().navigate(R.id.action_chatsFragment_to_chatFragment,
             bundleOf(
                 "chatId" to parameters.id,
@@ -86,6 +92,7 @@ class ChatsFragment : Fragment() {
                 "chatName" to parameters.name,
                 "avatar" to parameters.avatar,
                 "isDirect" to parameters.isDirect,
+                "userId" to userId
             )
         )
     }

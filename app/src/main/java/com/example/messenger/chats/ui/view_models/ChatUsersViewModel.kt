@@ -49,7 +49,7 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
                 _errorMessage.postValue("Ошибка загрузки участников чата")
             }
         } catch (e: Exception) {
-            _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
+            _errorMessage.postValue("Ошибка")
         }
     }
 
@@ -63,7 +63,7 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
                 _errorMessage.postValue("Ошибка удаления пользователя")
             }
         } catch (e: Exception) {
-            _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
+            _errorMessage.postValue("Ошибка")
         }
     }
 
@@ -101,7 +101,7 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
                     _errorMessage.postValue("Ошибка обновления аватара")
                 }
             } catch (e: Exception) {
-                _errorMessage.postValue("Ошибка: ${e.localizedMessage}")
+                _errorMessage.postValue("Ошибка")
             }
         }
     }
@@ -110,7 +110,7 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
         try {
             apiService.deleteChat(chatId)
         } catch (e: Exception) {
-            _errorMessage.postValue("Ошибка: ${e.localizedMessage}")
+            _errorMessage.postValue("Ошибка")
         }
     }
 

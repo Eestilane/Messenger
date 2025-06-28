@@ -12,6 +12,7 @@ import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.ChatsState
 import com.example.messenger.chats.ui.models.CreateChatRequest
 import com.example.messenger.data.ApiService
+import com.example.messenger.data.models.UserResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,7 +20,10 @@ import kotlinx.coroutines.withContext
 class ChatsViewModel(private val apiService: ApiService, private val context: Context) : ViewModel() {
 
     companion object {
-        fun getViewModelFactory(apiService: ApiService, context: Context): ViewModelProvider.Factory = viewModelFactory {
+        fun getViewModelFactory(
+            apiService: ApiService,
+            context: Context
+        ): ViewModelProvider.Factory = viewModelFactory {
             initializer { ChatsViewModel(apiService, context) }
         }
     }
@@ -30,8 +34,13 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
     private val _navigateToChat = MutableLiveData<ChatNavigationParameters?>()
     val navigateToChat: LiveData<ChatNavigationParameters?> = _navigateToChat
 
-    private val _ownerId = MutableLiveData<String?>()
-    val ownerId: LiveData<String?> = _ownerId
+    private val _currentUserId = MutableLiveData<String>()
+    val currentUserId: LiveData<String?> = _currentUserId
+
+    init {
+        loadUserId()
+    }
+
 
     fun loadChats() = viewModelScope.launch {
         _state.value = ChatsState.Loading
@@ -51,13 +60,14 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
     fun createChat(name: String) = viewModelScope.launch {
         try {
             _state.value = ChatsState.Loading
-            val response = withContext(Dispatchers.IO) { apiService.createChat(CreateChatRequest(name)) }
+            val response =
+                withContext(Dispatchers.IO) { apiService.createChat(CreateChatRequest(name)) }
             if (!response.isSuccessful) {
                 _state.value = ChatsState.Error("Ошибка создания чата")
                 return@launch
             }
             val chatId = response.body() ?: return@launch
-            val ownerId = getOwnerId().toString()
+            val ownerId = loadUserId().toString()
             val newChat = ChatNavigationParameters(chatId, ownerId, name.trim(), null, false)
             _navigateToChat.postValue(newChat)
         } catch (e: Exception) {
@@ -65,19 +75,11 @@ class ChatsViewModel(private val apiService: ApiService, private val context: Co
         }
     }
 
-    private fun getOwnerId() {
+    fun loadUserId(): LiveData<String> {
         viewModelScope.launch {
-            _ownerId.value = try {
-                val response = apiService.getUser()
-                if (response.isSuccessful) {
-                    response.body()?.id
-                } else {
-                    null
-                }
-            } catch (e: Exception) {
-                null
-            }
+            _currentUserId.value = apiService.getUser().body()?.id
         }
+        return _currentUserId
     }
 
     fun onChatNavigated() {

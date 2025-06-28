@@ -14,7 +14,10 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class MessageAdapter (private val onEdit: (messageId: String, currentText: String) -> Unit, private val onDelete: (messageId: String) -> Unit, ): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
+class MessageAdapter (
+    private val onEdit: (messageId: String, currentText: String) -> Unit,
+    private val onDelete: (messageId: String) -> Unit,
+    ): RecyclerView.Adapter<MessageAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemMessageBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -23,6 +26,7 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     private val timeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm") }
     private val utcZone = ZoneId.of("UTC")
     private val moscowZone = ZoneId.of("Europe/Moscow")
+    private var currentUserId: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.ViewHolder {
         val binding = ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -68,6 +72,7 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
     }
 
     private fun showContextMenu(view: View, message: Message) {
+        if (message.senderId != currentUserId) return
         PopupMenu(view.context, view).apply {
             menuInflater.inflate(R.menu.message_menu, menu)
             setOnMenuItemClickListener { item ->
@@ -79,6 +84,10 @@ class MessageAdapter (private val onEdit: (messageId: String, currentText: Strin
             }
             show()
         }
+    }
+
+    fun setCurrentUserId(userId: String) {
+        currentUserId = userId
     }
 
     fun setMessages(newMessages: List<Message>) {
