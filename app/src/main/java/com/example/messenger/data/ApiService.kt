@@ -5,6 +5,7 @@ import com.example.messenger.chats.ui.models.Chat
 import com.example.messenger.chats.ui.models.ChatMessagesResponse
 import com.example.messenger.chats.ui.models.CreateChatRequest
 import com.example.messenger.chats.ui.models.CreateDirectChatRequest
+import com.example.messenger.chats.ui.models.DirectChatResponse
 import com.example.messenger.chats.ui.models.RemoveUserRequest
 import com.example.messenger.data.models.ChangePasswordRequest
 import com.example.messenger.data.models.LoginRequest
@@ -108,5 +109,5 @@ interface ApiService {
     suspend fun createDirectChat(@Body request: CreateDirectChatRequest): Response<String>
 
     @GET("/chats/get_direct_chat")
-    suspend fun getDirectChat(@Query("userId") userId: String): Response<String>
+    suspend fun getDirectChat(@Query("userId") userId: String): Response<DirectChatResponse>
 }

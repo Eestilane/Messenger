@@ -9,6 +9,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.messenger.R
@@ -129,6 +130,13 @@ class ChatUsersDialogFragment : DialogFragment() {
             newAvatarUrl?.takeIf { it.isNotEmpty() }?.let { url ->
                 Glide.with(requireContext()).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(binding.chatAvatar)
                 (parentFragment as? OnAvatarUpdatedListener)?.onAvatarUpdated(url)
+            }
+        }
+
+        viewModel.deleteSuccess.observe(viewLifecycleOwner) { success ->
+            success?.let {
+                if (it) findNavController().navigateUp()
+                else Toast.makeText(context, "Ошибка удаления", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -40,6 +40,9 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
     private val _currentChatAvatar = MutableLiveData<String>()
     val currentChatAvatar: LiveData<String> = _currentChatAvatar
 
+    private val _deleteSuccess = MutableLiveData<Boolean>()
+    val deleteSuccess: LiveData<Boolean> = _deleteSuccess
+
     fun loadChatUsers(chatId: String) = viewModelScope.launch {
         try {
             val response = apiService.getChatUsers(chatId)
@@ -109,8 +112,10 @@ class ChatUsersViewModel(private val apiService: ApiService, private val context
     fun deleteChat(chatId: String) = viewModelScope.launch {
         try {
             apiService.deleteChat(chatId)
+            _deleteSuccess.postValue(true)
         } catch (e: Exception) {
             _errorMessage.postValue("Ошибка")
+            _deleteSuccess.postValue(false)
         }
     }
 

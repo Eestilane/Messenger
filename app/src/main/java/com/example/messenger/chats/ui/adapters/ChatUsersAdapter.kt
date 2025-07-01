@@ -1,7 +1,6 @@
 package com.example.messenger.chats.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -25,7 +24,6 @@ class ChatUsersAdapter (
         with(holder.binding) {
             val user = chatUsers[position]
             userName.text = if (user.id == ownerId) {
-                deleteInFrame.visibility = View.GONE
                 "${user.name} (админ)"
             } else {
                 user.name

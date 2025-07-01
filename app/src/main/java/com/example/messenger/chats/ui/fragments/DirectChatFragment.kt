@@ -14,19 +14,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messenger.chats.ui.ChatHubConnection
 import com.example.messenger.chats.ui.adapters.MessageAdapter
-import com.example.messenger.chats.ui.dialogs.AddUserToChatDialogFragment
-import com.example.messenger.chats.ui.dialogs.ChatUsersDialogFragment
 import com.example.messenger.chats.ui.models.ChatNavigationParameters
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.chats.ui.view_models.ChatViewModel
 import com.example.messenger.data.RetrofitClient
-import com.example.messenger.databinding.FragmentChatsChatBinding
+import com.example.messenger.databinding.FragmentChatsDirectChatBinding
 import com.example.messenger.libs.TokenManager
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class ChatFragment : Fragment() {
-    private var _binding: FragmentChatsChatBinding? = null
+class DirectChatFragment : Fragment() {
+    private var _binding: FragmentChatsDirectChatBinding? = null
     private val binding get() = _binding!!
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var chatHub: ChatHubConnection
@@ -39,7 +37,7 @@ class ChatFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentChatsChatBinding.inflate(inflater, container, false)
+        _binding = FragmentChatsDirectChatBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -48,24 +46,114 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeChat()
+        setupRecyclerView()
         initChatHub()
         setAllBindings()
+
+        viewModel.loadChatUsers(chat.id)
+
     }
 
     private fun initializeChat() {
-        val userId = arguments?.getString("userId") ?: run { findNavController().navigateUp(); return }
-        val chatId = arguments?.getString("chatId") ?: run { findNavController().navigateUp(); return }
+        val chatId = arguments?.getString("chatId") ?: run {
+            findNavController().navigateUp()
+            return
+        }
         val ownerId = arguments?.getString("ownerId") ?: ""
         val chatName = arguments?.getString("chatName") ?: ""
         val avatar = arguments?.getString("avatar") ?: ""
-        val isDirect = arguments?.getBoolean("isDirect") ?: false
+        val isDirect = arguments?.getBoolean("isDirect") ?: true
 
         chat = ChatNavigationParameters(chatId, ownerId, chatName, avatar, isDirect)
 
         viewModel.loadChatUsers(chatId)
 
         viewModel.loadMessages(chat.id)
+        viewModel.messages.observe(viewLifecycleOwner) { messages ->
+            messageAdapter.setMessages(messages)
+            if (messages.isNotEmpty()) {
+                binding.recyclerView.scrollToPosition(messages.size - 1)
+            }
+        }
+    }
 
+    private fun setAllBindings() {
+        binding.userName.text = chat.name
+
+        binding.toBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.sendMessage.setOnClickListener {
+            sendMessage()
+        }
+
+    }
+
+    private fun initChatHub() {
+        val token = TokenManager.getToken(requireContext()) ?: throw IllegalStateException("Токен не найден")
+
+        chatHub = ChatHubConnection(token).apply {
+            onMessageReceived { messageId, chatId, userId, content ->
+                val message = Message(
+                    id = messageId,
+                    chatId = chatId,
+                    senderId = userId,
+                    content = content,
+                    sentAt = LocalDateTime.now().toString(),
+                    editedAt = null,
+                    viewed = false
+                )
+                addMessageToChat(message)
+            }
+
+            onMessageEdited { messageId, chatId, content ->
+                activity?.runOnUiThread {
+                    messageAdapter.updateMessage(messageId, content)
+                    binding.recyclerView.scrollToPosition(messageAdapter.itemCount - 1)
+                }
+            }
+
+            onMessageDeleted { messageId ->
+                activity?.runOnUiThread {
+                    messageAdapter.removeMessage(messageId)
+                    viewModel.removeMessage(messageId)
+                }
+            }
+
+            onUserAdded { chatId, userId ->
+                if (chatId == this@DirectChatFragment.chat.id) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context,"Пользователь добавлен", Toast.LENGTH_LONG).show()
+                        viewModel.loadChatUsers(chatId)
+                    }
+                }
+            }
+            onUserRemoved { chatId, userId ->
+                if (chatId == this@DirectChatFragment.chat.id) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context,"Пользователь удалён", Toast.LENGTH_LONG).show()
+                        viewModel.loadChatUsers(chatId)
+                    }
+                }
+            }
+
+            onAvatarUpdated { chatId, userId, link ->
+                if (chatId == this@DirectChatFragment.chat.id) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(context,"Аватар чата обновлён", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+
+            lifecycleScope.launch {
+                connect()
+            }
+        }
+    }
+
+    private fun setupRecyclerView() {
         messageAdapter = MessageAdapter(
             onEdit = { messageId, currentText -> showEditDialog(messageId, currentText) },
             onDelete = { messageId -> confirmDelete(messageId) },
@@ -79,98 +167,6 @@ class ChatFragment : Fragment() {
         }
 
         viewModel.chatUsers.observe(viewLifecycleOwner) { users -> messageAdapter.updateUsersCache(users) }
-
-        viewModel.messages.observe(viewLifecycleOwner) { messages ->
-            messageAdapter.setMessages(messages)
-            if (messages.isNotEmpty()) {
-                binding.recyclerView.scrollToPosition(messages.size - 1)
-            }
-        }
-        messageAdapter.setCurrentUserId(userId)
-
-
-    }
-
-    private fun setAllBindings() {
-        binding.chatText.text = chat.name
-
-        binding.toBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        binding.chatText.setOnClickListener {
-            ChatUsersDialogFragment.newInstance(chat).show(childFragmentManager, "ChatUsersDialog")
-        }
-
-        binding.sendMessage.setOnClickListener {
-            sendMessage()
-        }
-
-        binding.addUserButton.setOnClickListener {
-            AddUserToChatDialogFragment.newInstance(chat.id).show(childFragmentManager, "AddUserToChatDialog")
-        }
-    }
-
-    private fun initChatHub() {
-        val token = TokenManager.getToken(requireContext()) ?: throw IllegalStateException("Токен не найден")
-
-        chatHub = ChatHubConnection(token).apply {
-
-            onMessageReceived { messageId, chatId, userId, content ->
-                val message = Message(
-                    id = messageId,
-                    chatId = chatId,
-                    senderId = userId,
-                    content = content,
-                    sentAt = LocalDateTime.now().toString(),
-                    editedAt = null,
-                    viewed = false
-                )
-                messageAdapter.addMessage(message)
-            }
-
-            onMessageEdited { messageId, chatId, content ->
-                activity?.runOnUiThread {
-                    messageAdapter.updateMessage(messageId, content)
-                }
-            }
-
-            onMessageDeleted { messageId ->
-                activity?.runOnUiThread {
-                    messageAdapter.removeMessage(messageId)
-                    viewModel.removeMessage(messageId)
-                }
-            }
-
-            onUserAdded { chatId, userId ->
-                if (chatId == this@ChatFragment.chat.id) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context,"Пользователь добавлен", Toast.LENGTH_LONG).show()
-                        viewModel.loadChatUsers(chatId)
-                    }
-                }
-            }
-            onUserRemoved { chatId, userId ->
-                if (chatId == this@ChatFragment.chat.id) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context,"Пользователь удалён", Toast.LENGTH_LONG).show()
-                        viewModel.loadChatUsers(chatId)
-                    }
-                }
-            }
-
-            onAvatarUpdated { chatId, userId, link ->
-                if (chatId == this@ChatFragment.chat.id) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(context,"Аватар чата обновлён", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-
-            lifecycleScope.launch {
-                connect()
-            }
-        }
     }
 
     private fun sendMessage() {
@@ -183,6 +179,13 @@ class ChatFragment : Fragment() {
         }
     }
 
+    private fun addMessageToChat(message: Message) {
+        requireActivity().runOnUiThread {
+            messageAdapter.addMessage(message)
+            binding.recyclerView.scrollToPosition(messageAdapter.itemCount - 1)
+        }
+    }
+
     private fun showEditDialog(messageId: String, currentText: String) {
 
         val editText = EditText(requireContext()).apply {
@@ -190,21 +193,20 @@ class ChatFragment : Fragment() {
         }
 
         AlertDialog.Builder(requireContext()).setTitle("Редактировать сообщение").setView(editText).setPositiveButton("Сохранить") { _, _ ->
-                val content = editText.text.toString()
-                lifecycleScope.launch {
-                    chatHub.editMessage(messageId, content)
-                }
+            val content = editText.text.toString()
+            lifecycleScope.launch {
+                chatHub.editMessage(messageId, content)
+            }
         }.setNegativeButton("Отмена", null).show()
     }
 
     private fun confirmDelete(messageId: String) {
-        AlertDialog.Builder(requireContext()).setTitle("Удаление сообщения").setMessage("Вы уверены, что хотите удалить это сообщение?")
-            .setPositiveButton("Удалить") { _, _ ->
-                lifecycleScope.launch {
-                    chatHub.deleteMessage(messageId)
-                    viewModel.removeMessage(messageId)
-                }
-            }.setNegativeButton("Отмена", null).show()
+        AlertDialog.Builder(requireContext()).setTitle("Удаление сообщения").setMessage("Вы уверены, что хотите удалить это сообщение?").setPositiveButton("Удалить") { _, _ ->
+            lifecycleScope.launch {
+                chatHub.deleteMessage(messageId)
+                viewModel.removeMessage(messageId)
+            }
+        }.setNegativeButton("Отмена", null).show()
     }
 
     override fun onDestroyView() {

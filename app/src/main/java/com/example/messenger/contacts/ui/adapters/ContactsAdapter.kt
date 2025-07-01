@@ -8,7 +8,7 @@ import com.example.messenger.R
 import com.example.messenger.data.models.contacts.ContactsResponse
 import com.example.messenger.databinding.ItemContactBinding
 
-class ContactsAdapter(val onClick: (ContactsResponse) -> Unit):RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+class ContactsAdapter(val onClick: (ContactsResponse) -> Unit, private val onChatClick: (ContactsResponse) -> Unit):RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
     inner class ViewHolder(val binding: ItemContactBinding): RecyclerView.ViewHolder(binding.root)
 
     private val contacts = mutableListOf<ContactsResponse>()
@@ -22,11 +22,17 @@ class ContactsAdapter(val onClick: (ContactsResponse) -> Unit):RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ContactsAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            userName.text = filteredContacts[position].name
-            userLogin.text = filteredContacts[position].login
-            Glide.with(holder.itemView).load(filteredContacts[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
+            val contact = filteredContacts[position]
+            userName.text = contact.name
+            userLogin.text = contact.login
+            contact.avatar?.takeIf { it.isNotEmpty() }?.let { url ->
+                Glide.with(holder.itemView).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
+            }
             delete.setOnClickListener {
-                onClick(filteredContacts[position])
+                onClick(contact)
+            }
+            openChat.setOnClickListener {
+                onChatClick(contact)
             }
         }
     }

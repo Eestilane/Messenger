@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.messenger.chats.ui.models.ChatState
+import com.example.messenger.chats.ui.models.CreateDirectChatRequest
 import com.example.messenger.contacts.ui.models.ContactsScreenState
 import com.example.messenger.data.ApiService
 import com.example.messenger.data.models.contacts.ContactRequest
@@ -19,11 +21,17 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
     private val _contacts = MutableLiveData<ContactsScreenState>(ContactsScreenState.Loading)
     val contacts: LiveData<ContactsScreenState> get() = _contacts
 
+    private val _chatState = MutableLiveData<ChatState>()
+    val chatState: LiveData<ChatState> = _chatState
+
+    private val _navigateToChat = MutableLiveData<String?>()
+    val navigateToChat: LiveData<String?> = _navigateToChat
+
     init {
         getContacts()
     }
 
-    fun renderState(state: ContactsScreenState) {
+    private fun renderState(state: ContactsScreenState) {
         _contacts.value = state
     }
 
@@ -31,11 +39,7 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
         fun getViewModelFactory(apiService: ApiService, context: Context, view: View?): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    ContactsViewModel(
-                        apiService = apiService,
-                        context = context,
-                        view = view
-                    )
+                    ContactsViewModel(apiService = apiService, context = context, view = view)
                 }
             }
     }
@@ -49,11 +53,7 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     val users = response.body()!!
-                    renderState(
-                        ContactsScreenState.Content(
-                            contacts = users
-                        )
-                    )
+                    renderState(ContactsScreenState.Content(contacts = users))
                 }
 
                 999 -> {
@@ -72,10 +72,35 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
                 200 -> {
                     getContacts()
                 }
-
                 999 -> {
                 }
             }
         }
+    }
+
+    fun getOrCreateDirectChat(contactId: String) = viewModelScope.launch {
+        try {
+
+            apiService.getDirectChat(contactId).let { response ->
+                if (response.isSuccessful && response.body()?.data != null) {
+                    _navigateToChat.postValue(response.body()?.data)
+                    return@launch
+                }
+            }
+
+            apiService.createDirectChat(CreateDirectChatRequest(contactId)).let { response ->
+                if (response.isSuccessful) {
+                    _navigateToChat.postValue(response.body())
+                } else {
+                    _chatState.postValue(ChatState.Error("Ошибка создания чата"))
+                }
+            }
+        } catch (e: Exception) {
+            _chatState.postValue(ChatState.Error("Сетевая ошибка: ${e.message}"))
+        }
+    }
+
+    fun onDirectChatNavigated() {
+        _navigateToChat.value = null
     }
 }

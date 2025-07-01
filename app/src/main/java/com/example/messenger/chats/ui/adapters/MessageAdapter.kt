@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.messenger.R
@@ -28,6 +30,16 @@ class MessageAdapter (
     private val moscowZone = ZoneId.of("Europe/Moscow")
     private lateinit var currentUserId: String
 
+    private val diffUtilCallback: DiffUtil.ItemCallback<Message> = object: DiffUtil.ItemCallback<Message>() {
+        override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean = (oldItem.id == newItem.id)
+
+        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean = (oldItem.content == newItem.content
+                && oldItem.sentAt == newItem.sentAt
+                && oldItem.editedAt == newItem.editedAt)
+    }
+
+    private val asyncListDiffer = AsyncListDiffer(this, diffUtilCallback)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageAdapter.ViewHolder {
         val binding = ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
@@ -35,7 +47,8 @@ class MessageAdapter (
 
     override fun onBindViewHolder(holder: MessageAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            val message = messages[position]
+            Glide.with(holder.itemView).clear(userAvatar)
+            val message = asyncListDiffer.currentList[position]
             val senderId = message.senderId
             val user = usersCache[senderId]
             senderName.text = user?.name
@@ -46,21 +59,57 @@ class MessageAdapter (
                 Glide.with(holder.itemView.context).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
             }
             root.setOnLongClickListener {
-                showContextMenu(it, message)
-                true
+                if (message.senderId == currentUserId) {
+                    showContextMenu(it, message)
+                    true
+                } else {
+                    false
+                }
             }
         }
     }
 
-    override fun getItemCount() = messages.size
+    override fun getItemCount() = asyncListDiffer.currentList.size
+
+    fun setCurrentUserId(userId: String) {
+        currentUserId = userId
+    }
+
+    fun setMessages(newMessages: List<Message>) {
+        asyncListDiffer.submitList(newMessages.sortedBy { it.sentAt })
+    }
+
+    fun addMessage(message: Message) {
+        val newList = asyncListDiffer.currentList.toMutableList()
+        newList.add(message)
+        asyncListDiffer.submitList(newList)
+    }
+
+    fun updateMessage(messageId: String, newText: String) {
+        val newList = asyncListDiffer.currentList.toMutableList()
+        val position = newList.indexOfFirst { it.id == messageId }
+        if (position != -1) {
+            newList[position] = newList[position].copy(content = newText, editedAt = LocalDateTime.now().toString())
+            asyncListDiffer.submitList(newList)
+        }
+    }
+
+    fun removeMessage(messageId: String) {
+        val newList = asyncListDiffer.currentList.toMutableList()
+        val position = messages.indexOfFirst { it.id == messageId }
+        if (position != -1) {
+            newList.removeAt(position)
+            asyncListDiffer.submitList(newList)
+        }
+    }
 
     fun updateUsersCache(users: List<UserResponse>) {
-        val oldSize = usersCache.size
         usersCache.clear()
         usersCache.putAll(users.associateBy { it.id })
-        if (oldSize != usersCache.size) {
-            notifyDataSetChanged()
+        val positions = asyncListDiffer.currentList.mapIndexedNotNull { index, message ->
+            index.takeIf { usersCache.containsKey(message.senderId) }
         }
+        positions.forEach { notifyItemChanged(it) }
     }
 
     private fun formatTime(isoTime: String): String {
@@ -83,39 +132,6 @@ class MessageAdapter (
                 true
             }
             show()
-        }
-    }
-
-    fun setCurrentUserId(userId: String) {
-        currentUserId = userId
-    }
-
-    fun setMessages(newMessages: List<Message>) {
-        messages.clear()
-        messages.addAll(newMessages.sortedBy { it.sentAt })
-        notifyDataSetChanged()
-    }
-
-    fun addMessage(message: Message) {
-        val insertPos = messages.indexOfFirst { LocalDateTime.parse(it.sentAt) > LocalDateTime.parse(message.sentAt) }.takeIf { it != -1 } ?: messages.size
-        messages.add(insertPos, message)
-        notifyItemInserted(insertPos)
-    }
-
-    fun updateMessage(messageId: String, newText: String) {
-        val position = messages.indexOfFirst { it.id == messageId }
-        if (position != -1) {
-            val updatedMessage = messages[position].copy(content = newText, editedAt = LocalDateTime.now().toString())
-            messages[position] = updatedMessage
-            notifyItemChanged(position)
-        }
-    }
-
-    fun removeMessage(messageId: String) {
-        val position = messages.indexOfFirst { it.id == messageId }
-        if (position != -1) {
-            messages.removeAt(position)
-            notifyItemRemoved(position)
         }
     }
 }

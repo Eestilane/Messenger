@@ -20,9 +20,7 @@ class AddUserToChatViewModel(private val apiService: ApiService, private val con
     companion object {
         fun getViewModelFactory(apiService: ApiService, context: Context): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                AddUserToChatViewModel(
-                    apiService = apiService,
-                    context = context)
+                AddUserToChatViewModel(apiService = apiService, context = context)
             }
         }
     }
@@ -64,7 +62,7 @@ class AddUserToChatViewModel(private val apiService: ApiService, private val con
         try {
             apiService.addUserToChat(AddUserRequest(chatId, userId))
         } catch (e: Exception) {
-            Toast.makeText(context, "Ошибка сети: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Ошибка добавления пользователя", Toast.LENGTH_SHORT).show()
         }
     }
 }

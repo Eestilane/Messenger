@@ -32,7 +32,17 @@
         android:id="@+id/contactsFragment"
         android:name="com.example.messenger.contacts.ui.fragments.ContactsFragment"
         android:label="fragment_contacts"
-        tools:layout="@layout/fragment_contacts" />
+        tools:layout="@layout/fragment_contacts" >
+        <action
+            android:id="@+id/action_contactsFragment_to_DirectChatFragment"
+            app:destination="@id/DirectChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/DirectChatFragment"
+        android:name="com.example.messenger.chats.ui.fragments.DirectChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chats_direct_chat">
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.messenger.settings.ui.SettingsFragment"

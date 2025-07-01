@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.messenger.R
 import com.example.messenger.contacts.ui.adapters.ContactsAdapter
 import com.example.messenger.contacts.ui.dialogs.RequestsDialogFragment
 import com.example.messenger.contacts.ui.dialogs.UserSearchDialogFragment
@@ -41,8 +44,16 @@ class ContactsFragment : Fragment() {
             render(contacts)
         }
 
+        viewModel.navigateToChat.observe(viewLifecycleOwner) { chatId ->
+            chatId?.let {
+                findNavController().navigate(R.id.action_contactsFragment_to_DirectChatFragment, bundleOf("chatId" to it))
+                viewModel.onDirectChatNavigated()
+            }
+        }
+
         contactsAdapter = ContactsAdapter(
-            onClick = { contact -> viewModel.deleteContact(contact.id) }
+            onClick = { contact -> viewModel.deleteContact(contact.id)},
+            onChatClick = {contact -> viewModel.getOrCreateDirectChat(contact.id)}
         )
         binding.rvSearchResults.adapter = contactsAdapter
 
@@ -61,12 +72,14 @@ class ContactsFragment : Fragment() {
         binding.requestContact.setOnClickListener {
             RequestsDialogFragment().show(childFragmentManager, "ConfirmationDialog")
         }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 
     private fun render(state: ContactsScreenState) {
         when (state) {
@@ -94,6 +107,11 @@ class ContactsFragment : Fragment() {
 
     private fun showError(state: ContactsScreenState.Error) {
         hideAll()
+    }
+
+    private fun showDirectChatLoading(state: ContactsScreenState.Loading) {
+        hideAll()
+        binding.progressBar.isVisible = true
     }
 
     override fun onResume() {
