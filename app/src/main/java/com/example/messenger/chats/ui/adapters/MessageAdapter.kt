@@ -53,19 +53,31 @@ class MessageAdapter (
     }
 
     override fun onBindViewHolder(holder: MessageAdapter.ViewHolder, position: Int) {
+        val message = asyncListDiffer.currentList[position]
+        val senderId = message.senderId
+        val user = usersCache[senderId]
+        val isMyMessage = asyncListDiffer.currentList.getOrNull(position)?.senderId == currentUserId
         with(holder.binding) {
-            val message = asyncListDiffer.currentList[position]
-            val senderId = message.senderId
-            val user = usersCache[senderId]
-            senderName.text = user?.name
-            messageText.text = message.content
-            timeText.text = formatTime(message.sentAt)
-            editedIndicator.visibility = message.editedAt?.let { View.VISIBLE } ?: View.GONE
-            user?.avatar?.let {
-                Glide.with(holder.itemView.context).load(user.avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
+            messageFrame.visibility = if (isMyMessage) View.GONE else View.VISIBLE
+            myMessageFrame.visibility = if (isMyMessage) View.VISIBLE else View.GONE
+            userAvatar.visibility = if (isMyMessage) View.GONE else View.VISIBLE
+            if (isMyMessage) {
+                myMessageText.text = message.content
+                myTimeText.text = formatTime(message.sentAt)
+                myEditedIndicator.visibility = message.editedAt?.let { View.VISIBLE } ?: View.GONE
+            } else {
+                messageText.text = message.content
+                timeText.text = formatTime(message.sentAt)
+                editedIndicator.visibility = message.editedAt?.let { View.VISIBLE } ?: View.GONE
+                senderName.text = user?.name
+                userAvatar.visibility = View.VISIBLE
+                user?.avatar?.let {
+                    Glide.with(holder.itemView.context).load(user.avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
+                }
             }
+
             root.setOnLongClickListener {
-                if (message.senderId == currentUserId) {
+                if (isMyMessage) {
                     showContextMenu(it, message)
                     true
                 } else {

@@ -24,4 +24,5 @@
     <color name="dayThemeLine">#F2F2F2</color>
     <color name="dayThemeGrayText">#82858A</color>
     <color name="dayThemeBlackText">#333333</color>
+    <color name="myMessageColor">#EFFDDE</color>
 </resources>

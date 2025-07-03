@@ -26,7 +26,8 @@
         android:backgroundTint="?colorFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/userAvatar"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/senderName"
@@ -80,7 +81,83 @@
             android:layout_alignTop="@id/senderName"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            android:layout_toLeftOf="@id/timeText"
+            android:layout_toStartOf="@id/timeText"
+            android:gravity="top|end"
+            android:padding="0dp"
+            android:text="@string/edited"
+            android:textColor="?colorSubtext"
+            android:textSize="11sp"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/myMessageFrame"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/my_messages_element"
+        android:backgroundTint="@color/myMessageColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/userAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <TextView
+            android:id="@id/senderName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:gravity="bottom|start"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="?colorSubtext"
+            android:textFontWeight="1000"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/myMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/senderName"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@id/myEditedIndicator"
+            android:gravity="top|end"
+            android:text=""
+            android:textColor="?colorText"
+            android:textFontWeight="1"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/myTimeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/senderName"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:gravity="top|end"
+            android:padding="0dp"
+            android:text=""
+            android:textColor="?colorSubtext"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/myEditedIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/senderName"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@id/myTimeText"
             android:gravity="top|end"
             android:padding="0dp"
             android:text="@string/edited"
