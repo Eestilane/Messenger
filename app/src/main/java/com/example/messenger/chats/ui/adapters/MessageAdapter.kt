@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.messenger.R
 import com.example.messenger.chats.ui.models.Message
 import com.example.messenger.data.models.UserResponse
@@ -23,19 +24,25 @@ class MessageAdapter (
 
     inner class ViewHolder(val binding: ItemMessageBinding): RecyclerView.ViewHolder(binding.root)
 
-    private val messages = mutableListOf<Message>()
     private val usersCache = mutableMapOf<String, UserResponse>()
-    private val timeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm") }
-    private val utcZone = ZoneId.of("UTC")
-    private val moscowZone = ZoneId.of("Europe/Moscow")
     private lateinit var currentUserId: String
+    private val timeCache = mutableMapOf<String, String>()
+    companion object {
+        private val UTC_ZONE = ZoneId.of("UTC")
+        private val MOSCOW_ZONE = ZoneId.of("Europe/Moscow")
+        private val TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm")
+    }
 
     private val diffUtilCallback: DiffUtil.ItemCallback<Message> = object: DiffUtil.ItemCallback<Message>() {
         override fun areItemsTheSame(oldItem: Message, newItem: Message): Boolean = (oldItem.id == newItem.id)
 
-        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean = (oldItem.content == newItem.content
-                && oldItem.sentAt == newItem.sentAt
-                && oldItem.editedAt == newItem.editedAt)
+        override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean = (
+                oldItem.content == newItem.content &&
+                oldItem.sentAt == newItem.sentAt &&
+                oldItem.editedAt == newItem.editedAt &&
+                usersCache[oldItem.senderId]?.name == usersCache[newItem.senderId]?.name &&
+                usersCache[oldItem.senderId]?.avatar == usersCache[newItem.senderId]?.avatar
+                )
     }
 
     private val asyncListDiffer = AsyncListDiffer(this, diffUtilCallback)
@@ -47,7 +54,6 @@ class MessageAdapter (
 
     override fun onBindViewHolder(holder: MessageAdapter.ViewHolder, position: Int) {
         with(holder.binding) {
-            Glide.with(holder.itemView).clear(userAvatar)
             val message = asyncListDiffer.currentList[position]
             val senderId = message.senderId
             val user = usersCache[senderId]
@@ -55,8 +61,8 @@ class MessageAdapter (
             messageText.text = message.content
             timeText.text = formatTime(message.sentAt)
             editedIndicator.visibility = message.editedAt?.let { View.VISIBLE } ?: View.GONE
-            user?.avatar?.let { url ->
-                Glide.with(holder.itemView.context).load(url).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
+            user?.avatar?.let {
+                Glide.with(holder.itemView.context).load(user.avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
             }
             root.setOnLongClickListener {
                 if (message.senderId == currentUserId) {
@@ -96,7 +102,7 @@ class MessageAdapter (
 
     fun removeMessage(messageId: String) {
         val newList = asyncListDiffer.currentList.toMutableList()
-        val position = messages.indexOfFirst { it.id == messageId }
+        val position = newList.indexOfFirst { it.id == messageId }
         if (position != -1) {
             newList.removeAt(position)
             asyncListDiffer.submitList(newList)
@@ -104,19 +110,43 @@ class MessageAdapter (
     }
 
     fun updateUsersCache(users: List<UserResponse>) {
-        usersCache.clear()
-        usersCache.putAll(users.associateBy { it.id })
-        val positions = asyncListDiffer.currentList.mapIndexedNotNull { index, message ->
-            index.takeIf { usersCache.containsKey(message.senderId) }
+        if (users.isEmpty()) return
+
+        val usersIds = HashSet<String>(users.size)
+        val changedAvatarUserIds = HashSet<String>(users.size)
+
+        users.forEach { newUser ->
+            usersIds.add(newUser.id)
+            usersCache[newUser.id]?.let { oldUser ->
+                if (oldUser.avatar != newUser.avatar) {
+                    changedAvatarUserIds.add(newUser.id)
+                }
+            } ?: run {
+                changedAvatarUserIds.add(newUser.id)
+            }
+            usersCache[newUser.id] = newUser
         }
-        positions.forEach { notifyItemChanged(it) }
+        val positions = ArrayList<Int>()
+        asyncListDiffer.currentList.forEachIndexed { index, message ->
+            if (message.senderId in usersIds) {
+                if (message.senderId in changedAvatarUserIds) {
+                    positions.add(index)
+                }
+            }
+        }
+
+        if (positions.isNotEmpty()) {
+            positions.forEach { notifyItemChanged(it) }
+        }
     }
 
     private fun formatTime(isoTime: String): String {
-        return try {
-            LocalDateTime.parse(isoTime).atZone(utcZone).withZoneSameInstant(moscowZone).format(timeFormatter)
-        } catch (e: Exception) {
-            isoTime
+        return timeCache.getOrPut(isoTime) {
+            try {
+                LocalDateTime.parse(isoTime).atZone(UTC_ZONE).withZoneSameInstant(MOSCOW_ZONE).format(TIME_FORMATTER)
+            } catch (e: Exception) {
+                isoTime
+            }
         }
     }
 
@@ -133,5 +163,10 @@ class MessageAdapter (
             }
             show()
         }
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        super.onViewRecycled(holder)
+        Glide.with(holder.itemView.context).clear(holder.binding.userAvatar)
     }
 }
