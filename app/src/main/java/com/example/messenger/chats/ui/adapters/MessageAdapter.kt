@@ -70,7 +70,6 @@ class MessageAdapter (
                 timeText.text = formatTime(message.sentAt)
                 editedIndicator.visibility = message.editedAt?.let { View.VISIBLE } ?: View.GONE
                 senderName.text = user?.name
-                userAvatar.visibility = View.VISIBLE
                 user?.avatar?.let {
                     Glide.with(holder.itemView.context).load(user.avatar).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.avatar).error(R.drawable.avatar).circleCrop().into(userAvatar)
                 }

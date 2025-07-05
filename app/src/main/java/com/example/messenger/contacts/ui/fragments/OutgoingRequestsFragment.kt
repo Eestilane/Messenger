@@ -39,7 +39,6 @@ class OutgoingRequestsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.incomingRequest = false
-        viewModel.outRequestResponse()
 
         outgoingRequestsAdapter = OutgoingRequestsAdapter(
             decline = { request -> viewModel.decline(request.requestId) }

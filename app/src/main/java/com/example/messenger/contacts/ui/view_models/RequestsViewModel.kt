@@ -2,6 +2,7 @@ package com.example.messenger.contacts.ui.view_models
 
 import android.content.Context
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -96,6 +97,7 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
             when (response.code()) {
                 200 -> {
                     inRequestResponse()
+                    Toast.makeText(context, "Запрос принят", Toast.LENGTH_SHORT).show()
                 }
 
                 999 -> {
@@ -119,8 +121,10 @@ class RequestsViewModel(val apiService: ApiService, val context: Context, val vi
                 200 -> {
                     if (incomingRequest) {
                         inRequestResponse()
+                        Toast.makeText(context, "Запрос отклонён", Toast.LENGTH_SHORT).show()
                     } else {
                         outRequestResponse()
+                        Toast.makeText(context, "Запрос отменён", Toast.LENGTH_SHORT).show()
                     }
                 }
 

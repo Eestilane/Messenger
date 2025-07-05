@@ -91,80 +91,62 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/myMessageFrame"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:maxWidth="400dp"
         android:background="@drawable/my_messages_element"
         android:backgroundTint="@color/myMessageColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/userAvatar"
         app:layout_constraintTop_toTopOf="parent"
+        android:minWidth="70dp"
         >
 
         <TextView
-            android:id="@id/senderName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="end"
-            android:gravity="bottom|start"
-            android:maxLines="1"
-            android:text=""
-            android:textColor="?colorSubtext"
-            android:textFontWeight="1000"
-            android:textSize="14sp"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/myMessageText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/senderName"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@id/myEditedIndicator"
-            android:gravity="top|end"
+            android:gravity="start"
             android:text=""
             android:textColor="?colorText"
-            android:textFontWeight="1"
-            android:textSize="14sp" />
+            android:textSize="16sp"
+            android:maxWidth="300dp"
+            android:padding="12dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constrainedWidth="true"
+            />
 
         <TextView
             android:id="@+id/myTimeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/senderName"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="8dp"
-            android:gravity="top|end"
-            android:padding="0dp"
+            android:layout_marginBottom="4dp"
             android:text=""
+            android:padding="4dp"
             android:textColor="?colorSubtext"
-            android:textSize="11sp" />
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <TextView
             android:id="@+id/myEditedIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/senderName"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_toStartOf="@id/myTimeText"
-            android:gravity="top|end"
-            android:padding="0dp"
             android:text="@string/edited"
             android:textColor="?colorSubtext"
-            android:textSize="11sp"
-            android:visibility="gone" />
-
-    </RelativeLayout>
+            android:textSize="14sp"
+            android:padding="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintEnd_toStartOf="@id/myTimeText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

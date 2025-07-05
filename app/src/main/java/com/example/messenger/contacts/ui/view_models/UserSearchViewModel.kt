@@ -2,6 +2,7 @@ package com.example.messenger.contacts.ui.view_models
 
 import android.content.Context
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.messenger.contacts.ui.models.ContactsScreenState
-import com.example.messenger.contacts.ui.models.RequestsScreenState
 import com.example.messenger.contacts.ui.models.UserSearchScreenState
 import com.example.messenger.data.ApiService
-import com.example.messenger.data.models.UserSearchResponse
 import com.example.messenger.data.models.contacts.ContactRequest
 import com.example.messenger.libs.DebounceOperators
 import com.example.messenger.libs.HandleOperators
@@ -75,15 +73,19 @@ class UserSearchViewModel(val apiService: ApiService, val context: Context, val 
 
     fun addFriendRequest(userId: String) {
         viewModelScope.launch {
-            renderState(UserSearchScreenState.Loading)
             val response = HandleOperators.handleRequest {
                 apiService.addContact(ContactRequest(userId))
+            }
+            if (response.isSuccessful) {
+                Toast.makeText(context,"Запрос отправлен", Toast.LENGTH_SHORT).show()
             }
             when (response.code()) {
                 200 -> {
                     searchUser(lastExpression)
                 }
-
+                409 -> {
+                    Toast.makeText(context,"Пользователь уже добавлен в контакты", Toast.LENGTH_SHORT).show()
+                }
                 999 -> {
                 }
             }

@@ -14,14 +14,12 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class ChatsAdapter(private var chats: List<Chat>, private val onClick: (ChatNavigationParameters) -> Unit): RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {
-
+    inner class ViewHolder(val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val moscowZone = ZoneId.of("Europe/Moscow")
     private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     private val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy")
     private val utcZone = ZoneId.of("UTC")
-
-    inner class ViewHolder(val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)

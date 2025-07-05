@@ -39,7 +39,6 @@ class IncomingRequestsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.incomingRequest = true
-        viewModel.inRequestResponse()
 
         incomingRequestsAdapter = IncomingRequestsAdapter(
             accept = { request -> viewModel.accept(request.requestId) },

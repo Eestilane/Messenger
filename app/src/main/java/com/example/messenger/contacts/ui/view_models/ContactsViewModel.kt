@@ -2,6 +2,7 @@ package com.example.messenger.contacts.ui.view_models
 
 import android.content.Context
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.messenger.chats.ui.models.ChatState
 import com.example.messenger.chats.ui.models.CreateDirectChatRequest
 import com.example.messenger.contacts.ui.models.ContactsScreenState
 import com.example.messenger.data.ApiService
@@ -20,9 +20,6 @@ import kotlinx.coroutines.launch
 class ContactsViewModel(val apiService: ApiService, val context: Context, val view: View?) : ViewModel() {
     private val _contacts = MutableLiveData<ContactsScreenState>(ContactsScreenState.Loading)
     val contacts: LiveData<ContactsScreenState> get() = _contacts
-
-    private val _chatState = MutableLiveData<ChatState>()
-    val chatState: LiveData<ChatState> = _chatState
 
     private val _navigateToChat = MutableLiveData<String?>()
     val navigateToChat: LiveData<String?> = _navigateToChat
@@ -68,6 +65,9 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
             val response = HandleOperators.handleRequest {
                 apiService.deleteContact(ContactRequest(userId))
             }
+            if (response.isSuccessful) {
+                Toast.makeText(context,"Пользователь удалён", Toast.LENGTH_SHORT).show()
+            }
             when (response.code()) {
                 200 -> {
                     getContacts()
@@ -92,11 +92,11 @@ class ContactsViewModel(val apiService: ApiService, val context: Context, val vi
                 if (response.isSuccessful) {
                     _navigateToChat.postValue(response.body())
                 } else {
-                    _chatState.postValue(ChatState.Error("Ошибка создания чата"))
+                    Toast.makeText(context,"Ошибка создания чата", Toast.LENGTH_SHORT).show()
                 }
             }
         } catch (e: Exception) {
-            _chatState.postValue(ChatState.Error("Сетевая ошибка: ${e.message}"))
+            Toast.makeText(context,"Ошибка создания чата", Toast.LENGTH_SHORT).show()
         }
     }
 

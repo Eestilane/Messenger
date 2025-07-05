@@ -53,8 +53,10 @@ class ChatFragment : Fragment() {
     }
 
     private fun initializeChat() {
-        val userId = arguments?.getString("userId") ?: run { findNavController().navigateUp(); return }
-        val chatId = arguments?.getString("chatId") ?: run { findNavController().navigateUp(); return }
+        val userId =
+            arguments?.getString("userId") ?: run { findNavController().navigateUp(); return }
+        val chatId =
+            arguments?.getString("chatId") ?: run { findNavController().navigateUp(); return }
         val ownerId = arguments?.getString("ownerId") ?: ""
         val chatName = arguments?.getString("chatName") ?: ""
         val avatar = arguments?.getString("avatar") ?: ""
@@ -78,17 +80,20 @@ class ChatFragment : Fragment() {
             adapter = messageAdapter
         }
 
-        viewModel.chatUsers.observe(viewLifecycleOwner) { users -> messageAdapter.updateUsersCache(users) }
+        viewModel.chatUsers.observe(viewLifecycleOwner) { users ->
+            messageAdapter.updateUsersCache(
+                users
+            )
+        }
 
         viewModel.messages.observe(viewLifecycleOwner) { messages ->
             messageAdapter.setMessages(messages)
-            if (messages.isNotEmpty()) {
-                binding.recyclerView.scrollToPosition(messages.size - 1)
-            }
         }
         messageAdapter.setCurrentUserId(userId)
 
-
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setAllBindings() {

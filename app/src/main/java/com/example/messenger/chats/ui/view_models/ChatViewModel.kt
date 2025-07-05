@@ -31,12 +31,8 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
     private val _messages = MutableLiveData<List<Message>>(emptyList())
     val messages: LiveData<List<Message>> = _messages
 
-    private val _loading = MutableLiveData<Boolean>(false)
-    val loading: LiveData<Boolean> = _loading
-
     fun loadMessages(chatId: String) {
         viewModelScope.launch {
-            _loading.value = true
             val response = apiService.getChatMessages(chatId)
             if (response.isSuccessful) {
                 _messages.value = response.body()?.data ?: emptyList()
@@ -56,7 +52,7 @@ class ChatViewModel(private val apiService: ApiService, val context: Context, va
                 _errorMessage.postValue("Ошибка загрузки участников чата")
             }
         } catch (e: Exception) {
-            _errorMessage.postValue("Ошибка сети: ${e.localizedMessage}")
+            _errorMessage.postValue("Ошибка сети")
         }
     }
 

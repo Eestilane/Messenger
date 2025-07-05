@@ -1,6 +1,7 @@
 package com.example.messenger.contacts.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,12 +21,18 @@ class UserSearchAdapter(private val onClick: (UserSearchResponse) -> Unit) : Rec
     }
 
     override fun onBindViewHolder(holder: UserSearchAdapter.ViewHolder, position: Int) {
+        val contact = contacts[position]
         with(holder.binding) {
-            userName.text = contacts[position].name
-            userLogin.text = contacts[position].login
-            Glide.with(holder.itemView).load(contacts[position].avatar).placeholder(R.drawable.avatar).into(userAvatar)
+            inContacts.visibility = if (contact.isInContacts) View.VISIBLE else View.GONE
+            pendingrequest.visibility = if (contact.hasPendingRequest) View.VISIBLE else View.GONE
+            add.visibility = if (contact.hasPendingRequest || contact.isInContacts) View.GONE else View.VISIBLE
+            userName.text = contact.name
+            userLogin.text = contact.login
+            contact?.avatar.let {
+                Glide.with(holder.itemView).load(contact.avatar).placeholder(R.drawable.avatar).into(userAvatar)
+            }
             add.setOnClickListener {
-                onClick(contacts[position])
+                onClick(contact)
             }
         }
     }
